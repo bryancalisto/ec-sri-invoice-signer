@@ -4,7 +4,7 @@
   "description": "Utilities for ecuadorian's SRI processes",
   "main": "dist/index.js",
   "type": "commonjs",
-  "types": "dist/index.d.ts",
+  "types": "src/index.d.ts",
   "scripts": {
     "build": "tsc",
     "build:watch": "tsc -w",

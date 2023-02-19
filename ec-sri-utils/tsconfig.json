@@ -10,6 +10,7 @@
     "strictNullChecks": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "moduleDetection": "force"
+    "moduleDetection": "force",
+    "declaration": true
   }
 }
