@@ -1,1 +1,5 @@
-console.log('HO')
+const { signXmlInvoice } = require('./invoice/signXmlInvoice');
+
+module.exports = {
+  signXmlInvoice
+};

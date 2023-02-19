@@ -1,28 +1,34 @@
-const fs = require('fs');
 const { signXmlInvoice } = require('./signXmlInvoice');
 const pem = require('pem');
-const pkcs12 = fs.readFileSync('client-identity.p12');
-
 
 describe('signXmlInvoice', () => {
-  it('should put the signature in the xml', (done) => {
-    const xml = `
-      <library>
-        <book>
-        <name>Harry Potter</name>
-        </book>
-      </library>
-    `;
+  let privateKey: string;
+  let certificate: string;
 
-    pem.readPkcs12(pkcs12, { p12Password: '' }, async (err: any, cert: any) => {
-      if (err) return done(err);
+  beforeAll((done) => {
+    // Setup the private key and certificate (.p12 file content)
+    pem.createPrivateKey(2048, null, (err: unknown, key: any) => {
+      if (err) done(err);
 
-      const privateKey = cert.key;
-      const certificate = cert.cert;
+      privateKey = key.key;
 
-      const signed = signXmlInvoice(xml, privateKey, certificate);
-      console.log('SINGED', signed);
-      done();
-    });
+      pem.createCertificate({
+        serviceKey: privateKey,
+        days: 1
+      }, (err: unknown, cert: any) => {
+        if (err) done(err);
+
+        const certificateWithoutDelimiters = cert.certificate.replace(/-----BEGIN CERTIFICATE[-\s]+|[-\s]+-----END CERTIFICATE[-\s]+/gm, '');
+        certificate = certificateWithoutDelimiters;
+        done();
+      });
+    })
+  });
+
+  it('should put the signature in the xml', () => {
+    const xml = '<comprobante></comprobante>';
+
+    const signed = signXmlInvoice(xml, privateKey, certificate);
+    console.log('SINGED', signed);
   });
 });
