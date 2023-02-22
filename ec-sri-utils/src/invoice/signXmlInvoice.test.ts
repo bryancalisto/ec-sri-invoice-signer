@@ -18,8 +18,7 @@ describe('signXmlInvoice', () => {
       }, (err: unknown, cert: any) => {
         if (err) done(err);
 
-        const certificateWithoutDelimiters = cert.certificate.replace(/-----BEGIN CERTIFICATE[-\s]+|[-\s]+-----END CERTIFICATE[-\s]+/gm, '');
-        certificate = certificateWithoutDelimiters;
+        certificate = cert.certificate;
         done();
       });
     })

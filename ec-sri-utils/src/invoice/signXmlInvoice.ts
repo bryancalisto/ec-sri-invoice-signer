@@ -1,5 +1,9 @@
 const xmlCrypto = require('xml-crypto');
 
+const removeCertificateDelimiters = (certificate: string) => {
+  return certificate.replace(/-----BEGIN CERTIFICATE[-\s]+|[-\s]+-----END CERTIFICATE[-\s]+/gm, '')
+}
+
 const signXmlInvoice = (xml: string, privateKey: string, certificate: string) => {
   const SignedXml = xmlCrypto.SignedXml;
 
@@ -12,7 +16,7 @@ const signXmlInvoice = (xml: string, privateKey: string, certificate: string) =>
       return `
         <X509Data>
           <X509Certificate>
-            ${certificate}
+            ${removeCertificateDelimiters(certificate)}
           </X509Certificate>
         </X509Data>`;
     },

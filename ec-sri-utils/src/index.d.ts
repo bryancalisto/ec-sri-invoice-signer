@@ -1,5 +1,1 @@
-type signXmlInvoice = (xml: string, privateKey: string, certificate: string) => string;
-
-export {
-  signXmlInvoice
-}
+export function signXmlInvoice(xml: string, privateKey: string, certificate: string): string;
