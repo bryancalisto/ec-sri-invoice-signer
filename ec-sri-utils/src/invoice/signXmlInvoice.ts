@@ -4,6 +4,15 @@ const removeCertificateDelimiters = (certificate: string) => {
   return certificate.replace(/-----BEGIN CERTIFICATE[-\s]+|[-\s]+-----END CERTIFICATE[-\s]+/gm, '')
 }
 
+/**
+ *
+ * @name signXmlInvoice
+ * @description Signs a XML invoice based on the SRI specifications.
+ * @param xml The XML invoice to sign.
+ * @param privateKey The private key to create the signature.
+ * @param certificate The X.509 certificate to include in the signature.
+ * @returns The signed XML invoice.
+ */
 const signXmlInvoice = (xml: string, privateKey: string, certificate: string) => {
   const SignedXml = xmlCrypto.SignedXml;
 
