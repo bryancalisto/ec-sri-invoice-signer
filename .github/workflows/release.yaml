@@ -14,7 +14,7 @@ jobs:
         with:
           node-version: '18.x'
           registry-url: 'https://registry.npmjs.org'
-      - run: which openssl
+      - run: openssl version
       - run: npm ci
       - run: npm run build
       - run: npm run test
