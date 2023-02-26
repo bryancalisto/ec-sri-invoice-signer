@@ -1,11 +1,18 @@
 const { signXmlInvoice } = require('./signXmlInvoice');
 const pem = require('pem');
+const isCI = require('is-ci');
 
 describe('signXmlInvoice', () => {
   let privateKey: string;
   let certificate: string;
 
   beforeAll((done) => {
+    if (isCI) {
+      pem.config({
+        pathOpenSSL: '/usr/bin/openssl'
+      });
+    }
+
     // Setup the private key and certificate (.p12 file content)
     pem.createPrivateKey(2048, null, (err: unknown, key: any) => {
       if (err) done(err);
