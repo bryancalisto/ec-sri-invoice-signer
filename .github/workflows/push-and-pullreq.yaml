@@ -1,7 +1,7 @@
-name: Publish package to npm
+name: Test and build
 on:
-  release:
-    types: [published]
+  push:
+    branches: [main]
 defaults:
   run:
     working-directory: ./ec-sri-utils
