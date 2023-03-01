@@ -1,33 +1,32 @@
 const { signXmlInvoice } = require('./signXmlInvoice');
-const pem = require('pem');
+const forge = require('node-forge');
 
 describe('signXmlInvoice', () => {
   let privateKey: string;
   let certificate: string;
 
-  beforeAll((done) => {
+  beforeAll(() => {
     // Setup the private key and certificate (.p12 file content)
-    pem.createPrivateKey(2048, null, (err: unknown, key: any) => {
-      if (err) done(err);
+    const pki = forge.pki;
+    const rsa = forge.pki.rsa;
+    const keyPair = rsa.generateKeyPair({ bits: 2048 });
 
-      privateKey = key.key;
+    const cert = pki.createCertificate();
+    cert.publicKey = keyPair.publicKey;
+    cert.serialNumber = '01';
+    cert.validity.notBefore = new Date();
+    cert.validity.notAfter = new Date();
+    cert.validity.notAfter.setFullYear(cert.validity.notBefore.getFullYear() + 1);
+    cert.sign(keyPair.privateKey);
 
-      pem.createCertificate({
-        serviceKey: privateKey,
-        days: 1
-      }, (err: unknown, cert: any) => {
-        if (err) done(err);
-
-        certificate = cert.certificate;
-        done();
-      });
-    })
+    privateKey = pki.privateKeyToPem(keyPair.privateKey);
+    certificate = pki.certificateToPem(cert);;
   });
 
   it('should put the signature in the xml', () => {
     const xml = '<comprobante></comprobante>';
 
     const signed = signXmlInvoice(xml, privateKey, certificate);
-    console.log('SINGED', signed);
+    console.log('SIGNED', signed);
   });
 });
