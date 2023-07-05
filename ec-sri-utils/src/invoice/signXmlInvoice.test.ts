@@ -20,7 +20,7 @@ describe('signXmlInvoice', () => {
     cert.sign(keyPair.privateKey);
 
     privateKey = pki.privateKeyToPem(keyPair.privateKey);
-    certificate = pki.certificateToPem(cert);;
+    certificate = pki.certificateToPem(cert);
   });
 
   it('should put the signature in the xml', () => {
