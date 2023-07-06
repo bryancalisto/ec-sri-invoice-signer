@@ -1,8 +1,5 @@
 const xmlCrypto = require('xml-crypto');
-
-const removeCertificateDelimiters = (certificate: string) => {
-  return certificate.replace(/-----BEGIN CERTIFICATE[-\s]+|[-\s]+-----END CERTIFICATE[-\s]+/gm, '')
-}
+const { pemToDer } = require('../utils/utils');
 
 /**
  *
@@ -15,8 +12,6 @@ const removeCertificateDelimiters = (certificate: string) => {
  */
 const signXmlInvoice = (xml: string, privateKey: string, certificate: string) => {
   const SignedXml = xmlCrypto.SignedXml;
-  const prefix = 'ds';
-
   const sig = new SignedXml();
 
   sig.addReference("comprobante", ["http://www.w3.org/2000/09/xmldsig#enveloped-signature"]);
@@ -25,11 +20,11 @@ const signXmlInvoice = (xml: string, privateKey: string, certificate: string) =>
   sig.canonicalizationAlgorithm = 'http://www.w3.org/TR/2001/REC-xml-c14n-20010315';
 
   sig.keyInfoProvider = {
-    getKeyInfo: () => {
+    getKeyInfo: (_: any, prefix: string) => {
       return `
         <${prefix}:X509Data>
           <${prefix}:X509Certificate>
-            ${removeCertificateDelimiters(certificate)}
+            ${pemToDer(certificate)}
           </${prefix}:X509Certificate>
         </${prefix}:X509Data>
         <${prefix}:KeyValue>
@@ -50,6 +45,6 @@ const signXmlInvoice = (xml: string, privateKey: string, certificate: string) =>
   return sig.getSignedXml();
 };
 
-module.exports = {
+export {
   signXmlInvoice
 };

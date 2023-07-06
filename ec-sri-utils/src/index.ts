@@ -1,5 +1,5 @@
 const { signXmlInvoice } = require('./invoice/signXmlInvoice');
 
-module.exports = {
+export {
   signXmlInvoice
 };
