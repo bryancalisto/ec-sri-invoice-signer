@@ -1,0 +1,1 @@
+// Signature example can be found in the SRI manual page 110
