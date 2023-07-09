@@ -11,7 +11,7 @@ describe('Given the sign function', () => {
   });
 });
 
-describe('Given the getSHA1 function', () => {
+describe('Given the getSHA1Hash function', () => {
   it('should return the SHA1 hash of the input string expressed in base64', () => {
     const result = getSHA1Hash('something');
     expect(result).toEqual('GvF+c3IdvgxAARuC7Uuxp9vjzik=');
