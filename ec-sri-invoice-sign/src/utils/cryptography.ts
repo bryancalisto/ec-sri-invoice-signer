@@ -7,4 +7,8 @@ const sign = (data: string, privateKey: string) => {
   return res;
 }
 
-export { sign }
+const getSHA1Hash = (data: string) => {
+  return crypto.createHash('sha1').update(data).digest('base64');
+}
+
+export { sign, getSHA1Hash }
