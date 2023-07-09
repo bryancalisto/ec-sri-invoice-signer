@@ -1,3 +1,3 @@
-# ec-sri-utils
-Utilities for ecuadorian's SRI processes
+# ec-sri-invoice-sign
+Ecuador SRI invoice signing tool.
 # WORK IN PROGRESS
