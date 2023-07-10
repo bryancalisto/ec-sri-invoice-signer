@@ -1,3 +1,4 @@
+import { expect } from 'chai';
 import { getSHA1Hash, sign } from '../src/utils/cryptography';
 
 const xml = '<factura Id="comprobante"><detalle Id="detalle">data</detalle></factura>';
@@ -14,6 +15,6 @@ describe('Given the sign function', () => {
 describe('Given the getSHA1Hash function', () => {
   it('should return the SHA1 hash of the input string expressed in base64', () => {
     const result = getSHA1Hash('something');
-    expect(result).toEqual('GvF+c3IdvgxAARuC7Uuxp9vjzik=');
+    expect(result).equal('GvF+c3IdvgxAARuC7Uuxp9vjzik=');
   });
 });
