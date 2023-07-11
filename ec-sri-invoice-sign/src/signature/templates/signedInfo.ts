@@ -1,37 +1,37 @@
 import { XmlProperties } from "../../utils/constants";
 
-type buildKeyInfoArgs = {
+type buildSignedInfoTagArgs = {
   invoiceHash: string;
   invoiceTagId: string;
   keyInfoCertificateTagHash: string;
   keyInfoCertificateTagId: string;
-  keyInfoCertificateRefId: string;
+  keyInfoCertificateRefTagId: string;
   signedInfoTagId: string;
-  signedPropertiesRefId: string;
+  signedPropertiesRefTagId: string;
   signedPropertiesTagHash: string;
   signedPropertiesTagId: string;
 }
 
-export const buildKeyInfo = ({
+export const buildSignedInfoTag = ({
   invoiceHash,
   invoiceTagId,
   keyInfoCertificateTagHash,
   keyInfoCertificateTagId,
-  keyInfoCertificateRefId,
+  keyInfoCertificateRefTagId,
   signedInfoTagId,
-  signedPropertiesRefId,
+  signedPropertiesRefTagId,
   signedPropertiesTagHash,
   signedPropertiesTagId
-}: buildKeyInfoArgs): string => {
+}: buildSignedInfoTagArgs) => {
   return `
     <ds:SignedInfo Id="${signedInfoTagId}">
       <ds:CanonicalizationMethod Algorithm="${XmlProperties.algorithms.canonicalization}" />
       <ds:SignatureMethod Algorithm="${XmlProperties.algorithms.signature}" />
-      <ds:Reference Id="${signedPropertiesRefId}" Type="${XmlProperties.types.signedProperties}" URI="#${signedPropertiesTagId}">
+      <ds:Reference Id="${signedPropertiesRefTagId}" Type="${XmlProperties.types.signedProperties}" URI="#${signedPropertiesTagId}">
         <ds:DigestMethod Algorithm="${XmlProperties.algorithms.digest}" />
         <ds:DigestValue>${signedPropertiesTagHash}</ds:DigestValue>
       </ds:Reference>
-      <ds:Reference Id="${keyInfoCertificateRefId}" URI="#${keyInfoCertificateTagId}">
+      <ds:Reference Id="${keyInfoCertificateRefTagId}" URI="#${keyInfoCertificateTagId}">
         <ds:DigestMethod Algorithm="${XmlProperties.algorithms.digest}" />
         <ds:DigestValue>${keyInfoCertificateTagHash}</ds:DigestValue>
       </ds:Reference>

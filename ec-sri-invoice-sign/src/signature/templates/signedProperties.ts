@@ -1,6 +1,6 @@
 import { XmlProperties } from '../../utils/constants';
 
-type buildSignedPropertiesArgs = {
+type buildSignedPropertiesTagArgs = {
   invoiceTagRef: string;
   signedPropertiesTagId: string;
   signatureDescription: string;
@@ -10,7 +10,7 @@ type buildSignedPropertiesArgs = {
   x509SerialNumber: string;
 }
 
-export const buildSignedProperties = ({
+export const buildSignedPropertiesTag = ({
   invoiceTagRef,
   signatureDescription,
   signedPropertiesTagId,
@@ -18,7 +18,7 @@ export const buildSignedProperties = ({
   x509Hash,
   x509IssuerName,
   x509SerialNumber,
-}: buildSignedPropertiesArgs): string => {
+}: buildSignedPropertiesTagArgs) => {
   return `
     <etsi:SignedProperties Id="${signedPropertiesTagId}">
       <etsi:SignedSignatureProperties>

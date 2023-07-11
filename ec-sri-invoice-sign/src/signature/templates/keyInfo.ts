@@ -1,18 +1,18 @@
-type buildKeyInfoArgs = {
+type buildKeyInfoTagArgs = {
   certificateContent: string;
   certificateExponent: string;
   certificateModulus: string;
-  certificateTagId: string;
+  keyInfoTagId: string;
 }
 
-export const buildKeyInfo = ({
+export const buildKeyInfoTag = ({
   certificateContent,
   certificateExponent,
   certificateModulus,
-  certificateTagId,
-}: buildKeyInfoArgs): string => {
+  keyInfoTagId,
+}: buildKeyInfoTagArgs) => {
   return `
-    <ds:KeyInfo Id="Certificate${certificateTagId}">
+    <ds:KeyInfo Id="${keyInfoTagId}">
       <ds:X509Data>
         <ds:X509Certificate>${certificateContent}</ds:X509Certificate>
       </ds:X509Data>
