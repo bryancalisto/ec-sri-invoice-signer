@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { buildXml, parseXml } from '../src/utils/xml';
+import { buildXml, parseXml } from '../../src/utils/xml';
 
 const xml = '<factura Id="comprobante"><detalle Id="detalle">data</detalle></factura>';
 

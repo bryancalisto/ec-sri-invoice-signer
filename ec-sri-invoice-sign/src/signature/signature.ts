@@ -1,3 +1,4 @@
+import { getHash } from "../utils/cryptography";
 import { buildKeyInfoTag } from "./templates/keyInfo";
 import { buildSignatureTag } from "./templates/signature";
 import { buildSignedInfoTag } from "./templates/signedInfo";
@@ -10,31 +11,46 @@ type signInvoiceXml = {
   certificate: string;
 }
 
-const signInvoiceXml = ({ invoiceXml, privateKey, certificate }: signInvoiceXml) => {
+export const signInvoiceXml = ({ invoiceXml, privateKey, certificate }: signInvoiceXml) => {
+  const signingTime = new Date().toISOString();
+
+  // IDs
+  const invoiceTagId = 'comprobante';
+  const invoiceTagRefId = ``;
+  const keyInfoTagId = ``;
+  const keyInfoCertificateRefTagId = ``;
+  const keyInfoCertificateTagId = ``;
+  const signedInfoTagId = ``;
+  const signedPropertiesRefTagId = ``;
+  const signedPropertiesTagId = ``;
+
+  // HASHES
+  const invoiceHash = getHash(invoiceXml);
+
   const signedInfoTag = buildSignedInfoTag({
-    invoiceHash: '',
-    invoiceTagId: '',
-    keyInfoCertificateRefTagId: '',
+    invoiceHash,
+    invoiceTagId,
+    keyInfoCertificateRefTagId,
     keyInfoCertificateTagHash: '',
-    keyInfoCertificateTagId: '',
-    signedInfoTagId: '',
-    signedPropertiesRefTagId: '',
+    keyInfoCertificateTagId,
+    signedInfoTagId,
+    signedPropertiesRefTagId,
     signedPropertiesTagHash: '',
-    signedPropertiesTagId: ''
+    signedPropertiesTagId
   });
 
   const keyInfoTag = buildKeyInfoTag({
     certificateContent: '',
     certificateExponent: '',
     certificateModulus: '',
-    keyInfoTagId: ''
+    keyInfoTagId
   });
 
   const signedPropertiesTag = buildSignedPropertiesTag({
-    invoiceTagRef: '',
+    invoiceTagRefId,
     signatureDescription: '',
     signedPropertiesTagId: '',
-    signingTime: '',
+    signingTime,
     x509Hash: '',
     x509IssuerName: '',
     x509SerialNumber: ''

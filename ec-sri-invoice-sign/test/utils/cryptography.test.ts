@@ -1,6 +1,6 @@
 import { expect } from 'chai';
-import { getSHA1Hash, sign } from '../src/utils/cryptography';
-import { generateKeyPair, verifySignature } from './utils/cryptography';
+import { getHash, sign } from '../../src/utils/cryptography';
+import { generateKeyPair, verifySignature } from '../test-utils/cryptography';
 
 const data = '<factura Id="comprobante"><detalle Id="detalle">data</detalle></factura>';
 
@@ -13,9 +13,9 @@ describe('Given the sign function', () => {
   });
 });
 
-describe('Given the getSHA1Hash function', () => {
+describe('Given the getHash function', () => {
   it('should return the SHA1 hash of the input string expressed in base64', () => {
-    const result = getSHA1Hash('something');
+    const result = getHash('something');
     expect(result).equal('GvF+c3IdvgxAARuC7Uuxp9vjzik=');
   });
 });

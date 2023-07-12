@@ -1,7 +1,7 @@
 import { XmlProperties } from '../../utils/constants';
 
 type buildSignedPropertiesTagArgs = {
-  invoiceTagRef: string;
+  invoiceTagRefId: string;
   signedPropertiesTagId: string;
   signatureDescription: string;
   signingTime: string;
@@ -11,7 +11,7 @@ type buildSignedPropertiesTagArgs = {
 }
 
 export const buildSignedPropertiesTag = ({
-  invoiceTagRef,
+  invoiceTagRefId,
   signatureDescription,
   signedPropertiesTagId,
   signingTime,
@@ -37,7 +37,7 @@ export const buildSignedPropertiesTag = ({
         </etsi:SigningCertificate>
       </etsi:SignedSignatureProperties>
       <etsi:SignedDataObjectProperties>
-        <etsi:DataObjectFormat ObjectReference="#${invoiceTagRef}">
+        <etsi:DataObjectFormat ObjectReference="#${invoiceTagRefId}">
           <etsi:Description>${signatureDescription}</etsi:Description>
             <etsi:MimeType>text/xml</etsi:MimeType>
         </etsi:DataObjectFormat>
