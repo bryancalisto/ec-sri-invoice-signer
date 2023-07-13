@@ -20,7 +20,7 @@ export const buildSignatureTag = ({
   signedPropertiesTag
 }: buildSignatureTagArgs) => {
   return `
-    <ds:Signature  xmlns:etsi="${XmlProperties.namespaces.etsi}" Id="${signatureTagId}">
+    <ds:Signature xmlns:ds="${XmlProperties.namespaces.ds}" xmlns:etsi="${XmlProperties.namespaces.etsi}" Id="${signatureTagId}">
       ${signedInfoTag}
       <ds:SignatureValue Id="${signatureValueTagId}">
         ${signedSignedInfoTag}

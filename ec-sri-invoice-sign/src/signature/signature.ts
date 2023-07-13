@@ -1,3 +1,4 @@
+import { defaultSignatureDescription } from "../utils/constants";
 import { getHash } from "../utils/cryptography";
 import { buildXml, parseXml } from "../utils/xml";
 import { buildKeyInfoTag } from "./templates/keyInfo";
@@ -5,12 +6,9 @@ import { buildSignatureTag } from "./templates/signature";
 import { buildSignedInfoTag } from "./templates/signedInfo";
 import { buildSignedPropertiesTag } from "./templates/signedProperties";
 
-// Signature example can be found in the SRI manual page 110
-type signInvoiceXml = {
-  invoiceXml: string;
-  privateKey: string;
-  certificate: string;
-}
+type signInvoiceXmlOptions = Partial<{
+  signatureDescription: string
+}>;
 
 const insertSignatureIntoInvoiceXml = (invoiceXml: string, signatureXml: string) => {
   const invoiceXmlObj = parseXml(invoiceXml);
@@ -21,7 +19,7 @@ const insertSignatureIntoInvoiceXml = (invoiceXml: string, signatureXml: string)
   return buildXml(invoiceXmlObj);
 }
 
-export const signInvoiceXml = ({ invoiceXml, privateKey, certificate }: signInvoiceXml) => {
+export const signInvoiceXml = (invoiceXml: string, privateKey: string, certificate: string, options?: signInvoiceXmlOptions) => {
   const signingTime = new Date().toISOString();
 
   // IDs
@@ -49,13 +47,15 @@ export const signInvoiceXml = ({ invoiceXml, privateKey, certificate }: signInvo
 
   const signedPropertiesTag = buildSignedPropertiesTag({
     invoiceTagRefId,
-    signatureDescription: '',
-    signedPropertiesTagId: '',
+    signatureDescription: options?.signatureDescription ?? defaultSignatureDescription,
+    signedPropertiesTagId,
     signingTime,
     x509Hash: '',
     x509IssuerName: '',
     x509SerialNumber: ''
   });
+
+  const signedPropertiesTagHash = getHash(signedPropertiesTag);
 
   const signedInfoTag = buildSignedInfoTag({
     invoiceHash,
@@ -65,7 +65,7 @@ export const signInvoiceXml = ({ invoiceXml, privateKey, certificate }: signInvo
     keyInfoCertificateTagId,
     signedInfoTagId,
     signedPropertiesRefTagId,
-    signedPropertiesTagHash: '',
+    signedPropertiesTagHash,
     signedPropertiesTagId
   });
 

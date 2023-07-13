@@ -14,6 +14,9 @@ const XmlProperties = {
   }
 };
 
+const defaultSignatureDescription = 'Firma digital correspondiente a esta factura';
+
 export {
+  defaultSignatureDescription,
   XmlProperties
 }
