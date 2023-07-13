@@ -1,7 +1,7 @@
 import { XmlProperties } from "../../utils/constants";
 
 type buildSignatureTagArgs = {
-  keyInfoSection: string;
+  keyInfoTag: string;
   signatureTagId: string;
   signatureObjectTagId: string;
   signatureValueTagId: string;
@@ -14,7 +14,7 @@ export const buildSignatureTag = ({
   signatureTagId,
   signatureObjectTagId,
   signedInfoTag,
-  keyInfoSection,
+  keyInfoTag,
   signedSignedInfoTag,
   signatureValueTagId,
   signedPropertiesTag
@@ -25,7 +25,7 @@ export const buildSignatureTag = ({
       <ds:SignatureValue Id="${signatureValueTagId}">
         ${signedSignedInfoTag}
       </ds:SignatureValue>
-      ${keyInfoSection}
+      ${keyInfoTag}
       <ds:Object Id="${signatureObjectTagId}">
         <etsi:QualifyingProperties Target="#${signatureTagId}">
           ${signedPropertiesTag}

@@ -1,4 +1,5 @@
 import { getHash } from "../utils/cryptography";
+import { buildXml, parseXml } from "../utils/xml";
 import { buildKeyInfoTag } from "./templates/keyInfo";
 import { buildSignatureTag } from "./templates/signature";
 import { buildSignedInfoTag } from "./templates/signedInfo";
@@ -9,6 +10,15 @@ type signInvoiceXml = {
   invoiceXml: string;
   privateKey: string;
   certificate: string;
+}
+
+const insertSignatureIntoInvoiceXml = (invoiceXml: string, signatureXml: string) => {
+  const invoiceXmlObj = parseXml(invoiceXml);
+  const signatureXmlObj = parseXml(signatureXml);
+
+  invoiceXmlObj.push(...signatureXmlObj);
+
+  return buildXml(invoiceXmlObj);
 }
 
 export const signInvoiceXml = ({ invoiceXml, privateKey, certificate }: signInvoiceXml) => {
@@ -23,21 +33,12 @@ export const signInvoiceXml = ({ invoiceXml, privateKey, certificate }: signInvo
   const signedInfoTagId = ``;
   const signedPropertiesRefTagId = ``;
   const signedPropertiesTagId = ``;
+  const signatureTagId = ``;
+  const signatureObjectTagId = ``;
+  const signatureValueTagId = ``;
 
   // HASHES
   const invoiceHash = getHash(invoiceXml);
-
-  const signedInfoTag = buildSignedInfoTag({
-    invoiceHash,
-    invoiceTagId,
-    keyInfoCertificateRefTagId,
-    keyInfoCertificateTagHash: '',
-    keyInfoCertificateTagId,
-    signedInfoTagId,
-    signedPropertiesRefTagId,
-    signedPropertiesTagHash: '',
-    signedPropertiesTagId
-  });
 
   const keyInfoTag = buildKeyInfoTag({
     certificateContent: '',
@@ -56,17 +57,27 @@ export const signInvoiceXml = ({ invoiceXml, privateKey, certificate }: signInvo
     x509SerialNumber: ''
   });
 
-  const signatureTag = buildSignatureTag({
-    signatureTagId: '',
-    signatureObjectTagId: '',
-    signedInfoTag: '',
-    keyInfoSection: '',
-    signedSignedInfoTag: '',
-    signatureValueTagId: '',
-    signedPropertiesTag: ''
+  const signedInfoTag = buildSignedInfoTag({
+    invoiceHash,
+    invoiceTagId,
+    keyInfoCertificateRefTagId,
+    keyInfoCertificateTagHash: '',
+    keyInfoCertificateTagId,
+    signedInfoTagId,
+    signedPropertiesRefTagId,
+    signedPropertiesTagHash: '',
+    signedPropertiesTagId
   });
 
-  const signedInvoiceXml = invoiceXml;
+  const signatureTag = buildSignatureTag({
+    keyInfoTag,
+    signatureTagId,
+    signatureObjectTagId,
+    signedInfoTag,
+    signedSignedInfoTag: '',
+    signatureValueTagId,
+    signedPropertiesTag
+  });
 
-  return signedInvoiceXml;
+  return insertSignatureIntoInvoiceXml(invoiceXml, signatureTag);
 }

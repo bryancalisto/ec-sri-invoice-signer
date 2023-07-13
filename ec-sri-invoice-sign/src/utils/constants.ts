@@ -10,7 +10,7 @@ const XmlProperties = {
     transform: 'http://www.w3.org/2000/09/xmldsig#enveloped-signature',
   },
   types: {
-    signedProperties: '"http://uri.etsi.org/01903#SignedProperties'
+    signedProperties: 'http://uri.etsi.org/01903#SignedProperties'
   }
 };
 

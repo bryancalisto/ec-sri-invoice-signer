@@ -1,13 +1,20 @@
 import { XMLParser, XMLBuilder } from 'fast-xml-parser';
+import { XmlFormatError } from './errors';
 
-const parseXml = (xml: string) => {
+type XmlObj = Array<Record<any, any>>;
+
+const parseXml = (xml: string): XmlObj => {
   const parserOptions = {
     ignoreAttributes: false,
     preserveOrder: true
   };
 
-  const parser = new XMLParser(parserOptions);
-  return parser.parse(xml);
+  try {
+    const parser = new XMLParser(parserOptions);
+    return parser.parse(xml);
+  } catch (err) {
+    throw new XmlFormatError();
+  }
 };
 
 const buildXml = (data: Record<any, any>) => {
