@@ -1,10 +1,13 @@
+import * as crypto from 'crypto';
 import { defaultSignatureDescription } from "../utils/constants";
 import { getHash } from "../utils/cryptography";
+import { getRandomInt } from "../utils/utils";
 import { buildXml, parseXml } from "../utils/xml";
 import { buildKeyInfoTag } from "./templates/keyInfo";
 import { buildSignatureTag } from "./templates/signature";
 import { buildSignedInfoTag } from "./templates/signedInfo";
 import { buildSignedPropertiesTag } from "./templates/signedProperties";
+import * as forge from 'node-forge';
 
 type signInvoiceXmlOptions = Partial<{
   signatureDescription: string
@@ -24,16 +27,15 @@ export const signInvoiceXml = (invoiceXml: string, privateKey: string, certifica
 
   // IDs
   const invoiceTagId = 'comprobante';
-  const invoiceTagRefId = ``;
-  const keyInfoTagId = ``;
-  const keyInfoCertificateRefTagId = ``;
-  const keyInfoCertificateTagId = ``;
-  const signedInfoTagId = ``;
-  const signedPropertiesRefTagId = ``;
-  const signedPropertiesTagId = ``;
-  const signatureTagId = ``;
-  const signatureObjectTagId = ``;
-  const signatureValueTagId = ``;
+  const invoiceTagRefId = `InvoiceRef`;
+  const keyInfoTagId = `Certificate`;
+  const keyInfoRefTagId = `CertificateRef`;
+  const signedInfoTagId = `SignedInfo`;
+  const signedPropertiesRefTagId = `SignedPropertiesRef`;
+  const signedPropertiesTagId = `SignedProperties`;
+  const signatureTagId = `Signature`;
+  const signatureObjectTagId = `SignatureObject`;
+  const signatureValueTagId = `SignatureValue`;
 
   // HASHES
   const invoiceHash = getHash(invoiceXml);
@@ -56,13 +58,14 @@ export const signInvoiceXml = (invoiceXml: string, privateKey: string, certifica
   });
 
   const signedPropertiesTagHash = getHash(signedPropertiesTag);
+  const keyInfoTagHash = getHash(keyInfoTag);
 
   const signedInfoTag = buildSignedInfoTag({
     invoiceHash,
     invoiceTagId,
-    keyInfoCertificateRefTagId,
-    keyInfoCertificateTagHash: '',
-    keyInfoCertificateTagId,
+    keyInfoRefTagId,
+    keyInfoTagHash,
+    keyInfoTagId,
     signedInfoTagId,
     signedPropertiesRefTagId,
     signedPropertiesTagHash,

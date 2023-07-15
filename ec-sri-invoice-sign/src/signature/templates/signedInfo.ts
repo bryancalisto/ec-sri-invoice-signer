@@ -3,9 +3,9 @@ import { XmlProperties } from "../../utils/constants";
 type buildSignedInfoTagArgs = {
   invoiceHash: string;
   invoiceTagId: string;
-  keyInfoCertificateTagHash: string;
-  keyInfoCertificateTagId: string;
-  keyInfoCertificateRefTagId: string;
+  keyInfoTagHash: string;
+  keyInfoTagId: string;
+  keyInfoRefTagId: string;
   signedInfoTagId: string;
   signedPropertiesRefTagId: string;
   signedPropertiesTagHash: string;
@@ -15,9 +15,9 @@ type buildSignedInfoTagArgs = {
 export const buildSignedInfoTag = ({
   invoiceHash,
   invoiceTagId,
-  keyInfoCertificateTagHash,
-  keyInfoCertificateTagId,
-  keyInfoCertificateRefTagId,
+  keyInfoTagHash,
+  keyInfoTagId,
+  keyInfoRefTagId,
   signedInfoTagId,
   signedPropertiesRefTagId,
   signedPropertiesTagHash,
@@ -31,9 +31,9 @@ export const buildSignedInfoTag = ({
         <ds:DigestMethod Algorithm="${XmlProperties.algorithms.digest}" />
         <ds:DigestValue>${signedPropertiesTagHash}</ds:DigestValue>
       </ds:Reference>
-      <ds:Reference Id="${keyInfoCertificateRefTagId}" URI="#${keyInfoCertificateTagId}">
+      <ds:Reference Id="${keyInfoRefTagId}" URI="#${keyInfoTagId}">
         <ds:DigestMethod Algorithm="${XmlProperties.algorithms.digest}" />
-        <ds:DigestValue>${keyInfoCertificateTagHash}</ds:DigestValue>
+        <ds:DigestValue>${keyInfoTagHash}</ds:DigestValue>
       </ds:Reference>
       <ds:Reference URI="#${invoiceTagId}">
         <ds:Transforms>
