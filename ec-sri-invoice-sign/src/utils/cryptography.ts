@@ -9,6 +9,11 @@ const getHash = (data: string) => {
   return crypto.createHash('sha1').update(data, 'utf-8').end().digest('base64');
 }
 
+/**
+ * @param pkcs12RawData The p12/pfx file data encoded as base64 or a Buffer.
+ * @param password The p12/pfx file password as a UTF-8 string.
+ * @returns An object with the private key and certificate extracted (both typed according to node-forge) from the p12/pfx file.
+ */
 const extractPrivateKeyAndCertificateFromPkcs12 = (pkcs12RawData: string | Buffer, password: string = '') => {
   const pkcs12InBase64 = typeof pkcs12RawData === 'string' ? pkcs12RawData : pkcs12RawData.toString('base64');
   const pkcs12InDer = forge.util.decode64(pkcs12InBase64);
@@ -27,7 +32,7 @@ const extractPrivateKeyAndCertificateFromPkcs12 = (pkcs12RawData: string | Buffe
     throw new Error(); // TODO: make this error custom
   }
 
-  const privateKey = pkcs8ShroudedKeyBag.key;
+  const privateKey = pkcs8ShroudedKeyBag.key as forge.pki.rsa.PrivateKey; // Not sure if the SRI software supports other kinds of private keys
   const certificate = certBag.cert;
 
   if (privateKey === undefined) {
@@ -44,8 +49,30 @@ const extractPrivateKeyAndCertificateFromPkcs12 = (pkcs12RawData: string | Buffe
   }
 }
 
+const extractX509Data = (certificate: forge.pki.Certificate) => {
+  const serialNumber = parseInt(certificate.serialNumber, 16);
+  const issuerName = certificate.issuer.attributes.map((attr) => `${attr.name}=${attr.value}`).join(',');
+
+  return {
+    issuerName,
+    serialNumber
+  };
+}
+
+const extractPrivateKeyData = (privateKey: forge.pki.rsa.PrivateKey) => {
+  const modulus = Buffer.from(privateKey.e.toString(), 'hex').toString('base64');
+  const exponent = Buffer.from(privateKey.n.toString(), 'hex').toString('base64');
+
+  return {
+    modulus,
+    exponent
+  };
+}
+
 export {
   sign,
   getHash,
-  extractPrivateKeyAndCertificateFromPkcs12
+  extractPrivateKeyAndCertificateFromPkcs12,
+  extractPrivateKeyData,
+  extractX509Data
 }
