@@ -1,16 +1,14 @@
-import * as crypto from 'crypto';
 import { defaultSignatureDescription } from "../utils/constants";
-import { getHash } from "../utils/cryptography";
-import { getRandomInt } from "../utils/utils";
+import { extractPrivateKeyAndCertificateFromPkcs12, extractPrivateKeyData, extractX509Data, getHash, sign } from "../utils/cryptography";
 import { buildXml, parseXml } from "../utils/xml";
 import { buildKeyInfoTag } from "./templates/keyInfo";
 import { buildSignatureTag } from "./templates/signature";
 import { buildSignedInfoTag } from "./templates/signedInfo";
 import { buildSignedPropertiesTag } from "./templates/signedProperties";
-import * as forge from 'node-forge';
 
 type signInvoiceXmlOptions = Partial<{
-  signatureDescription: string
+  pkcs12Password: string;
+  signatureDescription: string;
 }>;
 
 const insertSignatureIntoInvoiceXml = (invoiceXml: string, signatureXml: string) => {
@@ -22,8 +20,11 @@ const insertSignatureIntoInvoiceXml = (invoiceXml: string, signatureXml: string)
   return buildXml(invoiceXmlObj);
 }
 
-export const signInvoiceXml = (invoiceXml: string, privateKey: string, certificate: string, options?: signInvoiceXmlOptions) => {
+export const signInvoiceXml = (invoiceXml: string, pkcs12Data: string | Buffer, options?: signInvoiceXmlOptions) => {
   const signingTime = new Date().toISOString();
+  const { privateKey, certificate } = extractPrivateKeyAndCertificateFromPkcs12(pkcs12Data);
+  const { exponent: certificateExponent, modulus: certificateModulus } = extractPrivateKeyData(privateKey);
+  const { issuerName: x509IssuerName, serialNumber: x509SerialNumber, content: certificateContent } = extractX509Data(certificate);
 
   // IDs
   const invoiceTagId = 'comprobante';
@@ -37,26 +38,26 @@ export const signInvoiceXml = (invoiceXml: string, privateKey: string, certifica
   const signatureObjectTagId = `SignatureObject`;
   const signatureValueTagId = `SignatureValue`;
 
-  // HASHES
-  const invoiceHash = getHash(invoiceXml);
-
   const keyInfoTag = buildKeyInfoTag({
-    certificateContent: '',
-    certificateExponent: '',
-    certificateModulus: '',
+    certificateContent,
+    certificateExponent,
+    certificateModulus,
     keyInfoTagId
   });
+
+  const x509Hash = getHash(certificateContent);
 
   const signedPropertiesTag = buildSignedPropertiesTag({
     invoiceTagRefId,
     signatureDescription: options?.signatureDescription ?? defaultSignatureDescription,
     signedPropertiesTagId,
     signingTime,
-    x509Hash: '',
-    x509IssuerName: '',
-    x509SerialNumber: ''
+    x509Hash,
+    x509IssuerName,
+    x509SerialNumber
   });
 
+  const invoiceHash = getHash(invoiceXml);
   const signedPropertiesTagHash = getHash(signedPropertiesTag);
   const keyInfoTagHash = getHash(keyInfoTag);
 
@@ -72,12 +73,14 @@ export const signInvoiceXml = (invoiceXml: string, privateKey: string, certifica
     signedPropertiesTagId
   });
 
+  const signedSignedInfoTag = sign(signedInfoTag, privateKey);
+
   const signatureTag = buildSignatureTag({
     keyInfoTag,
     signatureTagId,
     signatureObjectTagId,
     signedInfoTag,
-    signedSignedInfoTag: '',
+    signedSignedInfoTag,
     signatureValueTagId,
     signedPropertiesTag
   });

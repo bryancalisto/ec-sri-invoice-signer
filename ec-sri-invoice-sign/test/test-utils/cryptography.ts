@@ -1,19 +1,6 @@
-import * as crypto from 'crypto';
+import * as forge from 'node-forge';
 
-export const generateKeyPair = () => {
-  return crypto.generateKeyPairSync('rsa', {
-    modulusLength: 2048,
-    publicKeyEncoding: {
-      type: 'pkcs1',
-      format: 'pem'
-    },
-    privateKeyEncoding: {
-      type: 'pkcs1',
-      format: 'pem'
-    }
-  });
-}
-
-export const verifySignature = (preSignData: string, publicKey: string, signature: string) => {
-  return crypto.createVerify('RSA-SHA1').update(preSignData, 'utf-8').end().verify(publicKey, signature, 'base64');
+export const verifySignature = (preSignData: string, publicKey: forge.pki.rsa.PublicKey, signature: string) => {
+  const digest = forge.md.sha1.create().update(preSignData, 'utf8');
+  return publicKey.verify(digest.digest().bytes(), forge.util.decode64(signature));
 }

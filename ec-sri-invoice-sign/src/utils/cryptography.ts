@@ -1,8 +1,9 @@
 import * as crypto from 'crypto';
 import * as forge from 'node-forge';
 
-const sign = (data: string, privateKey: string) => {
-  return crypto.createSign('RSA-SHA1').update(data, 'utf-8').end().sign(privateKey, 'base64');
+const sign = (data: string, privateKey: forge.pki.rsa.PrivateKey) => {
+  const md = forge.md.sha1.create().update(data, 'utf8');
+  return forge.util.encode64(privateKey.sign(md));
 }
 
 const getHash = (data: string) => {
@@ -50,10 +51,13 @@ const extractPrivateKeyAndCertificateFromPkcs12 = (pkcs12RawData: string | Buffe
 }
 
 const extractX509Data = (certificate: forge.pki.Certificate) => {
-  const serialNumber = parseInt(certificate.serialNumber, 16);
-  const issuerName = certificate.issuer.attributes.map((attr) => `${attr.name}=${attr.value}`).join(',');
+  const serialNumber = certificate.serialNumber;
+  const issuerName = certificate.issuer.attributes.reverse().map((attr) => `${attr.name}=${attr.value}`).join(','); // .reverse to follow convention of country name last seen in the SRI example
+  const certificateAsAsn1 = forge.pki.certificateToAsn1(certificate);
+  const content = Buffer.from(forge.asn1.toDer(certificateAsAsn1).getBytes()).toString('base64');
 
   return {
+    content,
     issuerName,
     serialNumber
   };

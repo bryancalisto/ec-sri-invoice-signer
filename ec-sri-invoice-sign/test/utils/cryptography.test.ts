@@ -1,17 +1,19 @@
 import { expect } from 'chai';
 import { extractPrivateKeyAndCertificateFromPkcs12, getHash, sign } from '../../src/utils/cryptography';
-import { generateKeyPair, verifySignature } from '../test-utils/cryptography';
+import { verifySignature } from '../test-utils/cryptography';
 import fs from 'fs';
 import path from 'path';
 import * as forge from 'node-forge';
-
-const data = '<factura Id="comprobante"><detalle Id="detalle">data</detalle></factura>';
+const signatureP12 = fs.readFileSync(path.resolve('test/test-data/pkcs12/signature.p12'));
 
 describe('Given the sign function', () => {
   it('should return the signature for the input data', () => {
-    const { privateKey, publicKey } = generateKeyPair();
+    const data = 'something';
+    const { privateKey, certificate } = extractPrivateKeyAndCertificateFromPkcs12(signatureP12);
+
     const resultSignature = sign(data, privateKey);
-    const verifiedSuccessfully = verifySignature(data, publicKey, resultSignature);
+    const verifiedSuccessfully = verifySignature(data, certificate.publicKey as forge.pki.rsa.PublicKey, resultSignature);
+
     expect(verifiedSuccessfully).to.be.true;
   });
 });
@@ -24,8 +26,7 @@ describe('Given the getHash function', () => {
 });
 
 describe('Given the extractPrivateKeyAndCertificateFromPkcs12 function', () => {
-  it.only('should return an object with the private key and certificate contained in the pkcs12 file', () => {
-    const signatureP12 = fs.readFileSync(path.resolve('test/test-data/pkcs12/signature.p12'));
+  it('should return an object with the private key and certificate contained in the pkcs12 file', () => {
     const privateKeyPem = fs.readFileSync(path.resolve('test/test-data/pkcs12/privateKey.pem')).toString('utf-8');
     const certificatePem = fs.readFileSync(path.resolve('test/test-data/pkcs12/certificate.pem')).toString('utf-8');
     const password = '';
