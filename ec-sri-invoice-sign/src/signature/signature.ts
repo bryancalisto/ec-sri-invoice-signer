@@ -1,5 +1,6 @@
 import { defaultSignatureDescription } from "../utils/constants";
 import { extractPrivateKeyAndCertificateFromPkcs12, extractPrivateKeyData, extractX509Data, getHash, sign } from "../utils/cryptography";
+import Utils from "../utils/utils";
 import { buildXml, parseXml } from "../utils/xml";
 import { buildKeyInfoTag } from "./templates/keyInfo";
 import { buildSignatureTag } from "./templates/signature";
@@ -21,7 +22,7 @@ const insertSignatureIntoInvoiceXml = (invoiceXml: string, signatureXml: string)
 }
 
 export const signInvoiceXml = (invoiceXml: string, pkcs12Data: string | Buffer, options?: signInvoiceXmlOptions) => {
-  const signingTime = new Date().toISOString();
+  const signingTime = Utils.getDate();
   const { privateKey, certificate } = extractPrivateKeyAndCertificateFromPkcs12(pkcs12Data);
   const { exponent: certificateExponent, modulus: certificateModulus } = extractPrivateKeyData(privateKey);
   const { issuerName: x509IssuerName, serialNumber: x509SerialNumber, content: certificateContent } = extractX509Data(certificate);
@@ -38,6 +39,7 @@ export const signInvoiceXml = (invoiceXml: string, pkcs12Data: string | Buffer, 
   const signatureObjectTagId = `SignatureObject`;
   const signatureValueTagId = `SignatureValue`;
 
+  // XML sections, hashes and signature
   const keyInfoTag = buildKeyInfoTag({
     certificateContent,
     certificateExponent,

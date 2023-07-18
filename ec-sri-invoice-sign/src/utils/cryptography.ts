@@ -1,5 +1,6 @@
 import * as crypto from 'crypto';
 import * as forge from 'node-forge';
+import { UnsuportedPkcs12Error } from './errors';
 
 const sign = (data: string, privateKey: forge.pki.rsa.PrivateKey) => {
   const md = forge.md.sha1.create().update(data, 'utf8');
@@ -25,23 +26,15 @@ const extractPrivateKeyAndCertificateFromPkcs12 = (pkcs12RawData: string | Buffe
   const pkcs8ShroudedKeyBags = p12.getBags({ bagType: forge.pki.oids.pkcs8ShroudedKeyBag });
   const pkcs8ShroudedKeyBag = pkcs8ShroudedKeyBags[forge.pki.oids.pkcs8ShroudedKeyBag]?.[0];
 
-  if (!certBag) {
-    throw new Error(); // TODO: make this error custom
-  }
-
-  if (!pkcs8ShroudedKeyBag) {
-    throw new Error(); // TODO: make this error custom
+  if (!certBag || !pkcs8ShroudedKeyBag) {
+    throw new UnsuportedPkcs12Error();
   }
 
   const privateKey = pkcs8ShroudedKeyBag.key as forge.pki.rsa.PrivateKey; // Not sure if the SRI software supports other kinds of private keys
   const certificate = certBag.cert;
 
-  if (privateKey === undefined) {
-    throw new Error();
-  }
-
-  if (certificate === undefined) {
-    throw new Error();
+  if (!privateKey || !certificate) {
+    throw new UnsuportedPkcs12Error();
   }
 
   return {
@@ -51,7 +44,7 @@ const extractPrivateKeyAndCertificateFromPkcs12 = (pkcs12RawData: string | Buffe
 }
 
 const extractX509Data = (certificate: forge.pki.Certificate) => {
-  const serialNumber = certificate.serialNumber;
+  const serialNumber = parseInt(certificate.serialNumber, 16).toString();
   const issuerName = certificate.issuer.attributes.reverse().map((attr) => `${attr.name}=${attr.value}`).join(','); // .reverse to follow convention of country name last seen in the SRI example
   const certificateAsAsn1 = forge.pki.certificateToAsn1(certificate);
   const content = Buffer.from(forge.asn1.toDer(certificateAsAsn1).getBytes()).toString('base64');
