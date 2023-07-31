@@ -20,13 +20,20 @@ const attributeCompare = (a: any, b: any) => {
   }
 }
 
-const namespaceCompare = (a: any, b: any) => {
-  const attr1 = a.prefix;
-  const attr2 = b.prefix;
-  if (attr1 === attr2) {
+const namespaceCompare = (a: Namespace, b: Namespace) => {
+  if (!a.prefix) {
+    return -1;
+  }
+
+  if (!b.prefix) {
+    return 1;
+  }
+
+  if (a.prefix === b.prefix) {
     return 0;
   }
-  return attr1.localeCompare(attr2);
+
+  return a.prefix.localeCompare(b.prefix);
 }
 
 interface Attribute {
@@ -36,9 +43,11 @@ interface Attribute {
 }
 
 interface Namespace {
-  name?: string;
+  prefix?: string;
   value: string;
 }
+
+type Node = Record<string, any>;
 
 type GenericCollection = Record<string, string>;
 
@@ -54,7 +63,7 @@ const parseAttributesAndNamespaces = (data: GenericCollection) => {
     const isAttributeWithNamespace = isAttribute && splittedKey.length === 2;
 
     if (isNamespace) {
-      namespaces.push({ name: splittedKey[1], value: data[rawKey] });
+      namespaces.push({ prefix: splittedKey[1], value: data[rawKey] });
     }
 
     if (isAttribute) {
@@ -65,23 +74,37 @@ const parseAttributesAndNamespaces = (data: GenericCollection) => {
   return { attributes, namespaces };
 }
 
-const parseNode = (node: Record<string, any>) => {
+const sortNamespaces = (namespaces: Namespace[]) => {
+  namespaces.sort(namespaceCompare);
+}
+
+const processNode = (node: Node, depth: number) => {
   const reservedKeywords = new Set([':@', '#text']);
   const { attributes, namespaces } = parseAttributesAndNamespaces(node[':@'] ?? {})
 
+  sortNamespaces(namespaces);
+
   const tagName = Object.keys(node).find((key) => !reservedKeywords.has(key));
   for (const child of node[tagName!] ?? []) {
-    parseNode(child);
+    processNode(child, depth + 1);
   }
+
+  console.log('NODE', node, attributes, namespaces);
 
   // Convert node adding, relocating and removing things and return it
 }
 
+const processObj = (obj: Node[]) => {
+  let depth = 0;
+
+  for (const node of obj) {
+    processNode(node, depth);
+  }
+}
+
 const c14nCanonicalize = (xml: string) => {
   const obj = parseXml(xml);
-  for (const node of obj) {
-    parseNode(node)
-  }
+  processObj(obj);
   // console.log("OBJ", JSON.stringify(obj, null, 2));
 
   return buildXml(obj);
