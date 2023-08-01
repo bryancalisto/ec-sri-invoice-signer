@@ -78,15 +78,31 @@ const sortNamespaces = (namespaces: Namespace[]) => {
   namespaces.sort(namespaceCompare);
 }
 
+const removeNode = (obj: Node[], currentPosition: number) => {
+  obj.splice(currentPosition, 1);
+}
+
 const processNode = (node: Node, depth: number) => {
-  const reservedKeywords = new Set([':@', '#text']);
+  const reservedKeywords = new Set([':@', '#text', '#comment']);
   const { attributes, namespaces } = parseAttributesAndNamespaces(node[':@'] ?? {})
 
   sortNamespaces(namespaces);
 
   const tagName = Object.keys(node).find((key) => !reservedKeywords.has(key));
-  for (const child of node[tagName!] ?? []) {
+  const children = (node[tagName!] ?? []) as Node[];
+  let i = 0;
+
+  while (i < children.length) {
+    const child = children[i];
+
+    if (child['#comment']) {
+      removeNode(children, i);
+      continue;
+    }
+
     processNode(child, depth + 1);
+
+    i++;
   }
 
   console.log('NODE', node, attributes, namespaces);
@@ -96,9 +112,19 @@ const processNode = (node: Node, depth: number) => {
 
 const processObj = (obj: Node[]) => {
   let depth = 0;
+  let i = 0;
 
-  for (const node of obj) {
+  while (i < obj.length) {
+    const node = obj[i];
+
+    if (node['#comment']) {
+      removeNode(obj, i);
+      continue;
+    }
+
     processNode(node, depth);
+
+    i++;
   }
 }
 

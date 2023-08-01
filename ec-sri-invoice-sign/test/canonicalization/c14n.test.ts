@@ -6,6 +6,8 @@ describe('cn14', () => {
     const input = `
         <doc>
   <e1   />
+
+
   <e2   ></e2>
   <e3   name = "elem3"   id="elem3"   />
   <e4   name="elem4"   id="elem4"   ></e4>
@@ -19,16 +21,19 @@ describe('cn14', () => {
         <e9 xmlns="" xmlns:a="http://www.ietf.org"/>
       </e8>
     </e7>
-  </e6>
-</doc>
-
     <!-- Comment 2 -->
 
-    <!-- Comment 3 -->  `;
+  </e6>
+
+    <!-- Comment 3 -->
+
+</doc>`;
 
     const expected = `\
 <doc>
   <e1></e1>
+
+
   <e2></e2>
   <e3 id="elem3" name="elem3"></e3>
   <e4 id="elem4" name="elem4"></e4>
@@ -39,7 +44,12 @@ describe('cn14', () => {
         <e9 xmlns:a="http://www.ietf.org" attr="default"></e9>
       </e8>
     </e7>
+    
+
   </e6>
+
+    
+
 </doc>`;
 
     const result = c14nCanonicalize(input);
