@@ -2,7 +2,7 @@ import { expect } from "chai";
 import { c14nCanonicalize } from "../../src/canonicalization/c14n";
 
 describe('cn14', () => {
-  it.only('PIs, Comments, and Outside of Document Element', () => {
+  it.only('Removes comments, sorts attributes and namespaces, inherits and removes redundant namespaces and trims document leading and trailing whitespace', () => {
     const input = `
         <doc>
   <e1   />
@@ -56,4 +56,30 @@ describe('cn14', () => {
 
     expect(result).to.equal(expected);
   });
+
+  it.only('should replace whitespace between attributes with a single space (0x20)', () => {
+    const input = `<e1   a='one'
+    
+    b  = 'two'  >`;
+
+    const expected = `<e1 a="one" b="two"></e1>`;
+
+    const result = c14nCanonicalize(input);
+    expect(result).to.equal(expected);
+  });
+
+  it.only('should replace CR (0x0d), LF (0x0a), TAB (0x09) within attribute values with a single space (0x20)', () => {
+    const input = `<e2 C=' letter
+
+
+	A ' >`;
+
+    const expected = `<e2 C=" letter    A "></e2>`;
+
+    const result = c14nCanonicalize(input);
+    expect(result).to.equal(expected);
+  });
 });
+
+
+// COVER THIS: The letter á is changed from Latin-1 encoding e1 to UTF-8 c3 a1
