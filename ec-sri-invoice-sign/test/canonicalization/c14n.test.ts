@@ -9,8 +9,8 @@ describe('cn14', () => {
 
 
   <e2   ></e2>
-  <e3   name = "elem3"   id="elem3"   />
-  <e4   name="elem4"   id="elem4"   ></e4>
+  <e3   name = 'elem3'   id='elem3'   />
+  <e4   name='elem4'   id='elem4'   ></e4>
   <e5 a:attr="out" b:attr="sorted" attr2="all" attr="I'm"
     xmlns:b="http://www.ietf.org"
     xmlns:a="http://www.w3.org"
