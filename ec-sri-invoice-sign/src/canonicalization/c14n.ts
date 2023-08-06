@@ -118,9 +118,19 @@ const insertAttributesAndNamespaces = (node: Node, attributes: Attribute[], name
   node[':@'] = toInsert;
 }
 
-const processNode = (node: Node, depth: number) => {
+const mergeLocalAndInheritedNamespaces = (local: Namespace[], inherited: Namespace[]) => {
+  return [...inherited.filter((namespace) => namespace.prefix !== undefined), ...local.filter((namespace) => namespace.prefix !== undefined)];
+}
+
+const processNode = (node: Node, alreadyDeclaredNamespaces: Namespace[], inheritedNamespaces?: Namespace[]) => {
+  console.log('ALREADY', alreadyDeclaredNamespaces);
+
   const reservedKeywords = new Set([':@', '#text', '#comment']);
-  const { attributes, namespaces } = parseAttributesAndNamespaces(node[':@'] ?? {})
+  let { attributes, namespaces } = parseAttributesAndNamespaces(node[':@'] ?? {})
+
+  if (inheritedNamespaces) {
+    namespaces = mergeLocalAndInheritedNamespaces(namespaces, inheritedNamespaces);
+  }
 
   sortNamespaces(namespaces);
   sortAttributes(attributes);
@@ -147,14 +157,17 @@ const processNode = (node: Node, depth: number) => {
       continue;
     }
 
-    processNode(child, depth + 1);
+    processNode(child, namespaces);
 
     i++;
   }
+
+  return {
+    namespaces: [...alreadyDeclaredNamespaces, ...namespaces]
+  };
 }
 
-const processObj = (obj: Node[]) => {
-  let depth = 0;
+const processObj = (obj: Node[], inheritedNamespaces?: Namespace[]) => {
   let i = 0;
 
   while (i < obj.length) {
@@ -165,16 +178,16 @@ const processObj = (obj: Node[]) => {
       continue;
     }
 
-    processNode(node, depth);
+    processNode(node, [], inheritedNamespaces);
 
     i++;
   }
 }
 
-const c14nCanonicalize = (xml: string) => {
+const c14nCanonicalize = (xml: string, options?: { inheritedNamespaces: Namespace[] }) => {
   const obj = parseXml(xml);
 
-  processObj(obj);
+  processObj(obj, options?.inheritedNamespaces);
 
   return buildXml(obj);
 }

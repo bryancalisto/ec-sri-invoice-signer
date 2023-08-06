@@ -2,7 +2,7 @@ import { expect } from "chai";
 import { c14nCanonicalize } from "../../src/canonicalization/c14n";
 
 describe.only('cn14', () => {
-  it('Removes comments, sorts attributes and namespaces, inherits and removes redundant namespaces and trims document leading and trailing whitespace', () => {
+  it.only('Removes comments, sorts attributes and namespaces, inherits and removes redundant namespaces and trims document leading and trailing whitespace', () => {
     const input = `
         <doc>
   <e1   />
@@ -86,7 +86,55 @@ describe.only('cn14', () => {
 
     const result = c14nCanonicalize(input);
     expect(result).to.equal(expected);
-  })
+  });
+
+  it('should set inherited namespaces into the root canonicalization target subset', () => {
+    const input = `<Doc Id="P666">
+    ...
+    </Doc>`;
+    const expected = `<Doc xmlns="http://www.example.com" xmlns:ab="http://www.ab.com" Id="P666">
+    ...
+    </Doc>`;
+
+    const result = c14nCanonicalize(input, {
+      inheritedNamespaces: [
+        {
+          prefix: undefined,
+          uri: 'http://www.example.com',
+        },
+        {
+          prefix: 'ab',
+          uri: 'http://www.ab.com'
+        }
+      ]
+    });
+
+    expect(result).to.equal(expected);
+  });
+
+  it('should omit empty default namespaces in the root canonicalization target subset', () => {
+    const input = `<Doc xmlns="" Id="P666">
+    ...
+    </Doc>`;
+    const expected = `<Doc xmlns:ab="http://www.ab.com" Id="P666">
+    ...
+    </Doc>`;
+
+    const result = c14nCanonicalize(input, {
+      inheritedNamespaces: [
+        {
+          prefix: undefined,
+          uri: '',
+        },
+        {
+          prefix: 'ab',
+          uri: 'http://www.ab.com'
+        }
+      ]
+    });
+
+    expect(result).to.equal(expected);
+  });
 });
 
 
