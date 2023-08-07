@@ -104,7 +104,7 @@ const removeNode = (obj: Node[], currentPosition: number) => {
   obj.splice(currentPosition, 1);
 }
 
-const insertAttributesAndNamespaces = (node: Node, attributes: Attribute[], namespaces: Namespace[]) => {
+const insertAttributesAndNamespaces = (node: Node, attributes: Attribute[], namespaces: Namespace[], shouldLog: boolean) => {
   const toInsert: GenericCollection = {};
 
   namespaces.forEach((namespace) => {
@@ -115,16 +115,19 @@ const insertAttributesAndNamespaces = (node: Node, attributes: Attribute[], name
     toInsert[`@_${attr.namespacePrefix ? `${attr.namespacePrefix}:${attr.name}` : attr.name}`] = attr.value;
   });
 
+  if (shouldLog)
+    console.log('TO INS', toInsert);
+
   node[':@'] = toInsert;
 }
 
 const mergeLocalAndInheritedNamespaces = (local: Namespace[], inherited: Namespace[]) => {
-  return [...inherited.filter((namespace) => namespace.prefix !== undefined), ...local.filter((namespace) => namespace.prefix !== undefined)];
+  // A local will override a inherited with the same prefix
+  const acceptedInherited: Namespace[] = inherited.filter((inheritedNamespace) => !local.some((localNamespace) => localNamespace.prefix === inheritedNamespace.prefix));
+  return [...acceptedInherited, ...local];
 }
 
 const processNode = (node: Node, alreadyDeclaredNamespaces: Namespace[], inheritedNamespaces?: Namespace[]) => {
-  console.log('ALREADY', alreadyDeclaredNamespaces);
-
   const reservedKeywords = new Set([':@', '#text', '#comment']);
   let { attributes, namespaces } = parseAttributesAndNamespaces(node[':@'] ?? {})
 
@@ -139,13 +142,15 @@ const processNode = (node: Node, alreadyDeclaredNamespaces: Namespace[], inherit
   const children = (node[tagName!] ?? []) as Node[];
   let i = 0;
 
-  if (tagName === 'e5') {
+  const shouldLog = tagName === 'e8';
+
+  if (shouldLog) {
     console.log('NODE', node, 'ATTR', attributes, 'NAMESP', namespaces);
   }
 
-  insertAttributesAndNamespaces(node, attributes, namespaces);
+  insertAttributesAndNamespaces(node, attributes, namespaces, shouldLog);
 
-  if (tagName === 'e5') {
+  if (shouldLog) {
     console.log('AFTER NODE', node);
   }
 

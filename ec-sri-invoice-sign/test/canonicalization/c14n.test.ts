@@ -2,7 +2,7 @@ import { expect } from "chai";
 import { c14nCanonicalize } from "../../src/canonicalization/c14n";
 
 describe.only('cn14', () => {
-  it.only('Removes comments, sorts attributes and namespaces, inherits and removes redundant namespaces and trims document leading and trailing whitespace', () => {
+  it('Removes comments, sorts attributes and namespaces, inherits and removes redundant namespaces and trims document leading and trailing whitespace', () => {
     const input = `
         <doc>
   <e1   />
@@ -15,10 +15,10 @@ describe.only('cn14', () => {
     xmlns:b="http://www.ietf.org"
     xmlns:a="http://www.w3.org"
     xmlns="http://example.org"/>
-  <e6 xmlns="" xmlns:a="http://www.w3.org">
+  <e6 xmlns:c="http://www.w3.org">
     <e7 xmlns="http://www.ietf.org">
-      <e8 xmlns="" xmlns:a="http://www.w3.org">
-        <e9 xmlns="" xmlns:a="http://www.ietf.org"/>
+      <e8 xmlns:d="http://www.w3.org">
+        <e9 xmlns:e="http://www.ietf.org"/>
       </e8>
     </e7>
     <!-- Comment 2 -->
@@ -38,10 +38,10 @@ describe.only('cn14', () => {
   <e3 id="elem3" name="elem3"></e3>
   <e4 id="elem4" name="elem4"></e4>
   <e5 xmlns="http://example.org" xmlns:a="http://www.w3.org" xmlns:b="http://www.ietf.org" attr="I'm" attr2="all" b:attr="sorted" a:attr="out"></e5>
-  <e6 xmlns:a="http://www.w3.org">
+  <e6 xmlns:c="http://www.w3.org">
     <e7 xmlns="http://www.ietf.org">
-      <e8 xmlns="">
-        <e9 xmlns:a="http://www.ietf.org" attr="default"></e9>
+      <e8 xmlns:d="http://www.w3.org">
+        <e9 xmlns:e="http://www.ietf.org"></e9>
       </e8>
     </e7>
     
@@ -90,10 +90,14 @@ describe.only('cn14', () => {
 
   it('should set inherited namespaces into the root canonicalization target subset', () => {
     const input = `<Doc Id="P666">
-    ...
+    <child>123</child>
+    <child>456</child>
+    <child>789</child>
     </Doc>`;
     const expected = `<Doc xmlns="http://www.example.com" xmlns:ab="http://www.ab.com" Id="P666">
-    ...
+    <child>123</child>
+    <child>456</child>
+    <child>789</child>
     </Doc>`;
 
     const result = c14nCanonicalize(input, {
@@ -112,19 +116,23 @@ describe.only('cn14', () => {
     expect(result).to.equal(expected);
   });
 
-  it('should omit empty default namespaces in the root canonicalization target subset', () => {
-    const input = `<Doc xmlns="" Id="P666">
-    ...
+  it('should override parent namespace URI with the child namespace URI', () => {
+    const input = `<Doc Id="P666">
+    <child>123</child>
+    <child>456</child>
+    <child>789</child>
     </Doc>`;
-    const expected = `<Doc xmlns:ab="http://www.ab.com" Id="P666">
-    ...
+    const expected = `<Doc xmlns="http://www.example.com" xmlns:ab="http://www.ab.com" Id="P666">
+    <child>123</child>
+    <child>456</child>
+    <child>789</child>
     </Doc>`;
 
     const result = c14nCanonicalize(input, {
       inheritedNamespaces: [
         {
           prefix: undefined,
-          uri: '',
+          uri: 'http://www.example.com',
         },
         {
           prefix: 'ab',
@@ -138,4 +146,12 @@ describe.only('cn14', () => {
 });
 
 
-// COVER THIS: The letter á is changed from Latin-1 encoding e1 to UTF-8 c3 a1
+/*
+ REQUIRED FROM THE USER:
+ - Input xml should be utf-8.
+ - No CDATA. Is removed by lib?
+ - No entity references. Is removed by lib?
+ - No ATTLIST. Is removed by lib?
+ - No xml attributes. How is this parsed by lib?
+ - No Empty URI namespaces.
+ */
