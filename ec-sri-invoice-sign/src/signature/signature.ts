@@ -14,6 +14,14 @@ const insertSignatureIntoInvoiceXml = (invoiceXml: string, signatureXml: string)
   return invoiceXml.replace('</factura>', `${signatureXml}</factura>`);
 }
 
+/**
+ * 
+ * @param invoiceXml The invoice XML to be signed.
+ * @param pkcs12Data The pkcs12 file (.p12/.pfx) data expressed as a node Buffer or base64 string.
+ * @param options Options are:
+ * - **pkcs12Password**: The pkcs12 file password. Defaults to no password.
+ * @returns 
+ */
 export const signInvoiceXml = (invoiceXml: string, pkcs12Data: string | Buffer, options?: signInvoiceXmlOptions) => {
   const signingTime = Utils.getDate();
   const { privateKey, certificate } = extractPrivateKeyAndCertificateFromPkcs12(pkcs12Data, options?.pkcs12Password);
