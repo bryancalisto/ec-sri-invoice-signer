@@ -1,9 +1,9 @@
 import { expect } from "chai";
 import { c14nCanonicalize } from "../../src/canonicalization/c14n";
 
-describe.only('cn14', () => {
-  it('Removes comments, sorts attributes and namespaces, inherits and removes redundant namespaces and trims document leading and trailing whitespace', () => {
-    const input = `
+describe('cn14', () => {
+  it('Removes doc declaration, comments, sorts attributes and namespaces and trims document leading and trailing whitespace', () => {
+    const input = `<?xml version="1.0" encoding="UTF-8"?>
         <doc>
   <e1   />
 
@@ -144,14 +144,3 @@ describe.only('cn14', () => {
     expect(result).to.equal(expected);
   });
 });
-
-
-/*
- REQUIRED FROM THE USER:
- - Input xml should be utf-8.
- - No CDATA. Is removed by lib?
- - No entity references. Is removed by lib?
- - No ATTLIST. Is removed by lib?
- - No xml attributes. How is this parsed by lib?
- - No Empty URI namespaces.
- */

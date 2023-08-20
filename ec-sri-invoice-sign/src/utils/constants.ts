@@ -14,9 +14,6 @@ const XmlProperties = {
   }
 };
 
-const defaultSignatureDescription = 'Contenido de la factura';
-
 export {
-  defaultSignatureDescription,
   XmlProperties
 }

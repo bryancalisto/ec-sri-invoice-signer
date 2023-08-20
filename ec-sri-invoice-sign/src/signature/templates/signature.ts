@@ -19,18 +19,17 @@ export const buildSignatureTag = ({
   signatureValueTagId,
   signedPropertiesTag
 }: buildSignatureTagArgs) => {
-  return `
-    <ds:Signature xmlns:ds="${XmlProperties.namespaces.ds}" xmlns:etsi="${XmlProperties.namespaces.etsi}" Id="${signatureTagId}">
-      ${signedInfoTag}
-      <ds:SignatureValue Id="${signatureValueTagId}">
-        ${signedSignedInfoTag}
-      </ds:SignatureValue>
-      ${keyInfoTag}
-      <ds:Object Id="${signatureObjectTagId}">
-        <etsi:QualifyingProperties Target="#${signatureTagId}">
-          ${signedPropertiesTag}
-        </etsi:QualifyingProperties>
-      </ds:Object>
-    </ds:Signature>
-  `;
+  return `\
+<ds:Signature xmlns:ds="${XmlProperties.namespaces.ds}" Id="${signatureTagId}">\
+${signedInfoTag}\
+<ds:SignatureValue Id="${signatureValueTagId}">\
+${signedSignedInfoTag}\
+</ds:SignatureValue>\
+${keyInfoTag}\
+<ds:Object Id="${signatureObjectTagId}">\
+<xades:QualifyingProperties xmlns:xades="http://uri.etsi.org/01903/v1.3.2#" Target="#${signatureTagId}">\
+${signedPropertiesTag}\
+</xades:QualifyingProperties>\
+</ds:Object>\
+</ds:Signature>`;
 }

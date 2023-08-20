@@ -6,12 +6,13 @@ type XmlObj = Array<Record<any, any>>;
 
 const parseXml = (xml: string): XmlObj => {
   const parserOptions = {
-    commentPropName: '#comment', // need to parse comments to keep the possible whitespace that is left when removing them. Otherwhise the library gets rid of it
+    commentPropName: '#comment', // need to include comments to keep the possible whitespace that is left when removing them. Otherwhise the library gets rid of it
     ignoreAttributes: false,
     ignoreDeclaration: true,
     parseTagValue: false,
     preserveOrder: true,
     trimValues: false,
+    processEntities: false,
     ignorePiTags: true,
     attributeValueProcessor: (name: string, value: string) => {
       return normalizeWhitespace(value);

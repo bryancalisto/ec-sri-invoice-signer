@@ -1,18 +1,16 @@
-import * as crypto from 'crypto';
 import * as forge from 'node-forge';
 import { UnsuportedPkcs12Error } from './errors';
 
 const sign = (data: string, privateKey: forge.pki.rsa.PrivateKey) => {
-  const md = forge.md.sha1.create().update(data, 'utf8');
-  return forge.util.encode64(privateKey.sign(md));
+  return forge.util.encode64(privateKey.sign(forge.sha1.create().update(data, 'utf8')));
 }
 
 const getHash = (data: string) => {
-  return crypto.createHash('sha1').update(data, 'utf-8').end().digest('base64');
+  return forge.util.encode64(forge.sha1.create().update(data, 'utf8').digest().bytes());
 }
 
 /**
- * @param pkcs12RawData The p12/pfx file data encoded as base64 or a Buffer.
+ * @param pkcs12RawData The p12/pfx file data encoded as base64 or a nodejs Buffer.
  * @param password The p12/pfx file password as a UTF-8 string.
  * @returns An object with the private key and certificate extracted (both typed according to node-forge) from the p12/pfx file.
  */
@@ -30,7 +28,7 @@ const extractPrivateKeyAndCertificateFromPkcs12 = (pkcs12RawData: string | Buffe
     throw new UnsuportedPkcs12Error();
   }
 
-  const privateKey = pkcs8ShroudedKeyBag.key as forge.pki.rsa.PrivateKey; // Not sure if the SRI software supports other kinds of private keys
+  const privateKey = pkcs8ShroudedKeyBag.key as forge.pki.rsa.PrivateKey;
   const certificate = certBag.cert;
 
   if (!privateKey || !certificate) {
@@ -43,14 +41,31 @@ const extractPrivateKeyAndCertificateFromPkcs12 = (pkcs12RawData: string | Buffe
   }
 }
 
+const extractIssuerData = (certificate: forge.pki.Certificate) => {
+  const issuerName = certificate.issuer.attributes.reverse().filter((attr) => attr.shortName || attr.type).map((attr) => {
+    if (attr.shortName) {
+      return `${attr.shortName}=${attr.value}`;
+    }
+    else {
+      return `${attr.type}=${attr.value}`; // REAL IMPLEMENTATION
+      // return `${attr.type}=#0c0f56415445532d413636373231343939`; // DEBUG ONLY
+    }
+  }).join(','); // .reverse to follow convention of country-name-is-last seen in the SRI example
+
+  return issuerName;
+}
+
 const extractX509Data = (certificate: forge.pki.Certificate) => {
-  const serialNumber = parseInt(certificate.serialNumber, 16).toString();
-  const issuerName = certificate.issuer.attributes.reverse().map((attr) => `${attr.name}=${attr.value}`).join(','); // .reverse to follow convention of country name last seen in the SRI example
+  const serialNumber = new forge.jsbn.BigInteger(Array.from(Buffer.from(certificate.serialNumber, 'hex'))).toString();
+  const issuerName = extractIssuerData(certificate);
   const certificateAsAsn1 = forge.pki.certificateToAsn1(certificate);
-  const content = Buffer.from(forge.asn1.toDer(certificateAsAsn1).getBytes()).toString('base64');
+  const contentAsDer = forge.asn1.toDer(certificateAsAsn1);
+  const contentHash = forge.util.encode64(forge.sha1.create().update(contentAsDer.bytes()).digest().bytes());
+  const content = forge.util.encode64(contentAsDer.bytes());
 
   return {
     content,
+    contentHash,
     issuerName,
     serialNumber
   };

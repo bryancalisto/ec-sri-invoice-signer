@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><factura xmlns:ds="http://www.w3.org/2000/09/xmldsig#" id="comprobante" version="1.1.0">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><factura id="comprobante">
     <infoTributaria>
         <ambiente>2</ambiente>
         <tipoEmision>1</tipoEmision>
@@ -10,11 +10,12 @@
         <estab>001</estab>
         <ptoEmi>002</ptoEmi>
         <secuencial>005128150</secuencial>
-        <dirMatriz>Quito, Amazonas y El Inca</dirMatriz>
+        <dirMatriz>Quito, Amazonas y El Inca  </dirMatriz>
     </infoTributaria>
+
     <infoFactura>
         <fechaEmision>01/07/2022</fechaEmision>
-        <dirEstablecimiento>Quito Sur (Villaflora)</dirEstablecimiento>
+        <dirEstablecimiento>Quito Sur (Villaflora)  </dirEstablecimiento>
         <contribuyenteEspecial>635</contribuyenteEspecial>
         <obligadoContabilidad>SI</obligadoContabilidad>
         <tipoIdentificacionComprador>05</tipoIdentificacionComprador>

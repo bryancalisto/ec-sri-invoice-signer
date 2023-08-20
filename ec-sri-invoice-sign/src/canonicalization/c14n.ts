@@ -1,4 +1,27 @@
+/**
+ * This doesn't implement the http://www.w3.org/TR/2001/REC-xml-c14n-20010315 specification entirely. Currently it's just
+ * good enough to work with xml invoices that align with below requirements (which should cover most of the cases).
+ * At first, won't implement the complete specification considering that the SRI software doesn't need many XML features
+ * that the specification supports. In the future, if really needed, a complete canonicalization may be implemented.
+ * 
+ * The requirements for the input invoice XML are (none of these are needed to interchange XML data with the):
+ * - The invoice to sign should consist of the 'factura' node and its children (e.g. <?xml version="1.0" encoding="UTF-8"?><factura Id="comprobante">...</factura>).
+ *   The document declaration (i.e. <?xml version="1.0" encoding="UTF-8"?>) is optional.
+ * - The invoice should be utf-8 encoded.
+ * - No namespaces.
+ * - No CDATA.
+ * - No XML, HTML, DOCTYPE or any other entity.
+ * - No Document type definition (DTD) tags.
+ * - No xml-prefixed attributes (xml:<attr_name>).
+ * 
+ * Canonicalization based on:
+ * - https://www.w3.org/TR/xml-c14n
+ * - https://www.di-mgt.com.au/xmldsig-c14n.html
+ */
+
 import { buildXml, parseXml } from "../utils/xml";
+
+const CommentNodeIdentifier = '#comment';
 
 const attributeCompare = (a: Attribute, b: Attribute) => {
   if (!a.namespaceURI && b.namespaceURI) {
@@ -86,7 +109,6 @@ const parseAttributesAndNamespaces = (data: GenericCollection) => {
     }
   }
 
-  // const solvedAttributesWithPendingNamespace: Attribute[] = attributesWithPendingNamespace.map((attr) => ({ name: attr.name, namespaceURI: namespacesByPrefix[attr.prefix].uri, value: attr.value }));
   const solvedAttributesWithPendingNamespace: Attribute[] = attributesWithPendingNamespace.map((attr) => ({ ...attr, namespaceURI: namespacesByPrefix[attr.namespacePrefix ?? ''].uri, value: attr.value }));
 
   return { attributes: [...attributes, ...solvedAttributesWithPendingNamespace], namespaces: Object.values(namespacesByPrefix) };
@@ -104,7 +126,7 @@ const removeNode = (obj: Node[], currentPosition: number) => {
   obj.splice(currentPosition, 1);
 }
 
-const insertAttributesAndNamespaces = (node: Node, attributes: Attribute[], namespaces: Namespace[], shouldLog: boolean) => {
+const insertAttributesAndNamespaces = (node: Node, attributes: Attribute[], namespaces: Namespace[]) => {
   const toInsert: GenericCollection = {};
 
   namespaces.forEach((namespace) => {
@@ -115,20 +137,17 @@ const insertAttributesAndNamespaces = (node: Node, attributes: Attribute[], name
     toInsert[`@_${attr.namespacePrefix ? `${attr.namespacePrefix}:${attr.name}` : attr.name}`] = attr.value;
   });
 
-  if (shouldLog)
-    console.log('TO INS', toInsert);
-
   node[':@'] = toInsert;
 }
 
 const mergeLocalAndInheritedNamespaces = (local: Namespace[], inherited: Namespace[]) => {
-  // A local will override a inherited with the same prefix
+  // A local should override an inherited with the same prefix
   const acceptedInherited: Namespace[] = inherited.filter((inheritedNamespace) => !local.some((localNamespace) => localNamespace.prefix === inheritedNamespace.prefix));
   return [...acceptedInherited, ...local];
 }
 
 const processNode = (node: Node, alreadyDeclaredNamespaces: Namespace[], inheritedNamespaces?: Namespace[]) => {
-  const reservedKeywords = new Set([':@', '#text', '#comment']);
+  const reservedKeywords = new Set([':@', '#text', CommentNodeIdentifier]);
   let { attributes, namespaces } = parseAttributesAndNamespaces(node[':@'] ?? {})
 
   if (inheritedNamespaces) {
@@ -142,22 +161,12 @@ const processNode = (node: Node, alreadyDeclaredNamespaces: Namespace[], inherit
   const children = (node[tagName!] ?? []) as Node[];
   let i = 0;
 
-  const shouldLog = tagName === 'e8';
-
-  if (shouldLog) {
-    console.log('NODE', node, 'ATTR', attributes, 'NAMESP', namespaces);
-  }
-
-  insertAttributesAndNamespaces(node, attributes, namespaces, shouldLog);
-
-  if (shouldLog) {
-    console.log('AFTER NODE', node);
-  }
+  insertAttributesAndNamespaces(node, attributes, namespaces);
 
   while (i < children.length) {
     const child = children[i];
 
-    if (child['#comment']) {
+    if (child[CommentNodeIdentifier]) {
       removeNode(children, i);
       continue;
     }
@@ -178,7 +187,7 @@ const processObj = (obj: Node[], inheritedNamespaces?: Namespace[]) => {
   while (i < obj.length) {
     const node = obj[i];
 
-    if (node['#comment']) {
+    if (node[CommentNodeIdentifier]) {
       removeNode(obj, i);
       continue;
     }

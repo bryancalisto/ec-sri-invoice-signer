@@ -3,6 +3,7 @@ import { XmlProperties } from "../../utils/constants";
 type buildSignedInfoTagArgs = {
   invoiceHash: string;
   invoiceTagId: string;
+  invoiceTagRefId: string;
   keyInfoTagHash: string;
   keyInfoTagId: string;
   keyInfoRefTagId: string;
@@ -15,6 +16,7 @@ type buildSignedInfoTagArgs = {
 export const buildSignedInfoTag = ({
   invoiceHash,
   invoiceTagId,
+  invoiceTagRefId,
   keyInfoTagHash,
   keyInfoTagId,
   keyInfoRefTagId,
@@ -23,25 +25,24 @@ export const buildSignedInfoTag = ({
   signedPropertiesTagHash,
   signedPropertiesTagId
 }: buildSignedInfoTagArgs) => {
-  return `
-    <ds:SignedInfo Id="${signedInfoTagId}">
-      <ds:CanonicalizationMethod Algorithm="${XmlProperties.algorithms.canonicalization}" />
-      <ds:SignatureMethod Algorithm="${XmlProperties.algorithms.signature}" />
-      <ds:Reference Id="${signedPropertiesRefTagId}" Type="${XmlProperties.types.signedProperties}" URI="#${signedPropertiesTagId}">
-        <ds:DigestMethod Algorithm="${XmlProperties.algorithms.digest}" />
-        <ds:DigestValue>${signedPropertiesTagHash}</ds:DigestValue>
-      </ds:Reference>
-      <ds:Reference Id="${keyInfoRefTagId}" URI="#${keyInfoTagId}">
-        <ds:DigestMethod Algorithm="${XmlProperties.algorithms.digest}" />
-        <ds:DigestValue>${keyInfoTagHash}</ds:DigestValue>
-      </ds:Reference>
-      <ds:Reference URI="#${invoiceTagId}">
-        <ds:Transforms>
-          <ds:Transform Algorithm="${XmlProperties.algorithms.transform}" />
-        </ds:Transforms>
-        <ds:DigestMethod Algorithm="${XmlProperties.algorithms.digest}" />
-        <ds:DigestValue>${invoiceHash}</ds:DigestValue>
-      </ds:Reference>
-    </ds:SignedInfo>
-  `;
+  return `\
+<ds:SignedInfo Id="${signedInfoTagId}">\
+<ds:CanonicalizationMethod Algorithm="${XmlProperties.algorithms.canonicalization}"/>\
+<ds:SignatureMethod Algorithm="${XmlProperties.algorithms.signature}"/>\
+<ds:Reference Id="${invoiceTagRefId}" URI="#${invoiceTagId}">\
+<ds:Transforms>\
+<ds:Transform Algorithm="${XmlProperties.algorithms.transform}"/>\
+</ds:Transforms>\
+<ds:DigestMethod Algorithm="${XmlProperties.algorithms.digest}"/>\
+<ds:DigestValue>${invoiceHash}</ds:DigestValue>\
+</ds:Reference>\
+<ds:Reference Id="${signedPropertiesRefTagId}" Type="${XmlProperties.types.signedProperties}" URI="#${signedPropertiesTagId}">\
+<ds:DigestMethod Algorithm="${XmlProperties.algorithms.digest}"/>\
+<ds:DigestValue>${signedPropertiesTagHash}</ds:DigestValue>\
+</ds:Reference>\
+<ds:Reference Id="${keyInfoRefTagId}" URI="#${keyInfoTagId}">\
+<ds:DigestMethod Algorithm="${XmlProperties.algorithms.digest}"/>\
+<ds:DigestValue>${keyInfoTagHash}</ds:DigestValue>\
+</ds:Reference>\
+</ds:SignedInfo>`;
 }
