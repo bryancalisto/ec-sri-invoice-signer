@@ -1,9 +1,9 @@
 {
-  "name": "ec-sri-utils",
+  "name": "ec-sri-invoice-sign",
   "version": "0.1.0",
   "description": "Ecuador SRI invoice signing tool.",
-  "main": "dist/index.js",
-  "types": "src/index.d.ts",
+  "main": "dist/src/index.js",
+  "types": "dist/src/index.d.ts",
   "scripts": {
     "build": "tsc",
     "build:watch": "tsc -w",

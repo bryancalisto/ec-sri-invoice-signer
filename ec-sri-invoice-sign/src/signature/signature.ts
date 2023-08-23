@@ -6,7 +6,7 @@ import { buildSignatureTag } from "./templates/signature";
 import { buildSignedInfoTag } from "./templates/signedInfo";
 import { buildSignedPropertiesTag } from "./templates/signedProperties";
 
-type signInvoiceXmlOptions = Partial<{
+export type signInvoiceXmlOptions = Partial<{
   pkcs12Password: string;
 }>;
 
