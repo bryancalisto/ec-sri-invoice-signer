@@ -4,7 +4,7 @@ on:
     types: [published]
 defaults:
   run:
-    working-directory: ./ec-sri-utils
+    working-directory: ./ec-sri-invoice-sign
 jobs:
   release:
     runs-on: ubuntu-latest
