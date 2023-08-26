@@ -1,3 +1,3 @@
-# ec-sri-invoice-sign
+# ec-sri-invoice-signer
 Ecuador SRI invoice signing tool.
 # WORK IN PROGRESS

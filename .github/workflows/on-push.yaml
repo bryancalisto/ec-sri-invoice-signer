@@ -4,7 +4,7 @@ on:
     branches: [main]
 defaults:
   run:
-    working-directory: ./ec-sri-invoice-sign
+    working-directory: ./ec-sri-invoice-signer
 jobs:
   release:
     runs-on: ubuntu-latest

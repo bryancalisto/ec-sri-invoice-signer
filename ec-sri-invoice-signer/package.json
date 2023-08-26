@@ -1,7 +1,7 @@
 {
-  "name": "ec-sri-invoice-sign",
+  "name": "ec-sri-invoice-signer",
   "version": "0.1.0",
-  "description": "Ecuador SRI invoice signing tool.",
+  "description": "Ecuador SRI invoice signer.",
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",
   "files": [
@@ -14,7 +14,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/bryancalisto/ec-sri-invoice-sign"
+    "url": "https://github.com/bryancalisto/ec-sri-invoice-signer"
   },
   "keywords": [
     "Ecuador",
@@ -28,9 +28,9 @@
   "author": "Bryan Calisto",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/bryancalisto/ec-sri-invoice-sign/issues"
+    "url": "https://github.com/bryancalisto/ec-sri-invoice-signer/issues"
   },
-  "homepage": "https://github.com/bryancalisto/ec-sri-invoice-sign#readme",
+  "homepage": "https://github.com/bryancalisto/ec-sri-invoice-signer#readme",
   "devDependencies": {
     "@types/chai": "^4.3.5",
     "@types/mocha": "^10.0.1",
