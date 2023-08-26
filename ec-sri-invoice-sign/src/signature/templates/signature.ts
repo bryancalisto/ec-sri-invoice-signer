@@ -27,7 +27,7 @@ ${signedSignedInfoTag}\
 </ds:SignatureValue>\
 ${keyInfoTag}\
 <ds:Object Id="${signatureObjectTagId}">\
-<xades:QualifyingProperties xmlns:xades="http://uri.etsi.org/01903/v1.3.2#" Target="#${signatureTagId}">\
+<xades:QualifyingProperties xmlns:xades="${XmlProperties.namespaces.xades}" Target="#${signatureTagId}">\
 ${signedPropertiesTag}\
 </xades:QualifyingProperties>\
 </ds:Object>\

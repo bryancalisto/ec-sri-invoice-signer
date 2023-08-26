@@ -1,4 +1,5 @@
 import { c14nCanonicalize } from "../canonicalization/c14n";
+import { XmlProperties } from "../utils/constants";
 import { extractPrivateKeyAndCertificateFromPkcs12, extractPrivateKeyData, extractX509Data, getHash, sign } from "../utils/cryptography";
 import Utils from "../utils/utils";
 import { buildKeyInfoTag } from "./templates/keyInfo";
@@ -58,8 +59,8 @@ export const signInvoiceXml = (invoiceXml: string, pkcs12Data: string | Buffer, 
   });
 
   const invoiceHash = getHash(c14nCanonicalize(invoiceXml));
-  const signedPropertiesTagHash = getHash(c14nCanonicalize(signedPropertiesTag, { inheritedNamespaces: [{ prefix: 'xades', uri: 'http://uri.etsi.org/01903/v1.3.2#' }, { prefix: 'xades141', uri: 'http://uri.etsi.org/01903/v1.4.1#' }, { prefix: 'ds', uri: 'http://www.w3.org/2000/09/xmldsig#' }] }));
-  const keyInfoTagHash = getHash(c14nCanonicalize(keyInfoTag, { inheritedNamespaces: [{ prefix: 'ds', uri: 'http://www.w3.org/2000/09/xmldsig#' }] }));
+  const signedPropertiesTagHash = getHash(c14nCanonicalize(signedPropertiesTag, { inheritedNamespaces: [{ prefix: 'xades', uri: XmlProperties.namespaces.xades }, { prefix: 'ds', uri: XmlProperties.namespaces.ds }] }));
+  const keyInfoTagHash = getHash(c14nCanonicalize(keyInfoTag, { inheritedNamespaces: [{ prefix: 'ds', uri: XmlProperties.namespaces.ds }] }));
 
   const signedInfoTag = buildSignedInfoTag({
     invoiceHash,
@@ -74,7 +75,7 @@ export const signInvoiceXml = (invoiceXml: string, pkcs12Data: string | Buffer, 
     signedPropertiesTagId
   });
 
-  const signedSignedInfoTag = sign(c14nCanonicalize(signedInfoTag, { inheritedNamespaces: [{ prefix: 'ds', uri: 'http://www.w3.org/2000/09/xmldsig#' }] }), privateKey);
+  const signedSignedInfoTag = sign(c14nCanonicalize(signedInfoTag, { inheritedNamespaces: [{ prefix: 'ds', uri: XmlProperties.namespaces.ds }] }), privateKey);
 
   const signatureTag = buildSignatureTag({
     keyInfoTag,

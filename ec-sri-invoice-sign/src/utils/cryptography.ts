@@ -9,11 +9,6 @@ const getHash = (data: string) => {
   return forge.util.encode64(forge.sha1.create().update(data, 'utf8').digest().bytes());
 }
 
-/**
- * @param pkcs12RawData The p12/pfx file data encoded as base64 or a nodejs Buffer.
- * @param password The p12/pfx file password as a UTF-8 string.
- * @returns An object with the private key and certificate extracted (both typed according to node-forge) from the p12/pfx file.
- */
 const extractPrivateKeyAndCertificateFromPkcs12 = (pkcs12RawData: string | Buffer, password: string = '') => {
   const pkcs12InBase64 = typeof pkcs12RawData === 'string' ? pkcs12RawData : pkcs12RawData.toString('base64');
   const pkcs12InDer = forge.util.decode64(pkcs12InBase64);
