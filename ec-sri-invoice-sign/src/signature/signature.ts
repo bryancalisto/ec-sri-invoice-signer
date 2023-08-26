@@ -30,18 +30,14 @@ export const signInvoiceXml = (invoiceXml: string, pkcs12Data: string | Buffer, 
 
   // IDs
   const invoiceTagId = 'comprobante';
-  // const invoiceTagRefId = `xmldsig-409823bd-3e51-475f-8240-40ad174a43d0-ref0`; // DEBUG
   const invoiceTagRefId = `InvoiceRef-${Utils.getRandomUuid()}`;
   const keyInfoTagId = `Certificate-${Utils.getRandomUuid()}`;
   const keyInfoRefTagId = `CertificateRef-${Utils.getRandomUuid()}`;
   const signedInfoTagId = `SignedInfo-${Utils.getRandomUuid()}`;
   const signedPropertiesRefTagId = `SignedPropertiesRef-${Utils.getRandomUuid()}`;
-  // const signedPropertiesTagId = `xmldsig-409823bd-3e51-475f-8240-40ad174a43d0-signedprops`; // DEBUG
   const signedPropertiesTagId = `SignedProperties-${Utils.getRandomUuid()}`;
-  // const signatureTagId = `xmldsig-409823bd-3e51-475f-8240-40ad174a43d0`; // DEBUG
   const signatureTagId = `Signature-${Utils.getRandomUuid()}`;
   const signatureObjectTagId = `SignatureObject-${Utils.getRandomUuid()}`;
-  // const signatureValueTagId = `xmldsig-409823bd-3e51-475f-8240-40ad174a43d0-sigvalue`; // DEBUG
   const signatureValueTagId = `SignatureValue-${Utils.getRandomUuid()}`;
 
   // XML sections, hashes and signature

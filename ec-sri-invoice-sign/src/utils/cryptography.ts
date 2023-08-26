@@ -47,8 +47,7 @@ const extractIssuerData = (certificate: forge.pki.Certificate) => {
       return `${attr.shortName}=${attr.value}`;
     }
     else {
-      return `${attr.type}=${attr.value}`; // REAL IMPLEMENTATION
-      // return `${attr.type}=#0c0f56415445532d413636373231343939`; // DEBUG ONLY
+      return `${attr.type}=${attr.value}`;
     }
   }).join(','); // .reverse to follow convention of country-name-is-last seen in the SRI example
 
