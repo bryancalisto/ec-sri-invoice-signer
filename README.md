@@ -81,8 +81,7 @@ Usa la función `signInvoiceXml` en tu código para firmar la factura:
 ```
  - No XML, HTML u otros tipos de entidades.
  ```xml
- <!-- Esto no es soportado, pero lo será pronto ya que, más que nada, las comillas simples y dobles son algo
-  común -->
+ <!-- Esto no es soportado, pero lo será pronto ya que las comillas simples y dobles son algo de uso común -->
  <factura Id="comprobante">
   <detalles>
     <!-- El contenido de <detalle> equivale a '<foo="bar">' -->
