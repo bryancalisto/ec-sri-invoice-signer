@@ -1,6 +1,6 @@
 import { XMLParser, XMLBuilder } from 'fast-xml-parser';
 import { XmlFormatError } from './errors';
-import { normalizeWhitespace } from '../canonicalization/utils';
+import { normalizeWhitespace, parseEntities } from '../canonicalization/utils';
 
 type XmlObj = Array<Record<any, any>>;
 
@@ -16,6 +16,9 @@ const parseXml = (xml: string): XmlObj => {
     ignorePiTags: true,
     attributeValueProcessor: (name: string, value: string) => {
       return normalizeWhitespace(value);
+    },
+    tagValueProcessor: (name: string, value: string) => {
+      return parseEntities(value);
     }
   };
 
