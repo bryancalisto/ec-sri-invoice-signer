@@ -10,7 +10,7 @@
  * - The invoice should be utf-8 encoded.
  * - No namespaces.
  * - No CDATA.
- * - No XML, HTML, DOCTYPE or any other entity.
+ * - No DOCTYPE entities.
  * - No Document type definition (DTD) tags.
  * - No xml-prefixed attributes (xml:<attr_name>).
  * 

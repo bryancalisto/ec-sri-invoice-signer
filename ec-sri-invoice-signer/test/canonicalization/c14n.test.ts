@@ -1,7 +1,7 @@
 import { expect } from "chai";
 import { c14nCanonicalize } from "../../src/canonicalization/c14n";
 
-describe('cn14', () => {
+describe('Given the c14nCanonicalize function', () => {
   it('Removes doc declaration, comments, sorts attributes and namespaces and trims document leading and trailing whitespace', () => {
     const input = `<?xml version="1.0" encoding="UTF-8"?>
         <doc>
@@ -141,6 +141,15 @@ describe('cn14', () => {
       ]
     });
 
+    expect(result).to.equal(expected);
+  });
+
+  it('should process entities in element content', () => {
+    const input = `<a>'>&&apos;>foo="bar">&apos;&&apoz;&quot;</a>`;
+
+    const expected = `<a>'&gt;&amp;'&gt;foo="bar"&gt;'&amp;&amp;apoz;"</a>`;
+
+    const result = c14nCanonicalize(input);
     expect(result).to.equal(expected);
   });
 });
