@@ -11,22 +11,22 @@ Usa la función `signInvoiceXml` en tu código para firmar la factura:
   ```js
   import fs from 'fs';
   import { signInvoiceXml } from 'ec-sri-invoice-signer';
-  /* Can import with require() if working with commonJS modules. */
+  /* Puedes user require() si usas módulos commonJS. */
 
-  /* The invoice XML to be signed. */
+  /* El XML de la factura a firmarse. */
   const invoiceXml = '<factura id="comprobante>...</factura>';
 
-  /* The invoice signer's pkcs12 file (.p12/.pfx extension) content as Node Buffer or base64 string.
-  Here it's a Node Buffer. */
+  /* El contenido del archivo pkcs12 (.p12/.pfx extension) del firmante representado como Node Buffer o string base64.
+  En este caso es un Node Buffer. */
   const p12FileData = fs.readFileSync('signature.p12');
 
-  /* Sign the invoice. If no pkcs12Password option is provided, '' will be used. */
+  /* Firma la factura. Si no se pasa la opción pkcs12Password, '' será usada como contraseña. */
   const signedInvoice = signInvoiceXml(invoiceXml, p12FileData, { pkcs12Password: 'thePKCS12FilePassword' });
 
   doSomethingWithTheSignedInvoice(signedInvoice);
   ```
 
- ## Nota importante sobre la el formato del XML.
+ ## Nota importante sobre el formato del XML.
  Este paquete no implemeneta la especificación de canonicalización http://www.w3.org/TR/2001/REC-xml-c14n-20010315 por completo. Solo implementa el es estándar para soportar XML con características comunes (Esto debería cubrir la mayoría de los casos de uso).
  Por ahora no se implementará la especificación completa ya que el software del SRI no requiere el uso de las características sofisticadas de XML.
 
