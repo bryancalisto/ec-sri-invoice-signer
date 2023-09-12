@@ -1,6 +1,9 @@
 # ec-sri-invoice-signer
 Firmador de facturas basado en las especificaciones del Servicio de Rentas Internas (SRI) ecuatoriano. Está escrito en puro TypeScript/JavaScript, sin dependencias de binarios criptográficos como OpenSSL o similares.
 
+<ins>**Este software se encuentra en fase de prueba ([alpha](https://es.wikipedia.org/wiki/Ciclo_de_vida_del_lanzamiento_de_software#Alfa)). Pese a tener implementadas las características planeadas, podría tener defectos en las mismas. Por tal razón se lo debe considerar como inestable hasta que un release post-alpha sea publicado.**</ins>
+
+
 ## Guía de uso
 
 Instala el paquete.
