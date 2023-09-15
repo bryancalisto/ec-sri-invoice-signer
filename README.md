@@ -34,7 +34,7 @@ Usa la función `signInvoiceXml` en tu código para firmar la factura:
  Por ahora no se implementará la especificación completa ya que el software del SRI no requiere el uso de las características sofisticadas de XML.
 
  Estas son las características requeridas del XML que se pretende firmar (ninguna de las características no soportadas es requerida para el intercambio de datos con el SRI):
- - La factura a firmarse debe consistir del nodo factura con su respectivo id 'comprobante' y sus etiquetas hijas describiendo el contenido de la factura (sin otros id ni namespaces).
+ - La factura a firmarse debe consistir del nodo factura con su respectivo id 'comprobante' y sus etiquetas hijas describiendo el contenido de la factura (sin otros namespaces).
  ```xml
  <?xml version="1.0" encoding="UTF-8"?>
  <factura Id="comprobante">
