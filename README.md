@@ -30,7 +30,7 @@ Usa la función `signInvoiceXml` en tu código para firmar la factura:
   ```
 
  ## Nota importante sobre el formato del XML.
- Este paquete no implemeneta la especificación de canonicalización http://www.w3.org/TR/2001/REC-xml-c14n-20010315 por completo. Solo implementa el es estándar para soportar XML con características comunes (Esto debería cubrir la mayoría de los casos de uso).
+ Este paquete no implemeneta la especificación de [canonicalización](https://en.wikipedia.org/wiki/Canonicalization) http://www.w3.org/TR/2001/REC-xml-c14n-20010315 por completo. Solo implementa las partes del estándar requeridas para soportar XML con características comunes (Esto debería cubrir la mayoría de los casos de uso).
  Por ahora no se implementará la especificación completa ya que el software del SRI no requiere el uso de las características sofisticadas de XML.
 
  Estas son las características requeridas del XML que se pretende firmar (ninguna de las características no soportadas es requerida para el intercambio de datos con el SRI):
