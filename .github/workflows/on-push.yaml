@@ -1,4 +1,4 @@
-name: Build and test
+name: CI
 on:
   push:
     branches: [main]
@@ -6,7 +6,7 @@ defaults:
   run:
     working-directory: ./ec-sri-invoice-signer
 jobs:
-  release:
+  ci:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
