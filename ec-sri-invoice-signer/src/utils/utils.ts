@@ -21,7 +21,15 @@ const getDate = (): string => {
   return new Date(date.getTime() - offsetRelativeToUTCInMinutes * 60 * 1000).toISOString().replace('Z', formattedOffset);
 }
 
-export default {
+/**
+ * Functional-like composer to compose functions 
+ */
+function pipe<T>(functions: Function[]) {
+  return (input: T) => functions.reduce((res, fn) => fn(res), input);
+}
+
+export {
   getDate,
-  getRandomUuid
+  getRandomUuid,
+  pipe
 };

@@ -1,4 +1,4 @@
-import Utils from '../../src/utils/utils';
+import * as Utils from '../../src/utils/utils';
 import { signInvoiceXml } from '../../src/signature/signature';
 import fs from 'fs';
 import path from 'path';

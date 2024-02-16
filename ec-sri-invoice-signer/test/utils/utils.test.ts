@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import Utils from '../../src/utils/utils';
+import * as Utils from '../../src/utils/utils';
 import sinon, { SinonFakeTimers } from 'sinon';
 
 describe('Given the getRandomInt function', () => {
