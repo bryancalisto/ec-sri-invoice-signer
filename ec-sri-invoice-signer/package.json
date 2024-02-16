@@ -10,7 +10,8 @@
   "scripts": {
     "build": "tsc",
     "build:watch": "tsc -w",
-    "test": "nyc mocha"
+    "test": "mocha",
+    "test:coverage": "nyc mocha"
   },
   "repository": {
     "type": "git",

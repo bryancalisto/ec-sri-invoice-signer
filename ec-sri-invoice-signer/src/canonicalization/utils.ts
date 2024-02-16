@@ -56,7 +56,7 @@ export const parseEntities = (str: string) => {
 }
 
 function setCapitalsInHexEntities(value: string) {
-  const entitiesToReplace = /&#x[aA-fF\d]+;/.exec(value) ?? [];
+  const entitiesToReplace = value.match(/&#x[aA-fF\d]+;/gm) ?? [];
   let newValue = value;
 
   for (const entity of entitiesToReplace) {
@@ -67,7 +67,7 @@ function setCapitalsInHexEntities(value: string) {
 }
 
 function convertDecimalEntitiesIntoHexEntities(value: string) {
-  const entitiesToReplace = /&#\d+;/.exec(value) ?? [];
+  const entitiesToReplace = value.match(/&#\d+;/gm) ?? [];
   let newValue = value;
 
   for (const entity of entitiesToReplace) {
