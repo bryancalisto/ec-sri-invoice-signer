@@ -12,6 +12,7 @@ function encodeEntitiesInTagValue(value: string) {
     "\r": "&#xD;"
   };
 
+  // TODO: Replace the ampersand only if it's not part of an entity 
   return value.replace(/([&<>\r])/g, function (str, item) {
     return encodings[item];
   });
@@ -27,6 +28,7 @@ function encodeEntitiesInAttributeValue(value: string) {
     "\t": "&#x9;"
   };
 
+  // TODO: Replace the ampersand only if it's not part of an entity 
   return value.replace(/([&<"\r\n\t])/g, function (str, item) {
     return encodings[item];
   });

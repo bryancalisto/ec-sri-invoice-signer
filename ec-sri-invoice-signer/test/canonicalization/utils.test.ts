@@ -13,6 +13,10 @@ describe('processAttributeValue', () => {
     expect(processAttributeValue('Thing &#012; 1 &#012;')).to.equal('Thing &#xC; 1 &#xC;');
     expect(processAttributeValue('Thing &#47; 1 &#47;')).to.equal('Thing &#x2F; 1 &#x2F;');
   });
+
+  it.only('Normalizes whitespace', () => {
+    expect(processAttributeValue('Thing\t\n\r&#47;\t1  \r&#47;\n')).to.equal('Thing   &#x2F; 1   &#x2F; ');
+  });
 });
 
 describe('processTagValue', () => {
