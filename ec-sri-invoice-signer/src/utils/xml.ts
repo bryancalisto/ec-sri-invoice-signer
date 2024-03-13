@@ -1,6 +1,6 @@
 import { XMLParser, XMLBuilder } from 'fast-xml-parser';
 import { XmlFormatError } from './errors';
-import { encodeSpecialCharactersInAttribute, normalizeWhitespace } from '../canonicalization/utils';
+import { processAttributeValue, processTagValue } from '../canonicalization/utils';
 import { pipe } from './utils';
 
 type XmlObj = Array<Record<any, any>>;
@@ -16,15 +16,10 @@ const parseXml = (xml: string): XmlObj => {
     processEntities: false,
     ignorePiTags: true,
     attributeValueProcessor: (name: string, value: string) => {
-      const steps = [
-        normalizeWhitespace,
-        encodeSpecialCharactersInAttribute
-      ];
-
-      return pipe(steps)(value);
+      return processAttributeValue(value);
     },
     tagValueProcessor: (name: string, value: string) => {
-      return value;
+      return processTagValue(value);
     }
   };
 

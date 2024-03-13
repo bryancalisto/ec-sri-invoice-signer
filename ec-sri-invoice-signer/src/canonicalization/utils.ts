@@ -1,7 +1,35 @@
 import { pipe } from "../utils/utils";
 
-export const normalizeWhitespace = (str: string) => {
+function normalizeWhitespace(str: string) {
   return str.replace(/[\r\t\n]/g, ' ');
+}
+
+function encodeEntitiesInTagValue(value: string) {
+  const encodings: Record<string, string> = {
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    "\r": "&#xD;"
+  };
+
+  return value.replace(/([&<>\r])/g, function (str, item) {
+    return encodings[item];
+  });
+}
+
+function encodeEntitiesInAttributeValue(value: string) {
+  const encodings: Record<string, string> = {
+    "&": "&amp;",
+    "<": "&lt;",
+    '"': "&quot;",
+    "\r": "&#xD;",
+    "\n": "&#xA;",
+    "\t": "&#x9;"
+  };
+
+  return value.replace(/([&<"\r\n\t])/g, function (str, item) {
+    return encodings[item];
+  });
 }
 
 function setCapitalsInHexEntities(value: string) {
@@ -27,11 +55,27 @@ function convertDecimalEntitiesIntoHexEntities(value: string) {
   return newValue;
 }
 
-export function encodeSpecialCharactersInAttribute(value: string) {
+function processAttributeValue(value: string) {
   const processingSteps = [
+    normalizeWhitespace,
     setCapitalsInHexEntities,
     convertDecimalEntitiesIntoHexEntities
   ];
 
   return pipe<string>(processingSteps)(value);
 }
+
+function processTagValue(value: string) {
+  const processingSteps = [
+    setCapitalsInHexEntities,
+    convertDecimalEntitiesIntoHexEntities,
+    encodeEntitiesInTagValue
+  ];
+
+  return pipe<string>(processingSteps)(value);
+}
+
+export {
+  processAttributeValue,
+  processTagValue
+};
