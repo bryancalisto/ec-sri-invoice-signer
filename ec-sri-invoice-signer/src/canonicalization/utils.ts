@@ -1,7 +1,12 @@
+import { XMLParser } from "fast-xml-parser";
 import { pipe } from "../utils/utils";
 
 function normalizeWhitespace(str: string) {
   return str.replace(/[\r\t\n]/g, ' ');
+}
+
+function trimAttributeValue(value: string) {
+  return value.trim();
 }
 
 function encodeEntitiesInTagValue(value: string) {
@@ -12,12 +17,34 @@ function encodeEntitiesInTagValue(value: string) {
     "\r": "&#xD;"
   };
 
-  // TODO: Replace the ampersand only if it's not part of an entity 
-  return value.replace(/([&<>\r])/g, function (str, item) {
-    return encodings[item];
-  });
+  return value.replace(/([<>\r])/gm, function (match, offset) {
+    return encodings[match];
+  })
+    // Replace the ampersand only if it's not part of an entity 
+    .replace(/&(?!(#x[aA-fF\d]+;)|amp;|lt;|gt;)/gm, function (match, offset) {
+      return encodings[match];
+    });
 }
 
+function decodeUtf8EntitiesInTagValue(value: string) {
+  const notDecodedEntities = new Set(['&amp;', '&lt;', '&gt;', '&#xD;']);
+  const entitiesToReplace = value.match(/&#x([aA-fF\d]+);/gm) ?? [];
+  let newValue = value;
+
+  for (const entity of entitiesToReplace) {
+    if (!notDecodedEntities.has(entity)) {
+      const decoded = new TextDecoder('utf-8').decode(new Uint8Array([parseInt(entity.slice(3), 16)]))
+      newValue = newValue.replace(entity, decoded);
+    }
+  }
+
+  return newValue;
+}
+
+/**
+ * Replace characters with their respective XML entities.
+ * & is a special case, as it's not replaced if it's part of an entity.
+ */
 function encodeEntitiesInAttributeValue(value: string) {
   const encodings: Record<string, string> = {
     "&": "&amp;",
@@ -28,10 +55,54 @@ function encodeEntitiesInAttributeValue(value: string) {
     "\t": "&#x9;"
   };
 
-  // TODO: Replace the ampersand only if it's not part of an entity 
-  return value.replace(/([&<"\r\n\t])/g, function (str, item) {
-    return encodings[item];
-  });
+  return value.replace(/[<"\r\n\t]/gm, function (match) {
+    return encodings[match];
+  })
+    // Replace the ampersand only if it's not part of an entity 
+    .replace(/&(?!(#x[aA-fF\d]+;)|amp;|quot;|lt;|apos;)/gm, function (match) {
+      return encodings[match];
+    });
+}
+
+function decodeUtf8HexEntitiesInAttributeValue(value: string) {
+  const notDecodedEntities = new Set(['&#xD;', '&#xA;', '&#x9;']);
+  const entitiesToReplace = value.match(/&#x[aA-fF\d]+;/gm) ?? [];
+  let newValue = value;
+
+  for (const entity of entitiesToReplace) {
+    if (!notDecodedEntities.has(entity)) {
+      const decoded = new TextDecoder('utf-8').decode(new Uint8Array([parseInt(entity.slice(3), 16)]))
+      console.log(
+        `Decoding hex entity ${entity} to ${decoded}`
+      );
+
+      newValue = newValue.replace(entity, decoded);
+    }
+  }
+
+  return newValue;
+}
+
+function decodeUtf8EntitiesInAttributeValue(value: string) {
+  const notDecodedEntities = new Set(['&amp;', '&lt;', '&quot;']);
+  const entitiesToReplace = value.match(/&[aA-zZ]+;/gm) ?? [];
+  let newValue = value;
+
+  for (const entity of entitiesToReplace) {
+    if (!notDecodedEntities.has(entity)) {
+      const decoded = new XMLParser().parse(`<body>${entity}</body>`).body ?? '';
+      console.log(
+        `Decoding entity ${entity} to ${JSON.stringify(decoded)}`
+      );
+      newValue = newValue.replace(entity, decoded);
+    }
+  }
+
+  return newValue;
+}
+
+function removeLeadingZerosInHexEntity(value: string) {
+  return value.replace(/0+(?=[\daA-fF]+;)/g, '');
 }
 
 function setCapitalsInHexEntities(value: string) {
@@ -39,7 +110,8 @@ function setCapitalsInHexEntities(value: string) {
   let newValue = value;
 
   for (const entity of entitiesToReplace) {
-    newValue = newValue.replace(entity, `&#x${entity.slice(3).toUpperCase()}`);
+    const entityWithoutLeadingZeros = removeLeadingZerosInHexEntity(entity);
+    newValue = newValue.replace(entity, `&#x${entityWithoutLeadingZeros.slice(3).toUpperCase()}`);
   }
 
   return newValue;
@@ -59,9 +131,15 @@ function convertDecimalEntitiesIntoHexEntities(value: string) {
 
 function processAttributeValue(value: string) {
   const processingSteps = [
-    normalizeWhitespace,
+    // TODO: Confirm how whitespace normalization should be done considering \r,\n,\t are sometimes converted to
+    // their respective entities in hex or to common whitespace
+    // normalizeWhitespace, 
+    // trimAttributeValue, // TODO: remove
     setCapitalsInHexEntities,
-    convertDecimalEntitiesIntoHexEntities
+    convertDecimalEntitiesIntoHexEntities,
+    encodeEntitiesInAttributeValue,
+    decodeUtf8HexEntitiesInAttributeValue,
+    decodeUtf8EntitiesInAttributeValue,
   ];
 
   return pipe<string>(processingSteps)(value);
@@ -71,7 +149,8 @@ function processTagValue(value: string) {
   const processingSteps = [
     setCapitalsInHexEntities,
     convertDecimalEntitiesIntoHexEntities,
-    encodeEntitiesInTagValue
+    encodeEntitiesInTagValue,
+    decodeUtf8EntitiesInTagValue
   ];
 
   return pipe<string>(processingSteps)(value);

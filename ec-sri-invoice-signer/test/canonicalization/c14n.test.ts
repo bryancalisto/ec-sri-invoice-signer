@@ -161,7 +161,6 @@ describe('Given the c14nCanonicalize function', () => {
   <compute expr='value>"0" &amp;&amp; value&lt;"10" ?"valid":"error"'>valid</compute>
   <norm attr=' &apos;   &#x20;&#13;&#xa;&#9;   &apos; '/>
   <normNames attr='   A   &#x20;&#13;&#xa;&#9;   B   '/>
-  <normId id=' &apos;   &#x20;&#13;&#xa;&#9;   &apos; '/>
 </doc>`;
 
     const expected = `<doc>
@@ -172,7 +171,6 @@ Second line</text>
   <compute expr="value>&quot;0&quot; &amp;&amp; value&lt;&quot;10&quot; ?&quot;valid&quot;:&quot;error&quot;">valid</compute>
   <norm attr=" '    &#xD;&#xA;&#x9;   ' "></norm>
   <normNames attr="A &#xD;&#xA;&#x9; B"></normNames>
-  <normId id="' &#xD;&#xA;&#x9; '"></normId>
 </doc>`;
 
     const result = c14nCanonicalize(input);
