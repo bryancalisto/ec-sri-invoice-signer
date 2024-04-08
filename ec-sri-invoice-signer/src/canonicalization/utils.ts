@@ -1,12 +1,9 @@
 import { XMLParser } from "fast-xml-parser";
 import { pipe } from "../utils/utils";
 
-function normalizeWhitespace(str: string) {
-  return str.replace(/[\r\t\n]/g, ' ');
-}
-
-function trimAttributeValue(value: string) {
-  return value.trim();
+function normalizeWhitespaceInAttributeValue(value: string) {
+  const trimmed = value.replace(/&#x20/g, ' ');
+  return trimmed;
 }
 
 function encodeEntitiesInTagValue(value: string) {
@@ -71,11 +68,9 @@ function decodeUtf8HexEntitiesInAttributeValue(value: string) {
 
   for (const entity of entitiesToReplace) {
     if (!notDecodedEntities.has(entity)) {
-      const decoded = new TextDecoder('utf-8').decode(new Uint8Array([parseInt(entity.slice(3), 16)]))
-      console.log(
-        `Decoding hex entity ${entity} to ${decoded}`
-      );
-
+      const hexToDecode = entity.match(/[aA-fF\d]+/)![0];
+      const decimalToDecode = parseInt(hexToDecode, 16);
+      const decoded = String.fromCodePoint(decimalToDecode);
       newValue = newValue.replace(entity, decoded);
     }
   }
@@ -140,6 +135,7 @@ function processAttributeValue(value: string) {
     encodeEntitiesInAttributeValue,
     decodeUtf8HexEntitiesInAttributeValue,
     decodeUtf8EntitiesInAttributeValue,
+    normalizeWhitespaceInAttributeValue
   ];
 
   return pipe<string>(processingSteps)(value);

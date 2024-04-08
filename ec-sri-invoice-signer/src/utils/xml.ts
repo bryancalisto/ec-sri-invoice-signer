@@ -25,8 +25,6 @@ const parseXml = (xml: string): XmlObj => {
 
   try {
     const parser = new XMLParser(parserOptions);
-    console.log('MLLL', xml);
-
     return parser.parse(xml);
   } catch (err) {
     throw new XmlFormatError();
