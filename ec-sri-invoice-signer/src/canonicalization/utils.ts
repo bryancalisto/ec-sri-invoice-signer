@@ -86,9 +86,6 @@ function decodeUtf8EntitiesInAttributeValue(value: string) {
   for (const entity of entitiesToReplace) {
     if (!notDecodedEntities.has(entity)) {
       const decoded = new XMLParser().parse(`<body>${entity}</body>`).body ?? '';
-      console.log(
-        `Decoding entity ${entity} to ${JSON.stringify(decoded)}`
-      );
       newValue = newValue.replace(entity, decoded);
     }
   }
@@ -126,10 +123,6 @@ function convertDecimalEntitiesIntoHexEntities(value: string) {
 
 function processAttributeValue(value: string) {
   const processingSteps = [
-    // TODO: Confirm how whitespace normalization should be done considering \r,\n,\t are sometimes converted to
-    // their respective entities in hex or to common whitespace
-    // normalizeWhitespace, 
-    // trimAttributeValue, // TODO: remove
     setCapitalsInHexEntities,
     convertDecimalEntitiesIntoHexEntities,
     encodeEntitiesInAttributeValue,
