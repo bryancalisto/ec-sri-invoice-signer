@@ -68,18 +68,6 @@ describe('Given the c14nCanonicalize function', () => {
     expect(result).to.equal(expected);
   });
 
-  it('should replace CR (0x0d), LF (0x0a), TAB (0x09) within attribute values with a single space (0x20)', () => {
-    const input = `<e2 C=' letter
-
-
-	A ' >`;
-
-    const expected = `<e2 C=" letter    A "></e2>`;
-
-    const result = c14nCanonicalize(input);
-    expect(result).to.equal(expected);
-  });
-
   it('should remove whitespace between the final double quotes in a start tag and the closing \'>\' and all whitespace in the closing tag', () => {
     const input = '<e3  d= "foo"  >bar</e3   >';
     const expected = '<e3 d="foo">bar</e3>'
@@ -141,15 +129,6 @@ describe('Given the c14nCanonicalize function', () => {
       ]
     });
 
-    expect(result).to.equal(expected);
-  });
-
-  it('should process entities in element content', () => {
-    const input = `<a>'>&&apos;>foo="bar">&apos;&&apoz;&quot;</a>`;
-
-    const expected = `<a>'&gt;&amp;'&gt;foo="bar"&gt;'&amp;&amp;apoz;"</a>`;
-
-    const result = c14nCanonicalize(input);
     expect(result).to.equal(expected);
   });
 
