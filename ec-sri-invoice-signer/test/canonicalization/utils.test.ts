@@ -24,11 +24,11 @@ describe('processAttributeValue', () => {
 
 describe('processTagValue', () => {
   it('Capitalizes lowercase chars in hex entities', () => {
-    expect(processAttributeValue('Thing &#xd; 1 &#xd;')).to.equal('Thing &#xD; 1 &#xD;');
+    expect(processTagValue('Thing &#xd; 1 &#xd;')).to.equal('Thing &#xD; 1 &#xD;');
   });
 
   it('Converts decimal entities to hex ones', () => {
-    expect(processAttributeValue('Thing &#013; 1 &#013;')).to.equal('Thing &#xD; 1 &#xD;');
+    expect(processTagValue('Thing &#013; 1 &#013;')).to.equal('Thing &#xD; 1 &#xD;');
   });
 
   it('encodes special characters', () => {
