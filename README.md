@@ -1,13 +1,14 @@
 # ec-sri-invoice-signer
-Firmador de facturas basado en las especificaciones del Servicio de Rentas Internas (SRI) ecuatoriano. Está escrito en puro TypeScript/JavaScript, sin dependencias de binarios criptográficos como OpenSSL o similares.
+Firmador de facturas basado en las especificaciones del Servicio de Rentas Internas (SRI) ecuatoriano. Está escrito en puro TypeScript/JavaScript, sin dependencias de binarios criptográficos como OpenSSL, DLLs con el código de firmado o similares.
+Por tal razón, funciona en Windows, Unix/Linux o cualquier plataforma que soporte Node.js sin configuraciones adicionales.
 
 ## Guía de uso
 
-Instala el paquete.
+1. Instala el paquete.
   ```bash
   npm i ec-sri-invoice-signer
   ```
-Usa la función `signInvoiceXml` en tu código para firmar la factura:
+2. Usa la función `signInvoiceXml` en tu código para firmar la factura:
   ```js
   import fs from 'fs';
   import { signInvoiceXml } from 'ec-sri-invoice-signer';
@@ -26,15 +27,16 @@ Usa la función `signInvoiceXml` en tu código para firmar la factura:
   doSomethingWithTheSignedInvoice(signedInvoice);
   ```
 
- ## Nota importante sobre el formato del XML.
- Este paquete no implemeneta la especificación de [canonicalización](https://en.wikipedia.org/wiki/Canonicalization) http://www.w3.org/TR/2001/REC-xml-c14n-20010315 por completo. Solo implementa las partes del estándar requeridas para soportar XML con características comunes (Esto debería cubrir la mayoría de los casos de uso).
- Por ahora no se implementará la especificación completa ya que el software del SRI no requiere el uso de las características sofisticadas de XML.
+ ## Notas importantes sobre la estructura del XML
+ Este paquete no implementa la especificación de [canonicalización](https://en.wikipedia.org/wiki/Canonicalization) http://www.w3.org/TR/2001/REC-xml-c14n-20010315 por completo.
+ El XML es un lenguaje con muchas características sofisticadas que, probablemente, no tienen mucha cabida en una aplicación de facturación electrónica en el marco del SRI.
+ Por tal razón, solo se implementa las partes del estándar requeridas para soportar XML con características relativamente comunes. Esto debería cubrir la mayoría de los casos de uso.
 
  Estas son las características requeridas del XML que se pretende firmar (ninguna de las características no soportadas es requerida para el intercambio de datos con el SRI):
- - La factura a firmarse debe consistir del nodo factura con su respectivo id 'comprobante' y sus etiquetas hijas describiendo el contenido de la factura (sin otros namespaces).
+ - La factura a firmarse debe consistir del nodo factura con su respectivo id 'comprobante', su versión y sus etiquetas hijas describiendo el contenido de la factura (sin otros namespaces).
  ```xml
  <?xml version="1.0" encoding="UTF-8"?>
- <factura Id="comprobante">
+ <factura Id="comprobante" version="1.1.0">
   <infoTributaria>...</infoTributaria>
   <infoFactura>...</infoFactura>
   <detalles>...</detalles>
@@ -42,11 +44,18 @@ Usa la función `signInvoiceXml` en tu código para firmar la factura:
  ```
  - La declaración del documento XML es opcional.
  ```xml
- <?xml version="1.0" encoding="UTF-8"?><factura Id="comprobante">...</factura>
+ <!-- Con declaración -->
+ <?xml version="1.0" encoding="UTF-8"?>
+ <factura Id="comprobante" version="1.1.0">
+ ...
+ </factura>
  ```
  o
  ```xml
- <factura Id="comprobante">...</factura>
+ <!-- Sin declaración -->
+ <factura Id="comprobante" version="1.1.0">
+ ...
+ </factura>
  ```
  son igual de válidos.
  - La factura debe estar en formato UTF-8.
@@ -55,30 +64,17 @@ Usa la función `signInvoiceXml` en tu código para firmar la factura:
  <!-- En este ejemplo, el xmlns:ds="..." debe ser eliminado. Como contexto, ningún namespace es necesario
  para la factura en sí. Este paquete se encarga de colocar los namespaces necesarios en la firma digital
   generada -->
- <factura Id="comprobante" xmlns:ds="...">...</factura>
+ <factura Id="comprobante" version="1.1.0" xmlns:ds="...">
+ ...
+ </factura>
  ```
 
  ```xml
  <!-- Esto es soportado -->
- <factura Id="comprobante">...</factura>
- ```
- - No CDATA.
- ```xml
- <!-- Esto no es soportado -->
- <factura Id="comprobante">
-  <detalles>
-    <detalle><![CDATA[Foo]]></detalle>
-  </detalles>
+ <factura Id="comprobante" version="1.1.0">
+ ...
  </factura>
  ```
-```xml
- <!-- Esto es soportado -->
- <factura Id="comprobante">
-  <detalles>
-    <detalle>Foo</detalle>
-  </detalles>
- </factura>
-```
  - No etiquetas de Document Type Definition (DOCTYPE).
  ```xml
  <!-- Esto no es soportado -->
@@ -90,10 +86,14 @@ Usa la función `signInvoiceXml` en tu código para firmar la factura:
   <!ELEMENT heading (#PCDATA)>
   <!ELEMENT body (#PCDATA)>
   ]>
- <factura Id="comprobante">...<factura>
+ <factura Id="comprobante" version="1.1.0">
+ ...
+ <factura>
  ```
  - No atributos con prefijo xml (xml:<attr_name>).
  ```xml
- <!-- Esto no es soportado -->
- <factura Id="comprobante" xml:foo="123">...</factura>
+ <!-- Esto no es soportado debido a xml:foo="123"-->
+ <factura Id="comprobante" version="1.1.0" xml:foo="123">
+ ...
+ </factura>
  ```
