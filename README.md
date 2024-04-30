@@ -2,8 +2,6 @@
 Firmador de facturas basado en las especificaciones del Servicio de Rentas Internas (SRI) ecuatoriano. Está escrito en puro TypeScript/JavaScript, sin dependencias de binarios criptográficos como OpenSSL, DLLs con el código de firmado o similares.
 Por tal razón, funciona en Windows, Unix/Linux o cualquier plataforma que soporte Node.js sin configuraciones adicionales.
 
-Si este paquete te ha ayudado, considera dejar tu ⭐.
-
 ## Guía de uso
 
 1. Instala el paquete.
@@ -28,6 +26,7 @@ Si este paquete te ha ayudado, considera dejar tu ⭐.
 
   doSomethingWithTheSignedInvoice(signedInvoice);
   ```
+3. Si este paquete te ha ayudado, considera dejar tu ⭐.
 
  ## Notas importantes sobre la estructura del XML
  Este paquete no implementa la especificación de [canonicalización](https://en.wikipedia.org/wiki/Canonicalization) http://www.w3.org/TR/2001/REC-xml-c14n-20010315 por completo.
