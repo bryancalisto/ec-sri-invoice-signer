@@ -1,7 +1,7 @@
 import { c14nCanonicalize } from "../canonicalization/c14n";
 import { XmlProperties } from "../utils/constants";
 import { extractPrivateKeyAndCertificateFromPkcs12, extractPrivateKeyData, extractX509Data, getHash, sign } from "../utils/cryptography";
-import Utils from "../utils/utils";
+import * as Utils from "../utils/utils";
 import { buildKeyInfoTag } from "./templates/keyInfo";
 import { buildSignatureTag } from "./templates/signature";
 import { buildSignedInfoTag } from "./templates/signedInfo";

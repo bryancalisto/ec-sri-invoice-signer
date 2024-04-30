@@ -1,43 +1,41 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><factura id="comprobante">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><factura id="comprobante" version="1.1.0">
     <infoTributaria>
-        <ambiente>2</ambiente>
+        <ambiente>1</ambiente>
         <tipoEmision>1</tipoEmision>
-        <razonSocial>EMPRESA S.A</razonSocial>
-        <nombreComercial>1691290151001</nombreComercial>
-        <ruc>1691290151001</ruc>
-        <claveAcceso>0101902209171128015100120010020051281907846333311</claveAcceso>
+        <razonSocial>Nombre Apellido</razonSocial>
+        <nombreComercial>1500932445001</nombreComercial>
+        <ruc>1234567890001</ruc>
+        <claveAcceso>1804202401123456789000110010010000000051234567816</claveAcceso>
         <codDoc>01</codDoc>
         <estab>001</estab>
-        <ptoEmi>002</ptoEmi>
-        <secuencial>005128150</secuencial>
+        <ptoEmi>001</ptoEmi>
+        <secuencial>000000005</secuencial>
         <dirMatriz>Quito, Amazonas y El Inca  </dirMatriz>
     </infoTributaria>
 
     <infoFactura>
-        <fechaEmision>01/07/2022</fechaEmision>
-        <dirEstablecimiento>Quito Sur (Villaflora)  </dirEstablecimiento>
-        <contribuyenteEspecial>635</contribuyenteEspecial>
-        <obligadoContabilidad>SI</obligadoContabilidad>
+        <fechaEmision>18/04/2024</fechaEmision>
+        <dirEstablecimiento>Quito Sur (Villaflora)  &#013; </dirEstablecimiento>
         <tipoIdentificacionComprador>05</tipoIdentificacionComprador>
         <razonSocialComprador>Don Venom</razonSocialComprador>
-        <identificacionComprador>1603712249</identificacionComprador>
+        <identificacionComprador>0987654321</identificacionComprador>
         <totalSinImpuestos>38.75</totalSinImpuestos>
         <totalDescuento>3.00</totalDescuento>
         <totalConImpuestos>
             <totalImpuesto>
                 <codigo>2</codigo>
-                <codigoPorcentaje>2</codigoPorcentaje>
+                <codigoPorcentaje>4</codigoPorcentaje>
                 <baseImponible>38.75</baseImponible>
-                <valor>4.65</valor>
+                <valor>5.81</valor>
             </totalImpuesto>
         </totalConImpuestos>
         <propina>0.00</propina>
-        <importeTotal>43.40</importeTotal>
+        <importeTotal>44.56</importeTotal>
         <moneda>USD</moneda>
         <pagos>
             <pago>
                 <formaPago>20</formaPago>
-                <total>43.40</total>
+                <total>44.56</total>
                 <plazo>5</plazo>
                 <unidadTiempo>días</unidadTiempo>
             </pago>
@@ -49,16 +47,16 @@
             <codigoAuxiliar>1540247</codigoAuxiliar>
             <descripcion>Costo 1</descripcion>
             <cantidad>1.00</cantidad>
-            <precioUnitario>0.25</precioUnitario>
+            <precioUnitario>38.75</precioUnitario>
             <descuento>0.00</descuento>
-            <precioTotalSinImpuesto>0.25</precioTotalSinImpuesto>
+            <precioTotalSinImpuesto>38.75</precioTotalSinImpuesto>
             <impuestos>
                 <impuesto>
                     <codigo>2</codigo>
-                    <codigoPorcentaje>2</codigoPorcentaje>
-                    <tarifa>12.00</tarifa>
-                    <baseImponible>0.25</baseImponible>
-                    <valor>0.03</valor>
+                    <codigoPorcentaje>4</codigoPorcentaje>
+                    <tarifa>15.00</tarifa>
+                    <baseImponible>38.75</baseImponible>
+                    <valor>5.81</valor>
                 </impuesto>
             </impuestos>
         </detalle>

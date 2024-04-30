@@ -9,7 +9,6 @@
  *   The document declaration (i.e. <?xml version="1.0" encoding="UTF-8"?>) is optional.
  * - The invoice should be utf-8 encoded.
  * - No namespaces.
- * - No CDATA.
  * - No DOCTYPE entities.
  * - No Document type definition (DTD) tags.
  * - No xml-prefixed attributes (xml:<attr_name>).
@@ -17,6 +16,12 @@
  * Canonicalization based on:
  * - https://www.w3.org/TR/xml-c14n
  * - https://www.di-mgt.com.au/xmldsig-c14n.html
+ */
+
+// TODO:
+/**
+ *  - Remove any unnecesary code.
+ *  - Make sure tests and coverage are passing. OK
  */
 
 import { buildXml, parseXml } from "../utils/xml";
