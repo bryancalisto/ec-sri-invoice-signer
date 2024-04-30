@@ -23,9 +23,26 @@ function encodeEntitiesInTagValue(value: string) {
     });
 }
 
+function decodeUtf8HexEntitiesInTagValue(value: string) {
+  const notDecodedEntities = new Set(['&#xD;']);
+  const entitiesToReplace = value.match(/&#x[aA-fF\d]+;/gm) ?? [];
+  let newValue = value;
+
+  for (const entity of entitiesToReplace) {
+    if (!notDecodedEntities.has(entity)) {
+      const hexToDecode = entity.match(/[aA-fF\d]+/)![0];
+      const decimalToDecode = parseInt(hexToDecode, 16);
+      const decoded = String.fromCodePoint(decimalToDecode);
+      newValue = newValue.replace(entity, decoded);
+    }
+  }
+
+  return newValue;
+}
+
 function decodeUtf8EntitiesInTagValue(value: string) {
-  const notDecodedEntities = new Set(['&amp;', '&lt;', '&gt;', '&#xD;']);
-  const entitiesToReplace = value.match(/&#x([aA-fF\d]+);/gm) ?? [];
+  const notDecodedEntities = new Set(['&amp;', '&lt;', '&gt;']);
+  const entitiesToReplace = value.match(/&([aA-zZ]+);/gm) ?? [];
   let newValue = value;
 
   for (const entity of entitiesToReplace) {
@@ -139,6 +156,7 @@ function processTagValue(value: string) {
     setCapitalsInHexEntities,
     convertDecimalEntitiesIntoHexEntities,
     encodeEntitiesInTagValue,
+    decodeUtf8HexEntitiesInTagValue,
     decodeUtf8EntitiesInTagValue
   ];
 

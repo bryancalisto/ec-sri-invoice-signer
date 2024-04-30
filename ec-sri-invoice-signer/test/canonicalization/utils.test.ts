@@ -17,7 +17,13 @@ describe('processAttributeValue', () => {
     expect(processAttributeValue('Thing &#x1fA; 1 &#x1fA;')).to.equal('Thing Ǻ 1 Ǻ');
   });
 
-  it('Normalizes whitespace', () => {
+  it('does not decode &amp;, &lt;, &quot;', () => {
+    expect(processAttributeValue('Thing &amp; 1 &amp; &#xf3;')).to.equal('Thing &amp; 1 &amp; ó');
+    expect(processAttributeValue('Thing &lt; 1 &lt; &#xf3;')).to.equal('Thing &lt; 1 &lt; ó');
+    expect(processAttributeValue('Thing &quot; 1 &quot;&#xf3;')).to.equal('Thing &quot; 1 &quot;ó');
+  });
+
+  it('normalizes whitespace', () => {
     expect(processAttributeValue(' &#x20; Thing &#x20; &#x20; ')).to.equal('   Thing     ');
   });
 });
@@ -29,6 +35,12 @@ describe('processTagValue', () => {
 
   it('Converts decimal entities to hex ones', () => {
     expect(processTagValue('Thing &#013; 1 &#013;')).to.equal('Thing &#xD; 1 &#xD;');
+  });
+
+  it('does not decode &amp;, &lt;, &gt; &#xD;', () => {
+    expect(processTagValue('Thing &amp; 1 &amp; &#xD; &#xf3;')).to.equal('Thing &amp; 1 &amp; &#xD; ó');
+    expect(processTagValue('Thing &lt; 1 &lt; &#xD; &#xf3;')).to.equal('Thing &lt; 1 &lt; &#xD; ó');
+    expect(processTagValue('Thing &gt; 1 &gt; &#xD;&#xf3;')).to.equal('Thing &gt; 1 &gt; &#xD;ó');
   });
 
   it('encodes special characters', () => {
