@@ -1,7 +1,6 @@
 import { XMLParser, XMLBuilder } from 'fast-xml-parser';
 import { XmlFormatError } from './errors';
 import { processAttributeValue, processTagValue } from '../canonicalization/utils';
-import { pipe } from './utils';
 
 type XmlObj = Array<Record<any, any>>;
 
