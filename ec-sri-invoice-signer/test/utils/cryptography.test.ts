@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { extractPrivateKeyAndCertificateFromPkcs12, getHash, sign } from '../../src/utils/cryptography';
+import { extractIssuerData, extractPrivateKeyAndCertificateFromPkcs12, getHash, sign } from '../../src/utils/cryptography';
 import { verifySignature } from '../test-utils/cryptography';
 import fs from 'fs';
 import path from 'path';
@@ -37,5 +37,23 @@ describe('Given the extractPrivateKeyAndCertificateFromPkcs12 function', () => {
     // This way the comparison is delegated to node-forge functions only becoming abstracted and consistent.
     expect(forge.pki.privateKeyToPem(result.privateKey)).to.equal(forge.pki.privateKeyToPem(forge.pki.privateKeyFromPem(privateKeyPem)));
     expect(forge.pki.certificateToPem(result.certificate)).to.equal(forge.pki.certificateToPem(forge.pki.certificateFromPem(certificatePem)));
+  });
+});
+
+describe('Give the extractIssuerData function', () => {
+  it('should return the issuer data inverted', () => {
+    const certificatePem = fs.readFileSync(path.resolve('test/test-data/pkcs12/certificate.pem')).toString('utf-8');
+    const certificate = forge.pki.certificateFromPem(certificatePem);
+
+    const result = extractIssuerData(certificate);
+    expect(result).to.equal('CN=ec-sri-invoice-sign,OU=engineering,O=ec-sri-invoice-sign,L=Quito,ST=Pichincha,C=EC');
+  });
+
+  it('should convert the \'E\' short name into \'EMAILADDRESS\' to match the SRI validator requirements', () => {
+    const certificatePem = fs.readFileSync(path.resolve('test/test-data/pkcs12/edge-cases/certificate-with-email-address/certificate.pem')).toString('utf-8');
+    const certificate = forge.pki.certificateFromPem(certificatePem);
+
+    const result = extractIssuerData(certificate);
+    expect(result).to.equal('EMAILADDRESS=info@mycompany.com,CN=my company name,O=my company,L=Ibarra,ST=Imbabura,C=EC');
   });
 });

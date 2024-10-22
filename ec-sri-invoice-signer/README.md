@@ -106,3 +106,11 @@ Por tal razón, funciona en Windows, Unix/Linux o cualquier plataforma que sopor
  ...
  </factura>
  ```
+
+## Nota importante sobre los archivos .p12
+El paquete se ha probado satisfactoriamente usando .p12 de estos proveedores:
+- Uanataca.
+- Security Data.
+- Lazzate.
+
+Si pruebas el paquete con .p12 de otros proveedores y encuentras problemas, por favor crea un [issue](https://github.com/bryancalisto/ec-sri-invoice-signer/issues)

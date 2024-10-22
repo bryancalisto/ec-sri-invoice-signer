@@ -106,3 +106,7 @@ dist
 # Others
 build
 .vscode
+
+# debug files
+debug-signed.xml
+debug-not-signed.xml
