@@ -114,9 +114,9 @@ function findNode(tagName: string, tree: any) {
 
 async function main() {
   // General params: adjust according to your setup
-  const invoiceXmlPath = 'test/test-data/bug-xml.xml';
-  const signaturePath = 'test/test-data/certificado-calisto-enext.p12';
-  const signaturePassword = 'clave1234';
+  const invoiceXmlPath = 'test/test-data/your-test-invoice-xml.xml';
+  const signaturePath = 'test/test-data/your-p12.p12';
+  const signaturePassword = 'your .p12 password';
 
   // Access key params: adjust according to your setup
   const todayDate = '09/10/2024'; // dd/mm/YYYY
@@ -136,7 +136,7 @@ ${numericCode}${emissionType}`;
   const accessKeyWithVerificationNumber = `${accessKey}${getAccessKeyVerificationNumber(accessKey)}`;
   console.log('[access key]:', accessKeyWithVerificationNumber);
 
-  // Replace fields in the XML with the values above automatically
+  // This replaces fields in the XML with the values above automatically
   let invoiceXml = fs.readFileSync(invoiceXmlPath, 'utf-8');
 
   const parser = new XMLParser({
