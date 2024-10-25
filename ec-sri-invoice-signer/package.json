@@ -11,7 +11,8 @@
     "build": "tsc",
     "build:watch": "tsc -w",
     "test": "mocha",
-    "test:coverage": "nyc mocha"
+    "test:coverage": "nyc mocha",
+    "test:sri": "npx ts-node test/sri-test/sri-test.ts"
   },
   "repository": {
     "type": "git",

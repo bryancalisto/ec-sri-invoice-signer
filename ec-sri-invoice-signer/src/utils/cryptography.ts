@@ -36,10 +36,23 @@ const extractPrivateKeyAndCertificateFromPkcs12 = (pkcs12RawData: string | Buffe
   }
 }
 
+const normalizeIssuerAttributeShortName = (shortName: string) => {
+  switch (shortName) {
+    case 'E':
+      // As required by the SRI validator code in this line (https://github.com/gdiazs/MITyCLib/blob/master/MITyCLibXADES/src/main/java/es/mityc/firmaJava/libreria/xades/ValidarFirmaXML.java#L2139).
+      // X500Principal needs EMAILADDRESS instead of E (https://docs.oracle.com/javase/7/docs/api/javax/security/auth/x500/X500Principal.html#X500Principal(java.lang.String)) and has been seen that some certificate issuers set the email address with 'E' shortName.
+      // The oid for email (1.2.840.113549.1.9.1) could also be used, but that's a bit cryptic and we know the SRI accepts EMAILADDRESS without issue so no need to be that generic.
+      return 'EMAILADDRESS';
+    default:
+      return shortName;
+  };
+};
+
 const extractIssuerData = (certificate: forge.pki.Certificate) => {
   const issuerName = certificate.issuer.attributes.reverse().filter((attr) => attr.shortName || attr.type).map((attr) => {
     if (attr.shortName) {
-      return `${attr.shortName}=${attr.value}`;
+      const normalizedShortName = normalizeIssuerAttributeShortName(attr.shortName);
+      return `${normalizedShortName}=${attr.value}`;
     }
     else {
       return `${attr.type}=${attr.value}`;
@@ -80,5 +93,6 @@ export {
   getHash,
   extractPrivateKeyAndCertificateFromPkcs12,
   extractPrivateKeyData,
+  extractIssuerData,
   extractX509Data
 }
