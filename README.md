@@ -100,7 +100,7 @@ Por tal razón, funciona en Windows, Unix/Linux o cualquier plataforma que sopor
  ```
 
 ## Nota importante sobre los archivos .p12
-El paquete se ha probado satisfactoriamente usando .p12 de estos proveedores:
+El paquete se ha probado satisfactoriamente usando .p12 de estos proveedores (no tengo .p12 de otros proveedores y tampoco he podido recibir el feedback de usuarios del paquete usando otras firmas):
 - Uanataca.
 - Security Data.
 - Lazzate.
