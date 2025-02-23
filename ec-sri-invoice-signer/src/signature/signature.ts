@@ -98,14 +98,14 @@ export const signInvoiceXml = (invoiceXml: string, pkcs12Data: string | Buffer, 
 
 /**
  * 
- * @param invoiceXml The credit note XML to be signed.
+ * @param invoiceXml The debit note XML to be signed.
  * @param pkcs12Data The pkcs12 file (.p12/.pfx) data expressed as a node Buffer or base64 string.
  * @param options Options are:
  * - **pkcs12Password**: The pkcs12 file password. Defaults to no password.
  * @returns 
  */
-export const signCreditNoteXml = (invoiceXml: string, pkcs12Data: string | Buffer, options?: signInvoiceXmlOptions) => {
-  return signDocumentXml(invoiceXml, pkcs12Data, 'notaCredito', options);
+export const signDebitNoteXml = (invoiceXml: string, pkcs12Data: string | Buffer, options?: signInvoiceXmlOptions) => {
+  return signDocumentXml(invoiceXml, pkcs12Data, 'notaDebito', options);
 }
 
 /**
