@@ -12,6 +12,10 @@ If you encounter any issues or bugs, please report them by creating a new issue 
 - Steps to reproduce the issue
 - Any relevant screenshots or error messages
 
+## Requesting / Proposing New Features
+
+Please don't create a pull request right away. Create an issue describing the intended feature in order to check feasibility, convenience and create a plan for it. We'll derive our next actions from the issue conversation.
+
 ## Submitting Pull Requests
 
 To submit a pull request, please follow these steps:
