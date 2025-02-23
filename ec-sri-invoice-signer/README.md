@@ -26,7 +26,7 @@ Por tal razón, funciona en Windows, Unix/Linux o cualquier plataforma que sopor
 
   doSomethingWithTheSignedInvoice(signedInvoice);
   ```
-3. Si este paquete te ha ayudado, considera dejar tu estrella en<a style="
+3. Si este paquete te ha ayudado, considera dejar tu estrella en <a style="
     display: inline-block;
     color: #d9deda;
     width: fit-content;
@@ -108,7 +108,7 @@ Por tal razón, funciona en Windows, Unix/Linux o cualquier plataforma que sopor
  ```
 
 ## Nota importante sobre los archivos .p12
-El paquete se ha probado satisfactoriamente usando .p12 de estos proveedores:
+El paquete se ha probado satisfactoriamente usando .p12 de estos proveedores (no tengo .p12 de otros proveedores y tampoco he podido recibir el feedback de usuarios del paquete usando otras firmas):
 - Uanataca.
 - Security Data.
 - Lazzate.
