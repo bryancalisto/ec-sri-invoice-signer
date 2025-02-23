@@ -26,7 +26,8 @@ function waitForKeyPress() {
   });
 }
 
-export async function sendDocToSRI(signedInvoice: string) {
+export async function sendDocToSRI(signedDoc: string) {
+  console.log('sending doc to SRI servers...');
   const url = 'https://celcer.sri.gob.ec/comprobantes-electronicos-ws/RecepcionComprobantesOffline?wsdl';
 
   return new Promise((resolve, reject) => {
@@ -34,16 +35,15 @@ export async function sendDocToSRI(signedInvoice: string) {
       if (err) {
         reject(err);
       } else {
-        const args = { xml: Buffer.from(signedInvoice).toString('base64') };
-
-        console.log('sending invoice to SRI servers...');
+        const args = { xml: Buffer.from(signedDoc).toString('base64') };
 
         client.validarComprobante(args, function (err: any, result: any) {
           if (err) {
-            console.log('error while sending invoice to SRI servers:', err);
+            console.log('error while sending doc to SRI servers:', err);
             reject(err);
           } else {
             resolve(result);
+            console.log('doc sent to SRI servers:', JSON.stringify(result, null, 2));
           }
         });
       }
@@ -92,6 +92,7 @@ export function getAccessKeyVerificationNumber(data: string) {
 }
 
 export async function longPollDoc({ accessKey }: { accessKey: string }) {
+  console.log('polling for doc information...');
   while (true) {
     await waitForKeyPress();
     const result = await checkDocAuthorization(accessKey);

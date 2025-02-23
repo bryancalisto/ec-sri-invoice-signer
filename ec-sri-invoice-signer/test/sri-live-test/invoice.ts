@@ -92,12 +92,9 @@ ${numericCode}${emissionType}`;
   const signedInvoice = signInvoiceXml(invoiceXml, signature, { pkcs12Password: signaturePassword })
   fs.writeFileSync('debug-signed.xml', signedInvoice);
 
-  console.log('sending invoice to SRI servers...');
   const result = await sendDocToSRI(signedInvoice);
-  console.log('invoice sent to SRI servers:', JSON.stringify(result, null, 2));
 
   // Poll until invoice has been processed
-  console.log('polling for invoice information...');
   await longPollDoc({ accessKey: accessKeyWithVerificationNumber });
 }
 
