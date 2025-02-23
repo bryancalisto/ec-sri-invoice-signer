@@ -110,3 +110,9 @@ build
 # debug files
 debug-signed.xml
 debug-not-signed.xml
+
+# A common file with notes
+notes.txt
+
+# A directory to put things for temporary use (normally for testing)
+**/test/test-data/temp

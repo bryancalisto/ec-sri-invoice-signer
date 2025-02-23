@@ -50,7 +50,7 @@ describe('Give the extractIssuerData function', () => {
   });
 
   it('should convert the \'E\' short name into \'EMAILADDRESS\' to match the SRI validator requirements', () => {
-    const certificatePem = fs.readFileSync(path.resolve('test/test-data/edge-cases/certificate-with-email-address/pkcs12/certificate.pem')).toString('utf-8');
+    const certificatePem = fs.readFileSync(path.resolve('test/test-data/invoice/edge-cases/certificate-with-email-address/pkcs12/certificate.pem')).toString('utf-8');
     const certificate = forge.pki.certificateFromPem(certificatePem);
 
     const result = extractIssuerData(certificate);
