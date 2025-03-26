@@ -38,6 +38,8 @@ describe('Given the extractPrivateKeyAndCertificateFromPkcs12 function', () => {
     expect(forge.pki.privateKeyToPem(result.privateKey)).to.equal(forge.pki.privateKeyToPem(forge.pki.privateKeyFromPem(privateKeyPem)));
     expect(forge.pki.certificateToPem(result.certificate)).to.equal(forge.pki.certificateToPem(forge.pki.certificateFromPem(certificatePem)));
   });
+
+  it("should return the correct private key for a 'Banco Central del Ecuador' .p12");
 });
 
 describe('Give the extractIssuerData function', () => {
