@@ -48,6 +48,7 @@ describe('Given the signDebitNote function', () => {
     jest.spyOn(Utils, 'getRandomUuid').mockReturnValue('5bdfc32d-a37f-47c3-90fe-49f5a093b7bf');
 
     const result = signDebitNoteXml(original, pkcs12Data, { pkcs12Password: '' });
+    fs.writeFileSync('filleee', result);
     expect(result).toEqual(signed);
   });
 });

@@ -1,11 +1,11 @@
 import fs from 'fs';
-import { signInvoiceXml } from '../../src';
+import { signDebitNoteXml } from '../../../src';
 import { XMLBuilder, XMLParser } from 'fast-xml-parser';
-import { findNode, getAccessKeyVerificationNumber, longPollDoc, sendDocToSRI } from './utils';
+import { findNode, getAccessKeyVerificationNumber, longPollDoc, sendDocToSRI } from '../utils';
 import path from 'path';
 
 async function main() {
-  const defaultParamsPath = path.resolve(__dirname, 'invoice-params.json');
+  const defaultParamsPath = path.resolve(__dirname, 'debit-note-params.json');
   const paramsPath = process.argv[2] || defaultParamsPath;
 
   if (!fs.existsSync(paramsPath)) {
@@ -15,18 +15,27 @@ async function main() {
   const params = JSON.parse(fs.readFileSync(paramsPath, 'utf-8'));
 
   const {
-    invoiceXmlPath,
+    xmlPath,
     signaturePath,
     signaturePassword,
     date,
     documentType,
     ruc,
+    razonSocial,
+    nombreComercial,
+    dirMatriz,
     environmentType,
     establishment,
     emissionPoint,
     sequentialDocumentNumber,
     numericCode,
-    emissionType
+    emissionType,
+    buyerIdType,
+    razonSocialComprador,
+    identificacionComprador,
+    codDocModificado,
+    numDocModificado,
+    fechaEmisionDocSustento,
   } = params;
 
   // Generate access key
@@ -37,7 +46,7 @@ ${numericCode}${emissionType}`;
   console.log('[access key]:', accessKeyWithVerificationNumber);
 
   // This replaces fields in the XML with the values above automatically
-  let invoiceXml = fs.readFileSync(invoiceXmlPath, 'utf-8');
+  let debitNoteXml = fs.readFileSync(xmlPath, 'utf-8');
 
   const parser = new XMLParser({
     preserveOrder: true,
@@ -48,26 +57,35 @@ ${numericCode}${emissionType}`;
     ignoreAttributes: false,
   });
 
-  const parsed = parser.parse(invoiceXml);
+  const parsed = parser.parse(debitNoteXml);
 
   const infoTributariaFieldsToReplace = {
     ambiente: environmentType,
     tipoEmision: emissionType,
-    ruc: ruc,
+    razonSocial,
+    nombreComercial,
+    ruc,
     claveAcceso: accessKeyWithVerificationNumber,
     codDoc: documentType,
     estab: establishment,
     ptoEmi: emissionPoint,
-    secuencial: sequentialDocumentNumber
+    secuencial: sequentialDocumentNumber,
+    dirMatriz,
   };
 
-  const infoFacturaFieldsToReplace = {
+  const infoNotaDebitoFieldsToReplace = {
     fechaEmision: date,
+    buyerIdType,
+    razonSocialComprador,
+    identificacionComprador,
+    codDocModificado,
+    numDocModificado,
+    fechaEmisionDocSustento,
   };
 
-  const facturaNode = findNode('factura', parsed);
-  const infoTributariaNode = findNode('infoTributaria', facturaNode);
-  const infoFacturaNode = findNode('infoFactura', facturaNode);
+  const debitNoteNode = findNode('notaDebito', parsed);
+  const infoTributariaNode = findNode('infoTributaria', debitNoteNode);
+  const infoNotaDebitoNode = findNode('infoNotaDebito', debitNoteNode);
 
   for (const node of infoTributariaNode) {
     for (const [key, value] of Object.entries(infoTributariaFieldsToReplace)) {
@@ -77,8 +95,8 @@ ${numericCode}${emissionType}`;
     }
   }
 
-  for (const node of infoFacturaNode) {
-    for (const [key, value] of Object.entries(infoFacturaFieldsToReplace)) {
+  for (const node of infoNotaDebitoNode) {
+    for (const [key, value] of Object.entries(infoNotaDebitoFieldsToReplace)) {
       if (key in node) {
         node[key].find((node: any) => '#text' in node)['#text'] = value;
       }
@@ -90,19 +108,15 @@ ${numericCode}${emissionType}`;
     ignoreAttributes: false,
   });
 
-  invoiceXml = builder.build(parsed);
+  debitNoteXml = builder.build(parsed);
 
-  // Save the updated XML for reference
-  fs.writeFileSync('debug-not-signed.xml', invoiceXml);
-
-  // Send the signed invoice to the SRI servers
+  // Send the signed debit note to the SRI servers
   const signature = fs.readFileSync(signaturePath);
-  const signedInvoice = signInvoiceXml(invoiceXml, signature, { pkcs12Password: signaturePassword })
-  fs.writeFileSync('debug-signed.xml', signedInvoice);
+  const signedDebitNote = signDebitNoteXml(debitNoteXml, signature, { pkcs12Password: signaturePassword })
 
-  await sendDocToSRI(signedInvoice);
+  await sendDocToSRI(signedDebitNote);
 
-  // Poll until invoice has been processed
+  // Poll until debit note has been processed
   await longPollDoc({ accessKey: accessKeyWithVerificationNumber });
 }
 

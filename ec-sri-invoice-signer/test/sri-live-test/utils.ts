@@ -7,25 +7,6 @@ import readline from 'readline';
  * https://celcer.sri.gob.ec/comprobantes-electronicos-ws/AutorizacionComprobantesOffline?wsdl
  */
 
-function waitForKeyPress() {
-  return new Promise((resolve) => {
-    const rl = readline.createInterface({
-      input: process.stdin,
-      output: process.stdout
-    });
-
-    rl.question('[exit]: e, [continue]: any key, but not e', (answer) => {
-      if (answer === 'e') {
-        process.exit(0);
-      }
-      else {
-        resolve(true);
-        rl.close();
-      }
-    });
-  });
-}
-
 export async function sendDocToSRI(signedDoc: string) {
   console.log('sending doc to SRI servers...');
   const url = 'https://celcer.sri.gob.ec/comprobantes-electronicos-ws/RecepcionComprobantesOffline?wsdl';
@@ -119,8 +100,12 @@ export async function longPollDoc({ accessKey, maxMinutes = 3, maxErrors = 3, in
         clearTimeout(timeout);
         return result;
       }
+      else if (result?.RespuestaAutorizacionComprobante?.autorizaciones?.autorizacion?.estado === 'NO AUTORIZADO') {
+        console.error('doc not authorized:', JSON.stringify(result, null, 2));
+        process.exit(1);
+      }
       else if (i < maxRetries - 1) {
-        console.log('doc not authorized yet, retrying...', JSON.stringify(result, null, 2));
+        console.log('could not check authorization, retrying...', JSON.stringify(result, null, 2));
       }
     }
     catch (error) {
