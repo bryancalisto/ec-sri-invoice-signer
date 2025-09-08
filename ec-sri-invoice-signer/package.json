@@ -10,8 +10,8 @@
   "scripts": {
     "build": "tsc",
     "build:watch": "tsc -w",
-    "test": "mocha",
-    "test:coverage": "nyc mocha",
+    "test": "jest",
+    "test:coverage": "jest --coverage",
     "test:sri": "npx ts-node test/sri-live-test/invoice.ts"
   },
   "repository": {
@@ -34,18 +34,13 @@
   },
   "homepage": "https://github.com/bryancalisto/ec-sri-invoice-signer#readme",
   "devDependencies": {
-    "@types/chai": "^4.3.5",
-    "@types/mocha": "^10.0.1",
+    "@types/jest": "^30.0.0",
     "@types/node": "^18.16.19",
     "@types/node-forge": "^1.3.3",
     "@types/sax": "^1.2.7",
-    "@types/sinon": "^10.0.15",
-    "chai": "^4.3.7",
-    "mocha": "^10.2.0",
-    "nyc": "^15.1.0",
-    "sinon": "^15.2.0",
+    "jest": "^30.1.3",
     "soap": "^1.0.0",
-    "ts-node": "^10.9.1",
+    "ts-jest": "^29.4.1",
     "typescript": "^5.1.6"
   },
   "dependencies": {

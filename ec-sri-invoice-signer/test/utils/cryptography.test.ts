@@ -1,4 +1,4 @@
-import { expect } from 'chai';
+import { describe, it, expect } from '@jest/globals';
 import { extractIssuerData, extractPrivateKeyAndCertificateFromPkcs12, getHash, sign } from '../../src/utils/cryptography';
 import { verifySignature } from '../test-utils/cryptography';
 import fs from 'fs';
@@ -14,14 +14,14 @@ describe('Given the sign function', () => {
     const resultSignature = sign(data, privateKey);
     const verifiedSuccessfully = verifySignature(data, certificate.publicKey as forge.pki.rsa.PublicKey, resultSignature);
 
-    expect(verifiedSuccessfully).to.be.true;
+    expect(verifiedSuccessfully).toBe(true);
   });
 });
 
 describe('Given the getHash function', () => {
   it('should return the SHA1 hash of the input string expressed in base64', () => {
     const result = getHash('something');
-    expect(result).equal('GvF+c3IdvgxAARuC7Uuxp9vjzik=');
+    expect(result).toEqual('GvF+c3IdvgxAARuC7Uuxp9vjzik=');
   });
 });
 
@@ -35,8 +35,8 @@ describe('Given the extractPrivateKeyAndCertificateFromPkcs12 function', () => {
 
     // Here we convert from fromPem and toPem to overcome format inconsistencies due to new line encoding and pkcs8 shrouding of private key.
     // This way the comparison is delegated to node-forge functions only becoming abstracted and consistent.
-    expect(forge.pki.privateKeyToPem(result.privateKey)).to.equal(forge.pki.privateKeyToPem(forge.pki.privateKeyFromPem(privateKeyPem)));
-    expect(forge.pki.certificateToPem(result.certificate)).to.equal(forge.pki.certificateToPem(forge.pki.certificateFromPem(certificatePem)));
+    expect(forge.pki.privateKeyToPem(result.privateKey)).toEqual(forge.pki.privateKeyToPem(forge.pki.privateKeyFromPem(privateKeyPem)));
+    expect(forge.pki.certificateToPem(result.certificate)).toEqual(forge.pki.certificateToPem(forge.pki.certificateFromPem(certificatePem)));
   });
 });
 
@@ -46,7 +46,7 @@ describe('Give the extractIssuerData function', () => {
     const certificate = forge.pki.certificateFromPem(certificatePem);
 
     const result = extractIssuerData(certificate);
-    expect(result).to.equal('CN=ec-sri-invoice-sign,OU=engineering,O=ec-sri-invoice-sign,L=Quito,ST=Pichincha,C=EC');
+    expect(result).toEqual('CN=ec-sri-invoice-sign,OU=engineering,O=ec-sri-invoice-sign,L=Quito,ST=Pichincha,C=EC');
   });
 
   it('should convert the \'E\' short name into \'EMAILADDRESS\' to match the SRI validator requirements', () => {
@@ -54,6 +54,6 @@ describe('Give the extractIssuerData function', () => {
     const certificate = forge.pki.certificateFromPem(certificatePem);
 
     const result = extractIssuerData(certificate);
-    expect(result).to.equal('EMAILADDRESS=info@mycompany.com,CN=my company name,O=my company,L=Ibarra,ST=Imbabura,C=EC');
+    expect(result).toEqual('EMAILADDRESS=info@mycompany.com,CN=my company name,O=my company,L=Ibarra,ST=Imbabura,C=EC');
   });
 });
