@@ -42,8 +42,13 @@ export async function sendDocToSRI(signedDoc: string) {
             console.log('error while sending doc to SRI servers:', err);
             reject(err);
           } else {
+            if (result?.RespuestaRecepcionComprobante?.estado !== 'RECIBIDA') {
+              console.error('doc could not be received:', JSON.stringify(result, null, 2));
+              process.exit(1);
+            }
+
+            console.log('doc received successfully:', JSON.stringify(result, null, 2));
             resolve(result);
-            console.log('doc sent to SRI servers:', JSON.stringify(result, null, 2));
           }
         });
       }
@@ -91,12 +96,44 @@ export function getAccessKeyVerificationNumber(data: string) {
   return verificatioNumber;
 }
 
-export async function longPollDoc({ accessKey }: { accessKey: string }) {
-  console.log('polling for doc information...');
-  while (true) {
-    await waitForKeyPress();
-    const result = await checkDocAuthorization(accessKey);
-    console.log('doc status:', JSON.stringify(result, null, 2));
+async function sleep(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+export async function longPollDoc({ accessKey, maxMinutes = 3, maxErrors = 3, intervalSeconds = 5, maxRetries = 3 }: { accessKey: string, maxMinutes?: number, maxErrors?: number, intervalSeconds?: number, maxRetries?: number }) {
+  const timeout = setTimeout(() => {
+    console.log('timeout reached, exiting...');
+    process.exit(1);
+  }, maxMinutes * 60 * 1000);
+  let errorCount = 0;
+
+
+  for (let i = 0; i < maxRetries; i++) {
+    console.log('polling for doc information...');
+
+    try {
+      const result: any = await checkDocAuthorization(accessKey);
+
+      if (result?.RespuestaAutorizacionComprobante?.autorizaciones?.autorizacion?.estado === 'AUTORIZADO') {
+        console.log('doc authorized successfully:', JSON.stringify(result, null, 2));
+        clearTimeout(timeout);
+        return result;
+      }
+      else if (i < maxRetries - 1) {
+        console.log('doc not authorized yet, retrying...', JSON.stringify(result, null, 2));
+      }
+    }
+    catch (error) {
+      console.error('error while checking doc status:', error);
+      errorCount++;
+
+      if (errorCount >= maxErrors) {
+        console.error('max errors reached, exiting...');
+        process.exit(1);
+      }
+    }
+
+    await sleep(intervalSeconds * 1000);
   }
 }
 

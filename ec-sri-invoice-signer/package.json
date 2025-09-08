@@ -12,7 +12,8 @@
     "build:watch": "tsc -w",
     "test": "jest",
     "test:coverage": "jest --coverage",
-    "test:sri": "npx ts-node test/sri-live-test/invoice.ts"
+    "test:sri:invoice": "npx ts-node test/sri-live-test/invoice.ts",
+    "test:sri:debit-note": "npx ts-node test/sri-live-test/debit-note.ts"
   },
   "repository": {
     "type": "git",

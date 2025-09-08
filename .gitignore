@@ -111,6 +111,7 @@ todo
 # debug files
 debug-signed.xml
 debug-not-signed.xml
+invoice-params.json
 
 # A common file with notes
 notes.txt

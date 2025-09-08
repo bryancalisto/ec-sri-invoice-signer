@@ -2,27 +2,35 @@ import fs from 'fs';
 import { signInvoiceXml } from '../../src';
 import { XMLBuilder, XMLParser } from 'fast-xml-parser';
 import { findNode, getAccessKeyVerificationNumber, longPollDoc, sendDocToSRI } from './utils';
-
+import path from 'path';
 
 async function main() {
-  // General params: adjust according to your setup
-  const invoiceXmlPath = 'test/test-data/your-test-invoice-xml.xml';
-  const signaturePath = 'test/test-data/your-p12.p12';
-  const signaturePassword = 'your .p12 password';
+  const defaultParamsPath = path.resolve(__dirname, 'invoice-params.json');
+  const paramsPath = process.argv[2] || defaultParamsPath;
 
-  // Access key params: adjust according to your setup
-  const todayDate = '09/10/2024'; // dd/mm/YYYY
-  const documentType = '01'; // invoice
-  const ruc = '1234567890001'; // RUC associated to the .p12 certificate
-  const environmentType = '1'; // testing
-  const establishment = '001';
-  const emissionPoint = '001';
-  const sequentialDocumentNumber = '000000001'; // sequence according to your invoice numbering sequence
-  const numericCode = '12345678'; // 8 random numeric digits
-  const emissionType = '1'; // constant value
+  if (!fs.existsSync(paramsPath)) {
+    throw new Error(`Params file not found: ${paramsPath}`);
+  }
+
+  const params = JSON.parse(fs.readFileSync(paramsPath, 'utf-8'));
+
+  const {
+    invoiceXmlPath,
+    signaturePath,
+    signaturePassword,
+    date,
+    documentType,
+    ruc,
+    environmentType,
+    establishment,
+    emissionPoint,
+    sequentialDocumentNumber,
+    numericCode,
+    emissionType
+  } = params;
 
   // Generate access key
-  const accessKey = `${todayDate.replace(/\//gm, '')}${documentType}${ruc}${environmentType}${establishment}${emissionPoint}${sequentialDocumentNumber}\
+  const accessKey = `${date.replace(/\//gm, '')}${documentType}${ruc}${environmentType}${establishment}${emissionPoint}${sequentialDocumentNumber}\
 ${numericCode}${emissionType}`;
 
   const accessKeyWithVerificationNumber = `${accessKey}${getAccessKeyVerificationNumber(accessKey)}`;
@@ -54,7 +62,7 @@ ${numericCode}${emissionType}`;
   };
 
   const infoFacturaFieldsToReplace = {
-    fechaEmision: todayDate,
+    fechaEmision: date,
   };
 
   const facturaNode = findNode('factura', parsed);
@@ -92,12 +100,10 @@ ${numericCode}${emissionType}`;
   const signedInvoice = signInvoiceXml(invoiceXml, signature, { pkcs12Password: signaturePassword })
   fs.writeFileSync('debug-signed.xml', signedInvoice);
 
-  const result = await sendDocToSRI(signedInvoice);
+  await sendDocToSRI(signedInvoice);
 
   // Poll until invoice has been processed
   await longPollDoc({ accessKey: accessKeyWithVerificationNumber });
 }
 
-main()
-  .then(() => console.log('DONE'))
-  .catch((err) => console.error(err));
+main().catch((err) => console.error(err));
