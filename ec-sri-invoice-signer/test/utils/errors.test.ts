@@ -9,6 +9,6 @@ describe('XmlFormatError', () => {
 
 describe('UnsuportedPkcs12Error', () => {
   it('Show expected message when thrown', () => {
-    expect(() => { throw new UnsuportedPkcs12Error(); }).toThrow("The used pkcs12 file is not supported");
+    expect(() => { throw new UnsuportedPkcs12Error(); }).toThrow("The used .p12 file is not supported");
   });
 });
