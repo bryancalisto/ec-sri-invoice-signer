@@ -12,7 +12,7 @@
     "build:watch": "tsc -w",
     "test": "mocha",
     "test:coverage": "nyc mocha",
-    "test:sri": "npx ts-node test/sri-test/sri-test.ts"
+    "test:sri": "npx ts-node test/sri-live-test/invoice.ts"
   },
   "repository": {
     "type": "git",

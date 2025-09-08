@@ -106,6 +106,7 @@ dist
 # Others
 build
 .vscode
+todo
 
 # debug files
 debug-signed.xml
