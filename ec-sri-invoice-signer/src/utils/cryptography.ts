@@ -9,6 +9,25 @@ const getHash = (data: string) => {
   return forge.util.encode64(forge.sha1.create().update(data, 'utf8').digest().bytes());
 }
 
+const getBancoCentralPkcs12PrivateKey = (pkcs8ShroudedKeyBags: forge.pkcs12.Bag[]) => {
+    const privateKeyBag = pkcs8ShroudedKeyBags.find((bag) => {
+      const name = bag?.attributes?.friendlyName?.[0];
+      return /signing key/i.test(name);
+    });
+
+    if (!privateKeyBag) {
+      throw new UnsuportedPkcs12Error("No key bag with friendly name 'Signing Key' found in the key bags of 'Banco Central del Ecuador' .p12");
+    }
+
+    const privateKey = privateKeyBag.key as forge.pki.rsa.PrivateKey;
+
+    if (!privateKey) {
+      throw new UnsuportedPkcs12Error("No valid key found in 'Banco Central del Ecuador' .p12");
+    }
+
+    return privateKey;
+}
+
 const extractPrivateKeyAndCertificateFromPkcs12 = (pkcs12RawData: string | Buffer, password: string = '') => {
   const pkcs12InBase64 = typeof pkcs12RawData === 'string' ? pkcs12RawData : pkcs12RawData.toString('base64');
   const pkcs12InDer = forge.util.decode64(pkcs12InBase64);
@@ -17,17 +36,31 @@ const extractPrivateKeyAndCertificateFromPkcs12 = (pkcs12RawData: string | Buffe
   const certBags = p12.getBags({ bagType: forge.pki.oids.certBag });
   const certBag = certBags[forge.pki.oids.certBag]?.[0];
   const pkcs8ShroudedKeyBags = p12.getBags({ bagType: forge.pki.oids.pkcs8ShroudedKeyBag });
-  const pkcs8ShroudedKeyBag = pkcs8ShroudedKeyBags[forge.pki.oids.pkcs8ShroudedKeyBag]?.[0];
 
-  if (!certBag || !pkcs8ShroudedKeyBag) {
+  if (!certBag || !pkcs8ShroudedKeyBags) {
     throw new UnsuportedPkcs12Error();
   }
 
-  const privateKey = pkcs8ShroudedKeyBag.key as forge.pki.rsa.PrivateKey;
+  const friendlyName = certBag?.attributes?.friendlyName?.[0];
+
   const certificate = certBag.cert;
 
-  if (!privateKey || !certificate) {
-    throw new UnsuportedPkcs12Error();
+  if (!certificate) {
+    throw new UnsuportedPkcs12Error("Couldn't find its certificate");
+  }
+
+  let privateKey: forge.pki.rsa.PrivateKey | null = null;
+
+  if (/banco central/i.test(friendlyName)) {
+    privateKey = getBancoCentralPkcs12PrivateKey(pkcs8ShroudedKeyBags[forge.pki.oids.pkcs8ShroudedKeyBag] ?? []);
+  }
+  else {
+    const firstPkcs8ShroudedKeyBag = pkcs8ShroudedKeyBags[forge.pki.oids.pkcs8ShroudedKeyBag]?.[0];
+    privateKey = firstPkcs8ShroudedKeyBag?.key ? firstPkcs8ShroudedKeyBag.key as forge.pki.rsa.PrivateKey : null;
+  }
+
+  if (!privateKey) {
+    throw new UnsuportedPkcs12Error("Couldn't find its private key");
   }
 
   return {
