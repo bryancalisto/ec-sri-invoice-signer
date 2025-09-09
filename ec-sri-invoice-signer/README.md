@@ -1,5 +1,5 @@
 # ec-sri-invoice-signer
-Firmador de facturas basado en las especificaciones del Servicio de Rentas Internas (SRI) ecuatoriano. Está escrito en puro TypeScript/JavaScript, sin dependencias de binarios criptográficos como OpenSSL, DLLs con el código de firmado o similares.
+Firmador de facturas y notas de débito basado en las especificaciones del Servicio de Rentas Internas (SRI) ecuatoriano. Está escrito en puro TypeScript/JavaScript, sin dependencias de binarios criptográficos como OpenSSL, DLLs con el código de firmado o similares.
 Por tal razón, funciona en Windows, Unix/Linux o cualquier plataforma que soporte Node.js sin configuraciones adicionales.
 
 ## Guía de uso
@@ -8,13 +8,13 @@ Por tal razón, funciona en Windows, Unix/Linux o cualquier plataforma que sopor
   ```bash
   npm i ec-sri-invoice-signer
   ```
-2. Usa la función `signInvoiceXml` en tu código para firmar la factura:
+2. Usa la función `signInvoiceXml` o `signDebitNoteXml` en tu código para firmar el documento respectivo:
   ```js
   import fs from 'fs';
   import { signInvoiceXml } from 'ec-sri-invoice-signer';
   /* Puedes user require() si usas módulos commonJS. */
 
-  /* El XML de la factura a firmarse. */
+  /* El XML del documento a firmarse. */
   const invoiceXml = '<factura id="comprobante>...</factura>';
 
   /* El contenido del archivo pkcs12 (.p12/.pfx extension) del firmante representado como Node Buffer o string base64.
@@ -42,7 +42,7 @@ Por tal razón, funciona en Windows, Unix/Linux o cualquier plataforma que sopor
  Por tal razón, solo se implementa las partes del estándar requeridas para soportar XML con características relativamente comunes. Esto debería cubrir la mayoría de los casos de uso.
 
  Estas son las características requeridas del XML que se pretende firmar (ninguna de las características no soportadas es requerida para el intercambio de datos con el SRI):
- - La factura a firmarse debe consistir del nodo factura con su respectivo id 'comprobante', su versión y sus etiquetas hijas describiendo el contenido de la factura (sin otros namespaces).
+ - El documento a firmarse debe consistir del nodo raíz (e.g. `factura` o `notaDebito`) con su respectivo id 'comprobante', su versión y sus etiquetas hijas describiendo el contenido del documento (sin otros namespaces).
  ```xml
  <?xml version="1.0" encoding="UTF-8"?>
  <factura Id="comprobante" version="1.1.0">
@@ -114,3 +114,16 @@ El paquete se ha probado satisfactoriamente usando .p12 de estos proveedores (no
 - Lazzate.
 
 Si pruebas el paquete con .p12 de otros proveedores y encuentras problemas, por favor crea un [issue](https://github.com/bryancalisto/ec-sri-invoice-signer/issues)
+
+
+## Herramientas para prueba directa con servicios del SRI
+El paquete incluye herramientas para probar el firmado de facturas y notas de débito contra los servidores del SRI en modo 'prueba'.
+Para usarlas, primero configura los parámetros en `test/sri-live-test/invoice/invoice-params.json` (usa `test/sri-live-test/invoice/invoice-params-template.json` como plantilla) y `test/sri-live-test/debit-note/debit-note-params.json` (usa `test/sri-live-test/debit-note/debit-note-params-template.json` como plantilla).
+Luego, puedes correr las pruebas con los siguientes comandos:
+
+```bash
+npm run test:sri:invoice
+npm run test:sri:debit-note
+```
+
+Los scripts tomarán los parámetros configurados, firmarán el documento y lo enviarán al SRI para su validación.
