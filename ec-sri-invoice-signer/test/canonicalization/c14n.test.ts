@@ -1,4 +1,4 @@
-import { expect } from "chai";
+import { describe, it, expect } from '@jest/globals';
 import { c14nCanonicalize } from "../../src/canonicalization/c14n";
 
 describe('Given the c14nCanonicalize function', () => {
@@ -54,7 +54,7 @@ describe('Given the c14nCanonicalize function', () => {
 
     const result = c14nCanonicalize(input);
 
-    expect(result).to.equal(expected);
+    expect(result).toEqual(expected);
   });
 
   it('should replace whitespace between attributes with a single space (0x20)', () => {
@@ -65,15 +65,15 @@ describe('Given the c14nCanonicalize function', () => {
     const expected = `<e1 a="one" b="two"></e1>`;
 
     const result = c14nCanonicalize(input);
-    expect(result).to.equal(expected);
+    expect(result).toEqual(expected);
   });
 
-  it('should remove whitespace between the final double quotes in a start tag and the closing \'>\' and all whitespace in the closing tag', () => {
+  it('should remove whitespace between the final double quotes in a start tag and the closing ">" and all whitespace in the closing tag', () => {
     const input = '<e3  d= "foo"  >bar</e3   >';
     const expected = '<e3 d="foo">bar</e3>'
 
     const result = c14nCanonicalize(input);
-    expect(result).to.equal(expected);
+    expect(result).toEqual(expected);
   });
 
   it('should set inherited namespaces into the root canonicalization target subset', () => {
@@ -101,7 +101,7 @@ describe('Given the c14nCanonicalize function', () => {
       ]
     });
 
-    expect(result).to.equal(expected);
+    expect(result).toEqual(expected);
   });
 
   it('should override parent namespace URI with the child namespace URI', () => {
@@ -129,7 +129,7 @@ describe('Given the c14nCanonicalize function', () => {
       ]
     });
 
-    expect(result).to.equal(expected);
+    expect(result).toEqual(expected);
   });
 
   it('should process entities in elements and attributes', () => {
@@ -151,6 +151,6 @@ Second line</text>
 </doc>`;
 
     const result = c14nCanonicalize(input);
-    expect(result).to.equal(expected);
+    expect(result).toEqual(expected);
   });
 });

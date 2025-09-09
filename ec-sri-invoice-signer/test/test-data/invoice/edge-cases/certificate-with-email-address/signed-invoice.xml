@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><factura id="comprobante" version="1.1.0">
+    <infoTributaria>
+        <ambiente>1</ambiente>
+        <tipoEmision>1</tipoEmision>
+        <razonSocial>Nombre Apellido</razonSocial>
+        <nombreComercial>1500932445001</nombreComercial>
+        <ruc>1234567890001</ruc>
+        <claveAcceso>1804202401123456789000110010010000000051234567816</claveAcceso>
+        <codDoc>01</codDoc>
+        <estab>001</estab>
+        <ptoEmi>001</ptoEmi>
+        <secuencial>000000005</secuencial>
+        <dirMatriz>Quito, Amazonas y El Inca  </dirMatriz>
+    </infoTributaria>
+
+    <infoFactura>
+        <fechaEmision>18/04/2024</fechaEmision>
+        <dirEstablecimiento>Quito Sur (Villaflora)  &#013; </dirEstablecimiento>
+        <tipoIdentificacionComprador>05</tipoIdentificacionComprador>
+        <razonSocialComprador>Don Venom</razonSocialComprador>
+        <identificacionComprador>0987654321</identificacionComprador>
+        <totalSinImpuestos>38.75</totalSinImpuestos>
+        <totalDescuento>3.00</totalDescuento>
+        <totalConImpuestos>
+            <totalImpuesto>
+                <codigo>2</codigo>
+                <codigoPorcentaje>4</codigoPorcentaje>
+                <baseImponible>38.75</baseImponible>
+                <valor>5.81</valor>
+            </totalImpuesto>
+        </totalConImpuestos>
+        <propina>0.00</propina>
+        <importeTotal>44.56</importeTotal>
+        <moneda>USD</moneda>
+        <pagos>
+            <pago>
+                <formaPago>20</formaPago>
+                <total>44.56</total>
+                <plazo>5</plazo>
+                <unidadTiempo>días</unidadTiempo>
+            </pago>
+        </pagos>
+    </infoFactura>
+    <detalles>
+        <detalle>
+            <codigoPrincipal>566711</codigoPrincipal>
+            <codigoAuxiliar>1540247</codigoAuxiliar>
+            <descripcion>Costo 1</descripcion>
+            <cantidad>1.00</cantidad>
+            <precioUnitario>38.75</precioUnitario>
+            <descuento>0.00</descuento>
+            <precioTotalSinImpuesto>38.75</precioTotalSinImpuesto>
+            <impuestos>
+                <impuesto>
+                    <codigo>2</codigo>
+                    <codigoPorcentaje>4</codigoPorcentaje>
+                    <tarifa>15.00</tarifa>
+                    <baseImponible>38.75</baseImponible>
+                    <valor>5.81</valor>
+                </impuesto>
+            </impuestos>
+        </detalle>
+    </detalles>
+    <infoAdicional>
+        <campoAdicional nombre="ciudad">Quito</campoAdicional>
+    </infoAdicional>
+<ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#" Id="Signature-5bdfc32d-a37f-47c3-90fe-49f5a093b7bf"><ds:SignedInfo Id="SignedInfo-5bdfc32d-a37f-47c3-90fe-49f5a093b7bf"><ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><ds:SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/><ds:Reference Id="DocumentRef-5bdfc32d-a37f-47c3-90fe-49f5a093b7bf" URI="#comprobante"><ds:Transforms><ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/></ds:Transforms><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><ds:DigestValue>atMB7w7TZedotqKWGtb/0eoC/1k=</ds:DigestValue></ds:Reference><ds:Reference Id="SignedPropertiesRef-5bdfc32d-a37f-47c3-90fe-49f5a093b7bf" Type="http://uri.etsi.org/01903#SignedProperties" URI="#SignedProperties-5bdfc32d-a37f-47c3-90fe-49f5a093b7bf"><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><ds:DigestValue>jdIyNTuyTFWr6dOLJ6wQTXB90p4=</ds:DigestValue></ds:Reference><ds:Reference Id="CertificateRef-5bdfc32d-a37f-47c3-90fe-49f5a093b7bf" URI="#Certificate-5bdfc32d-a37f-47c3-90fe-49f5a093b7bf"><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><ds:DigestValue>IrTAQb2IvkFWAxB9iDNnLnT7g34=</ds:DigestValue></ds:Reference></ds:SignedInfo><ds:SignatureValue Id="SignatureValue-5bdfc32d-a37f-47c3-90fe-49f5a093b7bf">okKK8cPnQong5k4SUg4+lWhF2A/ACVs00sE8fME1/AkYlqHCkBemuIaIZoT9lnwWIYdmpBHQjDO2mYwuZnme9ZPtCl/mVg1xSX+bT1oX3ql0+INUc+r9APzEOBWodNtvfrrdjQak281SywNShqjWQJ2+pLGtwDthG1CKdBbMV1Dmpz7PKfaYRC7eqmHaW5qk8VT9c9j/c4lFD+azLYM9+0XZBpTrnM8eMu2VcW7zSdO9wwLAyAgCMoAX40OOzKQCwSUchOn5PR3DO1OfqKvaI3WmE7wZMOG/oQyQcdgPzY8xmQSPhJdN/KftOtejmHcj7uUp29RydnU/5xXg0o+i7MNtp7aMIK2p+if+x/WsKPdd3LzlNM3Z241fFIcCTB39HOWvljl0nTYVKAgdf4c2xk0LKgvYDcm+cdc/23xWepEaSn9/lSm6jIAF7kK/R8BMLZwtp6JLMMGwiowX0CQqnQalgl+xsGMnAzeFqFhnSYw5PMHzMgCVCmGbNHD1xcs3ubosKG9DVZRs4mBSOn9llzaprdsFK4ueO19pFF9YyvUT0/L9g+SljeUFoRbipBqEJNn4IAMPSUKW7L38ehkKCXLzOs5RdVsCqrulb9g3O53Tpv3+j0vgPlRyCrM0VCOt5IEb0AIOJYJax5/xxX8jo6xb2UXolYyM66w3OePWZEc=</ds:SignatureValue><ds:KeyInfo Id="Certificate-5bdfc32d-a37f-47c3-90fe-49f5a093b7bf"><ds:X509Data><ds:X509Certificate>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</ds:X509Certificate></ds:X509Data><ds:KeyValue><ds:RSAKeyValue><ds:Modulus>ZVM=</ds:Modulus><ds:Exponent>eCRwNmmRSDA0BBQzRiGXAyZ1QmEyVSlJdGQVR5cjkASQEnQnNFglZTIYSAEAlwMIIxeDeRaQEDMSR1EjRUhhRZl2RylEGYSSRmRzQ4mIhXcSIFgBkFZXUxZldSU3kEaHYghDFRlBOCYXFAB5NpMmZClSQpBAEGMjZABAUAAiIHgAaChBZyWZSGRAcDGQlQExQjMXQzdIOHUHKAOJBGIygQEoFZGQQWM1GZOWVyJUUUEJkFkwl0UFWVNmiFN5NDgBJXVZAQMQMQUEA5BWGUlSZ3YhcEZIhnUFQFd0eHZpmYg3UFgwkCYFQ1BTOXNBUBJDdomIUpQjl2V4WGJjcUlCIJGWInKDYgZAU3F3KVERVTk1NplxgSSRFYYDYnaCSRc1QEWXiAmCAUVhBlc5KDdQhCBGNFcVOEJnCGA5JxIyVAk0FUc4SSIgFGaYJzSZV1kRUVh4UzcDQQk2hTAlAzkJWUIwhwc0UJF2OSMWZ5eBZAESM2BzlBCUgEcEEkNENlBHN2InZTeJBXACZmUxJAICOZhVGRFhR1gjODADFAYQZyITaCmWNVFFNVk0dGgCZCBRcTdogyGYEVRFJmBBlnRBCVgBIDaHAEBgkZB3F3VmcVEikFUSKWJwVhGBEDZlkjVCAJSWcFF4OGAEJBcQQXc5N0h0GQNEVHR3N5hjSSBleZJJMmcSMoUJaHBzIyaGhCFHAXB0aBEVCQI2RzODYkYkAkkXRhBXIgOJJSZ5YoWQZyYhWBEIQXciYHV3GUiVFDSBdRYIhJEplCghETlUJQRGdHAyk2FhgSRzd4mEQBEFGJJAY0kFWBOBlg==</ds:Exponent></ds:RSAKeyValue></ds:KeyValue></ds:KeyInfo><ds:Object Id="SignatureObject-5bdfc32d-a37f-47c3-90fe-49f5a093b7bf"><xades:QualifyingProperties xmlns:xades="http://uri.etsi.org/01903/v1.3.2#" Target="#Signature-5bdfc32d-a37f-47c3-90fe-49f5a093b7bf"><xades:SignedProperties Id="SignedProperties-5bdfc32d-a37f-47c3-90fe-49f5a093b7bf"><xades:SignedSignatureProperties><xades:SigningTime>2024-04-18T14:34:32.878-05:00</xades:SigningTime><xades:SigningCertificate><xades:Cert><xades:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><ds:DigestValue>Zi6awZkBdCHQjCmZodMhYsChIJY=</ds:DigestValue></xades:CertDigest><xades:IssuerSerial><ds:X509IssuerName>EMAILADDRESS=info@mycompany.com,CN=my company name,O=my company,L=Ibarra,ST=Imbabura,C=EC</ds:X509IssuerName><ds:X509SerialNumber>259699357814691067147196775901913526448645040244</ds:X509SerialNumber></xades:IssuerSerial></xades:Cert></xades:SigningCertificate></xades:SignedSignatureProperties><xades:SignedDataObjectProperties><xades:DataObjectFormat ObjectReference="#DocumentRef-5bdfc32d-a37f-47c3-90fe-49f5a093b7bf"><xades:Description>Firma digital</xades:Description><xades:MimeType>text/xml</xades:MimeType><xades:Encoding>UTF-8</xades:Encoding></xades:DataObjectFormat></xades:SignedDataObjectProperties></xades:SignedProperties></xades:QualifyingProperties></ds:Object></ds:Signature></factura>

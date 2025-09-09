@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<notaDebito version="1.0.0" id="comprobante">
+  <infoTributaria>
+    <ambiente>1</ambiente>
+    <tipoEmision>1</tipoEmision>
+    <razonSocial>AABC</razonSocial>
+    <nombreComercial>ABC</nombreComercial>
+    <ruc>1234567891001</ruc>
+    <claveAcceso>2712202405123456789100110010010000000028694560211</claveAcceso>
+    <codDoc>05</codDoc>
+    <estab>001</estab>
+    <ptoEmi>001</ptoEmi>
+    <secuencial>000000002</secuencial>
+    <dirMatriz>DIRECCION</dirMatriz>
+  </infoTributaria>
+  <infoNotaDebito>
+    <fechaEmision>27/12/2024</fechaEmision>
+    <tipoIdentificacionComprador>06</tipoIdentificacionComprador>
+    <razonSocialComprador>COMPRADOR</razonSocialComprador>
+    <identificacionComprador>9999999999</identificacionComprador>
+    <obligadoContabilidad>NO</obligadoContabilidad>
+    <codDocModificado>01</codDocModificado>
+    <numDocModificado>001-001-000000012</numDocModificado>
+    <fechaEmisionDocSustento>19/12/2024</fechaEmisionDocSustento>
+    <totalSinImpuestos>16.31</totalSinImpuestos>
+    <impuestos>
+
+      <impuesto>
+        <codigo>2</codigo>
+        <codigoPorcentaje>4</codigoPorcentaje>
+        <tarifa>15.00</tarifa>
+        <baseImponible>15.65</baseImponible>
+        <valor>2.35</valor>
+      </impuesto>
+    </impuestos>
+    <valorTotal>18.66</valorTotal>
+  </infoNotaDebito>
+  <motivos>
+    <motivo>
+      <razon>INTERESES</razon>
+      <valor>0.660000</valor>
+    </motivo>
+    <motivo>
+      <razon>GASTO DE COBRANZA</razon>
+      <valor>15.650000</valor>
+    </motivo>
+  </motivos>
+  <infoAdicional>
+    <campoAdicional nombre="Informacion Adicional"> CC AB-000023</campoAdicional>
+  </infoAdicional>
+</notaDebito>

@@ -4,6 +4,10 @@
     "rootDir": ".",
     "outDir": "dist",
     "module": "commonjs",
+    "lib": [
+      "esnext",
+      "dom"
+    ],
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
