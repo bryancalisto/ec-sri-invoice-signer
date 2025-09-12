@@ -48,9 +48,9 @@ describe('processTagValue', () => {
   });
 
   it('encodes special characters', () => {
-    const input = 'First line&#x0d;&#10;Second line';
+    const input = 'First line&#x0d;&#10;>Second line';
     const expected = `First line&#xD;
-Second line`;
+&gt;Second line`;
 
     expect(processTagValue(input)).toEqual(expected);
   });
