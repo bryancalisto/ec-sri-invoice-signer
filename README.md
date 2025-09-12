@@ -118,4 +118,4 @@ npm run test:sri:invoice
 npm run test:sri:debit-note
 ```
 
-Los scripts tomarán los parámetros configurados, firmarán el documento y lo enviarán al SRI para su validación.
+Los scripts tomarán los parámetros configurados, firmarán el documento y lo enviarán al SRI para su validación y consultarán el servicio del SRI para verificar el estado del documento.
