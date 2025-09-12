@@ -69,6 +69,7 @@ function encodeEntitiesInAttributeValue(value: string) {
     "\t": "&#x9;"
   };
 
+  // Replace the ampersand only if it's not part of an entity
   return value.replace(/&(?!(#x[aA-fF\d]+;)|amp;|quot;|lt;|apos;)/gm, function (match) {
     return encodings[match];
   }).replace(/[<"\r\n\t]/gm, function (match) {
