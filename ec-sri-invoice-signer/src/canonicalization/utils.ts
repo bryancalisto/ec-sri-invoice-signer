@@ -69,13 +69,11 @@ function encodeEntitiesInAttributeValue(value: string) {
     "\t": "&#x9;"
   };
 
-  return value.replace(/[<"\r\n\t]/gm, function (match) {
+  return value.replace(/&(?!(#x[aA-fF\d]+;)|amp;|quot;|lt;|apos;)/gm, function (match) {
     return encodings[match];
-  })
-    // Replace the ampersand only if it's not part of an entity 
-    .replace(/&(?!(#x[aA-fF\d]+;)|amp;|quot;|lt;|apos;)/gm, function (match) {
-      return encodings[match];
-    });
+  }).replace(/[<"\r\n\t]/gm, function (match) {
+    return encodings[match];
+  });
 }
 
 function decodeUtf8HexEntitiesInAttributeValue(value: string) {
