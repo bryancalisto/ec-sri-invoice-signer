@@ -23,6 +23,10 @@ describe('processAttributeValue', () => {
     expect(processAttributeValue('Thing &quot; 1 &quot;&#xf3;')).toEqual('Thing &quot; 1 &quot;ó');
   });
 
+  it('does not allow double decode of ampersand', () => {
+    expect(processAttributeValue('Thing &amp;amp; 1 &amp;amp; &#xf3;')).toEqual('Thing &amp;amp; 1 &amp;amp; ó');
+  });
+
   it('normalizes whitespace', () => {
     expect(processAttributeValue(' &#x20; Thing &#x20; &#x20; ')).toEqual('   Thing     ');
   });
@@ -44,9 +48,9 @@ describe('processTagValue', () => {
   });
 
   it('encodes special characters', () => {
-    const input = 'First line&#x0d;&#10;Second line';
+    const input = 'First line&#x0d;&#10;>Second line';
     const expected = `First line&#xD;
-Second line`;
+&gt;Second line`;
 
     expect(processTagValue(input)).toEqual(expected);
   });
