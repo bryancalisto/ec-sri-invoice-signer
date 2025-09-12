@@ -1,4 +1,4 @@
-# ec-sri-invoice-signer
+# 🇪🇨 ec-sri-invoice-signer 🇪🇨
 Firmador de facturas y notas de débito basado en las especificaciones del Servicio de Rentas Internas (SRI) ecuatoriano. Está escrito en puro TypeScript/JavaScript, sin dependencias de binarios criptográficos como OpenSSL, DLLs con el código de firmado o similares.
 Por tal razón, funciona en Windows, Unix/Linux o cualquier plataforma que soporte Node.js sin configuraciones adicionales.
 
@@ -118,4 +118,4 @@ npm run test:sri:invoice
 npm run test:sri:debit-note
 ```
 
-Los scripts tomarán los parámetros configurados, firmarán el documento y lo enviarán al SRI para su validación.
+Los scripts tomarán los parámetros configurados, firmarán el documento y lo enviarán al SRI para su validación y consultarán el servicio del SRI para verificar el estado del documento.
