@@ -1,5 +1,5 @@
 # 🇪🇨 ec-sri-invoice-signer 🇪🇨
-Firmador de facturas y notas de débito basado en las especificaciones del Servicio de Rentas Internas (SRI) ecuatoriano. Está escrito en puro TypeScript/JavaScript, sin dependencias de binarios criptográficos como OpenSSL, DLLs con el código de firmado o similares.
+Firmador de comprobantes electrónicos del SRI ecuatoriano. Soporta facturas, notas de crédito, notas de débito, comprobantes de retención y guías de remisión basado en las especificaciones del Servicio de Rentas Internas (SRI) ecuatoriano. Está escrito en puro TypeScript/JavaScript, sin dependencias de binarios criptográficos como OpenSSL, DLLs con el código de firmado o similares.
 Por tal razón, funciona en Windows, Unix/Linux o cualquier plataforma que soporte Node.js sin configuraciones adicionales.
 
 ## Guía de uso
@@ -8,11 +8,17 @@ Por tal razón, funciona en Windows, Unix/Linux o cualquier plataforma que sopor
   ```bash
   npm i ec-sri-invoice-signer
   ```
-2. Usa la función `signInvoiceXml` o `signDebitNoteXml` en tu código para firmar el documento respectivo:
+2. Usa la función correspondiente en tu código para firmar el documento respectivo:
   ```js
   import fs from 'fs';
-  import { signInvoiceXml } from 'ec-sri-invoice-signer';
-  /* Puedes user require() si usas módulos commonJS. */
+  import {
+    signInvoiceXml,
+    signDebitNoteXml,
+    signCreditNoteXml,
+    signRetentionVoucherXml,
+    signShippingGuideXml
+  } from 'ec-sri-invoice-signer';
+  /* Puedes usar require() si usas módulos commonJS. */
 
   /* El XML del documento a firmarse. */
   const invoiceXml = '<factura id="comprobante>...</factura>';
@@ -24,9 +30,43 @@ Por tal razón, funciona en Windows, Unix/Linux o cualquier plataforma que sopor
   /* Firma la factura. Si no se pasa la opción pkcs12Password, '' será usada como contraseña. */
   const signedInvoice = signInvoiceXml(invoiceXml, p12FileData, { pkcs12Password: 'thePKCS12FilePassword' });
 
+  /* También puedes firmar otros tipos de documentos: */
+  const signedDebitNote = signDebitNoteXml(debitNoteXml, p12FileData, { pkcs12Password: 'thePKCS12FilePassword' });
+  const signedCreditNote = signCreditNoteXml(creditNoteXml, p12FileData, { pkcs12Password: 'thePKCS12FilePassword' });
+  const signedRetentionVoucher = signRetentionVoucherXml(retentionXml, p12FileData, { pkcs12Password: 'thePKCS12FilePassword' });
+  const signedShippingGuide = signShippingGuideXml(shippingGuideXml, p12FileData, { pkcs12Password: 'thePKCS12FilePassword' });
+
   doSomethingWithTheSignedInvoice(signedInvoice);
   ```
 3. Si este paquete te ha ayudado, considera dejar tu ⭐.
+
+## Validación XML mejorada
+
+El paquete ahora incluye validación XML exhaustiva que detecta características no soportadas y proporciona mensajes de error descriptivos:
+
+- ✅ **Detección automática de tipo de documento**: El paquete detecta automáticamente si el XML es una factura, nota de crédito, nota de débito, comprobante de retención o guía de remisión
+- ✅ **Validación de estructura**: Verifica que el documento tenga los atributos requeridos (Id, versión)
+- ✅ **Detección de características no soportadas**: Identifica namespaces, DOCTYPE, atributos xml:prefijados, etc.
+- ✅ **Mensajes de error claros**: Proporciona descripciones específicas para facilitar la depuración
+
+### Ejemplos de mensajes de error:
+```
+Unsupported XML feature: namespace declarations. Namespace declarations (xmlns:) are not supported in the document root. This library adds the necessary namespaces automatically during signing.
+
+Unsupported XML feature: missing Id attribute. Root element 'factura' must have an 'Id' attribute (case-insensitive) with value 'comprobante'.
+
+Unsupported document type: 'documentoInvalido'. Supported types are: factura, notaDebito, notaCredito, comprobanteRetencion, guiaRemision.
+```
+
+## Tipos de documentos soportados
+
+| Documento | Función | Código SRI |
+|-----------|---------|------------|
+| Factura | `signInvoiceXml(xml, p12, options)` | 01 |
+| Nota de Crédito | `signCreditNoteXml(xml, p12, options)` | 04 |
+| Nota de Débito | `signDebitNoteXml(xml, p12, options)` | 05 |
+| Guía de Remisión | `signShippingGuideXml(xml, p12, options)` | 06 |
+| Comprobante de Retención | `signRetentionVoucherXml(xml, p12, options)` | 07 |
 
  ## Notas importantes sobre la estructura del XML
  Este paquete no implementa la especificación de [canonicalización](https://en.wikipedia.org/wiki/Canonicalization) http://www.w3.org/TR/2001/REC-xml-c14n-20010315 por completo.
