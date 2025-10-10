@@ -3,6 +3,7 @@ import {
   signCreditNoteXml,
   signRetentionVoucherXml,
   signShippingGuideXml,
+  signPurchaseLiquidationXml,
   signDocumentXml,
   signInvoiceXml,
   signDebitNoteXml
@@ -77,6 +78,20 @@ describe("New Document Type Signing", () => {
       const documentType = validateXmlForSigning(shippingGuideXml);
       expect(documentType).toBe("guiaRemision");
     });
+
+    test("validateXmlForSigning should detect liquidacionCompra correctly", () => {
+      const purchaseLiquidationXml = `<?xml version="1.0" encoding="UTF-8"?>
+      <liquidacionCompra Id="comprobante" version="1.0.0">
+        <infoTributaria>
+          <ambiente>1</ambiente>
+          <tipoEmision>1</tipoEmision>
+          <ruc>1234567890123</ruc>
+        </infoTributaria>
+      </liquidacionCompra>`;
+
+      const documentType = validateXmlForSigning(purchaseLiquidationXml);
+      expect(documentType).toBe("liquidacionCompra");
+    });
   });
 
   describe("Function Export and Availability", () => {
@@ -94,6 +109,10 @@ describe("New Document Type Signing", () => {
 
     test("signDocumentXml function should be exported", () => {
       expect(typeof signDocumentXml).toBe("function");
+    });
+
+    test("signPurchaseLiquidationXml function should be exported", () => {
+      expect(typeof signPurchaseLiquidationXml).toBe("function");
     });
   });
 

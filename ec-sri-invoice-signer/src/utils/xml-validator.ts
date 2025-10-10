@@ -1,7 +1,7 @@
 import { parseXml } from "./xml";
 import { UnsupportedXmlFeatureError, UnsupportedDocumentTypeError, XmlFormatError } from "./errors";
 
-const SUPPORTED_DOCUMENT_TYPES = ['factura', 'notaDebito', 'notaCredito', 'comprobanteRetencion', 'guiaRemision'];
+const SUPPORTED_DOCUMENT_TYPES = ['factura', 'liquidacionCompra', 'notaDebito', 'notaCredito', 'comprobanteRetencion', 'guiaRemision'];
 
 const validateDocumentType = (xml: string): string => {
   const parsed = parseXml(xml);
