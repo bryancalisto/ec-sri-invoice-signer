@@ -112,8 +112,8 @@ const extractX509Data = (certificate: forge.pki.Certificate) => {
 }
 
 const extractPrivateKeyData = (privateKey: forge.pki.rsa.PrivateKey) => {
-  const modulus = Buffer.from(privateKey.e.toString(), 'hex').toString('base64');
-  const exponent = Buffer.from(privateKey.n.toString(), 'hex').toString('base64');
+  const modulus = Buffer.from(privateKey.n.toString(), 'hex').toString('base64');
+  const exponent = Buffer.from(privateKey.e.toString(), 'hex').toString('base64');
 
   return {
     modulus,
@@ -128,4 +128,5 @@ export {
   extractPrivateKeyData,
   extractIssuerData,
   extractX509Data
+
 }
