@@ -2,6 +2,7 @@ import { c14nCanonicalize } from "../canonicalization/c14n";
 import { XmlProperties } from "../utils/constants";
 import { extractPrivateKeyAndCertificateFromPkcs12, extractPrivateKeyData, extractX509Data, getHash, sign } from "../utils/cryptography";
 import * as Utils from "../utils/utils";
+import { validateXmlForSigning } from "../utils/xml-validator";
 import { buildKeyInfoTag } from "./templates/keyInfo";
 import { buildSignatureTag } from "./templates/signature";
 import { buildSignedInfoTag } from "./templates/signedInfo";
@@ -16,7 +17,11 @@ const insertSignatureIntoInvoiceXml = (invoiceXml: string, signatureXml: string,
   return invoiceXml.replace(tagName, `${signatureXml}${tagName}`);
 }
 
-export const signDocumentXml = (docXml: string, pkcs12Data: string | Buffer, rootTagName: string, options?: signXmlOptions) => {
+export const signDocumentXml = (docXml: string, pkcs12Data: string | Buffer, rootTagName?: string, options?: signXmlOptions) => {
+  // Validate XML and detect document type if not provided
+  const detectedDocumentType = validateXmlForSigning(docXml);
+  const documentType = rootTagName || detectedDocumentType;
+
   const signingTime = Utils.getDate();
   const { privateKey, certificate } = extractPrivateKeyAndCertificateFromPkcs12(pkcs12Data, options?.pkcs12Password);
   const { exponent: certificateExponent, modulus: certificateModulus } = extractPrivateKeyData(privateKey);
@@ -80,30 +85,77 @@ export const signDocumentXml = (docXml: string, pkcs12Data: string | Buffer, roo
     signedPropertiesTag
   });
 
-  return insertSignatureIntoInvoiceXml(docXml, signatureTag, rootTagName);
+  return insertSignatureIntoInvoiceXml(docXml, signatureTag, documentType);
 }
 
 /**
- * 
+ *
  * @param xml The invoice XML to be signed.
  * @param pkcs12Data The pkcs12 file (.p12/.pfx) data expressed as a node Buffer or base64 string.
  * @param options Options are:
  * - **pkcs12Password**: The pkcs12 file password. Defaults to no password.
- * @returns 
+ * @returns
  */
 export const signInvoiceXml = (xml: string, pkcs12Data: string | Buffer, options?: signXmlOptions) => {
   return signDocumentXml(xml, pkcs12Data, 'factura', options);
 }
 
-
 /**
- * 
+ *
  * @param xml The debit note XML to be signed.
  * @param pkcs12Data The pkcs12 file (.p12/.pfx) data expressed as a node Buffer or base64 string.
  * @param options Options are:
  * - **pkcs12Password**: The pkcs12 file password. Defaults to no password.
- * @returns 
+ * @returns
  */
 export const signDebitNoteXml = (xml: string, pkcs12Data: string | Buffer, options?: signXmlOptions) => {
   return signDocumentXml(xml, pkcs12Data, 'notaDebito', options);
+}
+
+/**
+ *
+ * @param xml The credit note XML to be signed.
+ * @param pkcs12Data The pkcs12 file (.p12/.pfx) data expressed as a node Buffer or base64 string.
+ * @param options Options are:
+ * - **pkcs12Password**: The pkcs12 file password. Defaults to no password.
+ * @returns
+ */
+export const signCreditNoteXml = (xml: string, pkcs12Data: string | Buffer, options?: signXmlOptions) => {
+  return signDocumentXml(xml, pkcs12Data, 'notaCredito', options);
+}
+
+/**
+ *
+ * @param xml The retention voucher XML to be signed.
+ * @param pkcs12Data The pkcs12 file (.p12/.pfx) data expressed as a node Buffer or base64 string.
+ * @param options Options are:
+ * - **pkcs12Password**: The pkcs12 file password. Defaults to no password.
+ * @returns
+ */
+export const signRetentionVoucherXml = (xml: string, pkcs12Data: string | Buffer, options?: signXmlOptions) => {
+  return signDocumentXml(xml, pkcs12Data, 'comprobanteRetencion', options);
+}
+
+/**
+ *
+ * @param xml The shipping guide XML to be signed.
+ * @param pkcs12Data The pkcs12 file (.p12/.pfx) data expressed as a node Buffer or base64 string.
+ * @param options Options are:
+ * - **pkcs12Password**: The pkcs12 file password. Defaults to no password.
+ * @returns
+ */
+export const signShippingGuideXml = (xml: string, pkcs12Data: string | Buffer, options?: signXmlOptions) => {
+  return signDocumentXml(xml, pkcs12Data, 'guiaRemision', options);
+}
+
+/**
+ *
+ * @param xml The purchase liquidation XML to be signed.
+ * @param pkcs12Data The pkcs12 file (.p12/.pfx) data expressed as a node Buffer or base64 string.
+ * @param options Options are:
+ * - **pkcs12Password**: The pkcs12 file password. Defaults to no password.
+ * @returns
+ */
+export const signPurchaseLiquidationXml = (xml: string, pkcs12Data: string | Buffer, options?: signXmlOptions) => {
+  return signDocumentXml(xml, pkcs12Data, 'liquidacionCompra', options);
 }
