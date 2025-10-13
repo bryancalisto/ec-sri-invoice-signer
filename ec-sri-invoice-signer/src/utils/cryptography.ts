@@ -128,5 +128,4 @@ export {
   extractPrivateKeyData,
   extractIssuerData,
   extractX509Data
-
 }
