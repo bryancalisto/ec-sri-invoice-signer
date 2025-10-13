@@ -2,6 +2,11 @@ name: Publish to npm
 on:
   release:
     types: [published]
+
+permissions:
+  id-token: write  # Required for OIDC (for npm trusted publishing)
+  contents: read
+
 defaults:
   run:
     working-directory: ./ec-sri-invoice-signer
