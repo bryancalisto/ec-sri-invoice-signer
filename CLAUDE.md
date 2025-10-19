@@ -113,3 +113,4 @@ import {
 - Error handling uses custom error types from `src/utils/errors.ts`
 - Document type validation happens before any signing operations
 - Jest mocking for cryptographic operations in unit tests
+- Integration tests should be built for each document supported. Integration tests can be found in `ec-sri-invoice-signer/test/sri-live-test`.
