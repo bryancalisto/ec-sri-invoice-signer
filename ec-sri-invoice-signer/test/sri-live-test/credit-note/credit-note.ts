@@ -1,11 +1,11 @@
 import fs from 'fs';
-import { signDebitNoteXml } from '../../../src';
+import { signCreditNoteXml } from '../../../src';
 import { XMLBuilder, XMLParser } from 'fast-xml-parser';
 import { findNode, getAccessKeyVerificationNumber, longPollDoc, sendDocToSRI } from '../utils';
 import path from 'path';
 
 async function main() {
-  const defaultParamsPath = path.resolve(__dirname, 'debit-note-params.json');
+  const defaultParamsPath = path.resolve(__dirname, 'credit-note-params.json');
   const paramsPath = process.argv[2] || defaultParamsPath;
 
   if (!fs.existsSync(paramsPath)) {
@@ -46,7 +46,7 @@ ${numericCode}${emissionType}`;
   console.log('[access key]:', accessKeyWithVerificationNumber);
 
   // This replaces fields in the XML with the values above automatically
-  let debitNoteXml = fs.readFileSync(xmlPath, 'utf-8');
+  let creditNoteXml = fs.readFileSync(xmlPath, 'utf-8');
 
   const parser = new XMLParser({
     preserveOrder: true,
@@ -57,7 +57,7 @@ ${numericCode}${emissionType}`;
     ignoreAttributes: false,
   });
 
-  const parsed = parser.parse(debitNoteXml);
+  const parsed = parser.parse(creditNoteXml);
 
   const infoTributariaFieldsToReplace = {
     ambiente: environmentType,
@@ -73,9 +73,9 @@ ${numericCode}${emissionType}`;
     dirMatriz,
   };
 
-  const infoNotaDebitoFieldsToReplace = {
+  const infoNotaCreditoFieldsToReplace = {
     fechaEmision: date,
-    buyerIdType,
+    tipoIdentificacionComprador: buyerIdType,
     razonSocialComprador,
     identificacionComprador,
     codDocModificado,
@@ -83,9 +83,9 @@ ${numericCode}${emissionType}`;
     fechaEmisionDocSustento,
   };
 
-  const debitNoteNode = findNode('notaDebito', parsed);
-  const infoTributariaNode = findNode('infoTributaria', debitNoteNode);
-  const infoNotaDebitoNode = findNode('infoNotaDebito', debitNoteNode);
+  const creditNoteNode = findNode('notaCredito', parsed);
+  const infoTributariaNode = findNode('infoTributaria', creditNoteNode);
+  const infoNotaCreditoNode = findNode('infoNotaCredito', creditNoteNode);
 
   for (const node of infoTributariaNode) {
     for (const [key, value] of Object.entries(infoTributariaFieldsToReplace)) {
@@ -95,8 +95,8 @@ ${numericCode}${emissionType}`;
     }
   }
 
-  for (const node of infoNotaDebitoNode) {
-    for (const [key, value] of Object.entries(infoNotaDebitoFieldsToReplace)) {
+  for (const node of infoNotaCreditoNode) {
+    for (const [key, value] of Object.entries(infoNotaCreditoFieldsToReplace)) {
       if (key in node) {
         node[key].find((node: any) => '#text' in node)['#text'] = value;
       }
@@ -108,15 +108,15 @@ ${numericCode}${emissionType}`;
     ignoreAttributes: false,
   });
 
-  debitNoteXml = builder.build(parsed);
+  creditNoteXml = builder.build(parsed);
 
-  // Send the signed debit note to the SRI servers
+  // Send the signed credit note to the SRI servers
   const signature = fs.readFileSync(signaturePath);
-  const signedDebitNote = signDebitNoteXml(debitNoteXml, signature, { pkcs12Password: signaturePassword })
+  const signedCreditNote = signCreditNoteXml(creditNoteXml, signature, { pkcs12Password: signaturePassword })
 
-  await sendDocToSRI(signedDebitNote);
+  await sendDocToSRI(signedCreditNote);
 
-  // Poll until debit note has been processed
+  // Poll until credit note has been processed
   await longPollDoc({ accessKey: accessKeyWithVerificationNumber });
 }
 

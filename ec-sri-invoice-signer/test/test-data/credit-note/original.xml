@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<notaCredito version="1.1.0" id="comprobante">
+  <infoTributaria>
+    <ambiente>1</ambiente>
+    <tipoEmision>1</tipoEmision>
+    <razonSocial>AABC</razonSocial>
+    <nombreComercial>ABC</nombreComercial>
+    <ruc>1234567891001</ruc>
+    <claveAcceso>2712202404123456789100110010010000000028694560211</claveAcceso>
+    <codDoc>04</codDoc>
+    <estab>001</estab>
+    <ptoEmi>001</ptoEmi>
+    <secuencial>000000002</secuencial>
+    <dirMatriz>DIRECCION</dirMatriz>
+  </infoTributaria>
+  <infoNotaCredito>
+    <fechaEmision>27/12/2024</fechaEmision>
+    <tipoIdentificacionComprador>06</tipoIdentificacionComprador>
+    <razonSocialComprador>COMPRADOR</razonSocialComprador>
+    <identificacionComprador>9999999999</identificacionComprador>
+    <obligadoContabilidad>NO</obligadoContabilidad>
+    <codDocModificado>01</codDocModificado>
+    <numDocModificado>001-001-000000012</numDocModificado>
+    <fechaEmisionDocSustento>19/12/2024</fechaEmisionDocSustento>
+    <totalSinImpuestos>100.00</totalSinImpuestos>
+    <valorModificacion>115.00</valorModificacion>
+    <moneda>DOLAR</moneda>
+    <totalConImpuestos>
+      <totalImpuesto>
+        <codigo>2</codigo>
+        <codigoPorcentaje>4</codigoPorcentaje>
+        <baseImponible>100.00</baseImponible>
+        <valor>15.00</valor>
+      </totalImpuesto>
+    </totalConImpuestos>
+    <motivo>ANULACION</motivo>
+  </infoNotaCredito>
+  <detalles>
+    <detalle>
+      <codigoInterno>1</codigoInterno>
+      <descripcion>ANULACION DE PRUEBA</descripcion>
+      <cantidad>1</cantidad>
+      <precioUnitario>100.00</precioUnitario>
+      <descuento>0.00</descuento>
+      <precioTotalSinImpuesto>100.00</precioTotalSinImpuesto>
+      <impuestos>
+        <impuesto>
+          <codigo>2</codigo>
+          <codigoPorcentaje>4</codigoPorcentaje>
+          <tarifa>15.00</tarifa>
+          <baseImponible>100.00</baseImponible>
+          <valor>15.00</valor>
+        </impuesto>
+      </impuestos>
+    </detalle>
+  </detalles>
+  <infoAdicional>
+    <campoAdicional nombre="Informacion Adicional"> CC AB-000023</campoAdicional>
+  </infoAdicional>
+</notaCredito>
