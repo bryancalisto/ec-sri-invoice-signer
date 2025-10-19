@@ -1,6 +1,7 @@
-import { signInvoiceXml, signDebitNoteXml } from './signature/signature';
+import { signInvoiceXml, signDebitNoteXml, signCreditNoteXml } from './signature/signature';
 
 export {
   signInvoiceXml,
   signDebitNoteXml,
+  signCreditNoteXml,
 };

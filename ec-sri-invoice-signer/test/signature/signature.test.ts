@@ -1,6 +1,6 @@
 import { describe, it, expect, afterEach, jest } from '@jest/globals';
 import * as Utils from '../../src/utils/utils';
-import { signDebitNoteXml, signInvoiceXml } from '../../src/signature/signature';
+import { signCreditNoteXml, signDebitNoteXml, signInvoiceXml } from '../../src/signature/signature';
 import fs from 'fs';
 import path from 'path';
 
@@ -48,6 +48,24 @@ describe('Given the signDebitNote function', () => {
     jest.spyOn(Utils, 'getRandomUuid').mockReturnValue('5bdfc32d-a37f-47c3-90fe-49f5a093b7bf');
 
     const result = signDebitNoteXml(original, pkcs12Data, { pkcs12Password: '' });
+    expect(result).toEqual(signed);
+  });
+});
+
+describe('Given the signCreditNote function', () => {
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+
+  it('should generate the signature for the invoice and put it at the end of the invoice', () => {
+    const original = fs.readFileSync(path.resolve('test/test-data/credit-note/original.xml')).toString();
+    const pkcs12Data = fs.readFileSync(path.resolve('test/test-data/pkcs12/signature.p12')).toString('base64');
+    const signed = fs.readFileSync(path.resolve('test/test-data/credit-note/signed.xml')).toString();
+    // Keep variable data constant
+    jest.spyOn(Utils, 'getDate').mockReturnValue('2024-04-18T14:34:32.878-05:00');
+    jest.spyOn(Utils, 'getRandomUuid').mockReturnValue('5bdfc32d-a37f-47c3-90fe-49f5a093b7bf');
+
+    const result = signCreditNoteXml(original, pkcs12Data, { pkcs12Password: '' });
     expect(result).toEqual(signed);
   });
 });
