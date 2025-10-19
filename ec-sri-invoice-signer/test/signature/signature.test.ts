@@ -1,6 +1,6 @@
 import { describe, it, expect, afterEach, jest } from '@jest/globals';
 import * as Utils from '../../src/utils/utils';
-import { signDebitNoteXml, signInvoiceXml } from '../../src/signature/signature';
+import { signCreditNoteXml, signDebitNoteXml, signInvoiceXml } from '../../src/signature/signature';
 import fs from 'fs';
 import path from 'path';
 
@@ -65,7 +65,7 @@ describe('Given the signCreditNote function', () => {
     jest.spyOn(Utils, 'getDate').mockReturnValue('2024-04-18T14:34:32.878-05:00');
     jest.spyOn(Utils, 'getRandomUuid').mockReturnValue('5bdfc32d-a37f-47c3-90fe-49f5a093b7bf');
 
-    const result = signDebitNoteXml(original, pkcs12Data, { pkcs12Password: '' });
+    const result = signCreditNoteXml(original, pkcs12Data, { pkcs12Password: '' });
     expect(result).toEqual(signed);
   });
 });
