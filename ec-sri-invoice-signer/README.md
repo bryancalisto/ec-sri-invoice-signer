@@ -1,5 +1,5 @@
 # 🇪🇨 ec-sri-invoice-signer 🇪🇨
-Firmador de facturas y notas de débito basado en las especificaciones del Servicio de Rentas Internas (SRI) ecuatoriano. Está escrito en puro TypeScript/JavaScript, sin dependencias de binarios criptográficos como OpenSSL, DLLs con el código de firmado o similares.
+Firmador de comprobantes electrónicos del Servicio de Rentas Internas (SRI) ecuatoriano. Soporta facturas, notas de crédito, notas de débito. Está escrito en puro TypeScript/JavaScript, sin dependencias de binarios criptográficos como OpenSSL, DLLs con el código de firmado o similares.
 Por tal razón, funciona en Windows, Unix/Linux o cualquier plataforma que soporte Node.js sin configuraciones adicionales.
 
 ## Guía de uso
@@ -8,10 +8,16 @@ Por tal razón, funciona en Windows, Unix/Linux o cualquier plataforma que sopor
   ```bash
   npm i ec-sri-invoice-signer
   ```
-2. Usa la función `signInvoiceXml` o `signDebitNoteXml` en tu código para firmar el documento respectivo:
+2. Usa la función correspondiente en tu código para firmar el documento respectivo. En este ejemplo se firmará una factura:
   ```js
   import fs from 'fs';
-  import { signInvoiceXml } from 'ec-sri-invoice-signer';
+  import {
+    signInvoiceXml,
+    // Otras funciones disponibles:
+    // signPurchaseLiquidationXml,
+    // signDebitNoteXml,
+    // signCreditNoteXml
+    } from 'ec-sri-invoice-signer';
   /* Puedes user require() si usas módulos commonJS. */
 
   /* El XML del documento a firmarse. */
@@ -26,6 +32,17 @@ Por tal razón, funciona en Windows, Unix/Linux o cualquier plataforma que sopor
 
   doSomethingWithTheSignedInvoice(signedInvoice);
   ```
+
+  Así mismo puedes firmar otros tipos de documentos.
+
+  ```js
+  /* Firma notas de débito */
+  const signedDebitNote = signDebitNoteXml(debitNoteXml, p12FileData, { pkcs12Password: 'thePKCS12FilePassword' });
+
+  /* Firma notas de crédito */
+  const signedCreditNote = signCreditNoteXml(creditNoteXml, p12FileData, { pkcs12Password: 'thePKCS12FilePassword' });
+  ```
+
 3. Si este paquete te ha ayudado, considera dejar tu estrella en <a style="
     display: inline-block;
     color: #d9deda;
