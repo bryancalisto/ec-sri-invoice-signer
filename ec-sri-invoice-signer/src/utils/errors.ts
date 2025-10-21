@@ -26,6 +26,15 @@ class UnsuportedPkcs12Error extends Error {
   }
 }
 
+class InvalidPkcs12PasswordError extends Error {
+  name: string = 'InvalidPkcs12PasswordError';
+
+  constructor() {
+    const message = "The provided password for the .p12 file is invalid";
+    super(message);
+  }
+}
+
 class UnsupportedXmlFeatureError extends Error {
   name: string = 'UnsupportedXmlFeatureError';
 
@@ -55,5 +64,6 @@ export {
   XmlFormatError,
   UnsupportedXmlFeatureError,
   UnsupportedDocumentTypeError,
-  UnexpectedDocumentRootError
+  UnexpectedDocumentRootError,
+  InvalidPkcs12PasswordError
 }

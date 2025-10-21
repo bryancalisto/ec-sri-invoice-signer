@@ -2,7 +2,7 @@ import { pki } from "node-forge";
 import { c14nCanonicalize } from "../canonicalization/c14n";
 import { XmlProperties } from "../utils/constants";
 import { extractPrivateKeyAndCertificateFromPkcs12, extractPrivateKeyData, extractX509Data, getHash, sign } from "../utils/cryptography";
-import { UnsuportedPkcs12Error } from "../utils/errors";
+import { InvalidPkcs12PasswordError, UnsuportedPkcs12Error } from "../utils/errors";
 import * as Utils from "../utils/utils";
 import { validateXmlForSigning } from "../utils/xml-validation";
 import { buildKeyInfoTag } from "./templates/keyInfo";
@@ -45,6 +45,9 @@ export const signDocumentXml = (docXml: string, pkcs12Data: string | Buffer, roo
     certificateContent = _certificateContent;
     x509Hash = _x509Hash;
   } catch(error) {
+    if ((error as Error).message === 'PKCS#12 MAC could not be verified. Invalid password?') {
+      throw new InvalidPkcs12PasswordError();
+    }
     throw new UnsuportedPkcs12Error((error as Error).message, error as Error);
   }
 
