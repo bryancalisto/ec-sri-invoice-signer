@@ -91,7 +91,7 @@ describe('Given the signing functions and an invalid input', () => {
     expect(() => signInvoiceXml(invoiceXml, invalidPkcs12, { pkcs12Password })).toThrow('The used .p12 file is not supported: Too few bytes to parse DER.');
   });
 
-  it('should throw UnsuportedPkcs12Error for invalid pkcs12 password', () => {
+  it('should throw InvalidPkcs12PasswordError for invalid pkcs12 password', () => {
     const wrongPassword = 'wrongpassword';
     expect(() => signInvoiceXml(invoiceXml, pkcs12Data, { pkcs12Password: wrongPassword })).toThrow('The provided password for the .p12 file is invalid');
   });
