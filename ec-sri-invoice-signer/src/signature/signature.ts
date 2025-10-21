@@ -89,7 +89,7 @@ export const signDocumentXml = (docXml: string, pkcs12Data: string | Buffer, roo
  * @param pkcs12Data The pkcs12 file (.p12/.pfx) data expressed as a node Buffer or base64 string.
  * @param options Options are:
  * - **pkcs12Password**: The pkcs12 file password. Defaults to no password.
- * @returns 
+ * @returns The signed invoice XML.
  */
 export const signInvoiceXml = (xml: string, pkcs12Data: string | Buffer, options?: signXmlOptions) => {
   return signDocumentXml(xml, pkcs12Data, 'factura', options);
@@ -102,7 +102,7 @@ export const signInvoiceXml = (xml: string, pkcs12Data: string | Buffer, options
  * @param pkcs12Data The pkcs12 file (.p12/.pfx) data expressed as a node Buffer or base64 string.
  * @param options Options are:
  * - **pkcs12Password**: The pkcs12 file password. Defaults to no password.
- * @returns 
+ * @returns The signed debit note XML.
  */
 export const signDebitNoteXml = (xml: string, pkcs12Data: string | Buffer, options?: signXmlOptions) => {
   return signDocumentXml(xml, pkcs12Data, 'notaDebito', options);
@@ -114,8 +114,20 @@ export const signDebitNoteXml = (xml: string, pkcs12Data: string | Buffer, optio
  * @param pkcs12Data The pkcs12 file (.p12/.pfx) data expressed as a node Buffer or base64 string.
  * @param options Options are:
  * - **pkcs12Password**: The pkcs12 file password. Defaults to no password.
- * @returns 
+ * @returns The signed credit note XML.
  */
 export const signCreditNoteXml = (xml: string, pkcs12Data: string | Buffer, options?: signXmlOptions) => {
   return signDocumentXml(xml, pkcs12Data, 'notaCredito', options);
+}
+
+/**
+ * 
+ * @param xml The delivery guide XML to be signed.
+ * @param pkcs12Data The pkcs12 file (.p12/.pfx) data expressed as a node Buffer or base64 string.
+ * @param options Options are:
+ * - **pkcs12Password**: The pkcs12 file password. Defaults to no password.
+ * @returns The signed delivery guide XML.
+ */
+export const signDeliveryGuideXml = (xml: string, pkcs12Data: string | Buffer, options?: signXmlOptions) => {
+  return signDocumentXml(xml, pkcs12Data, 'guiaRemision', options);
 }

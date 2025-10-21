@@ -115,6 +115,7 @@ debug-not-signed.xml
 invoice-params.json
 debit-note-params.json
 credit-note-params.json
+delivery-guide-params.json
 
 # A directory to put things for temporary use (normally for testing)
 **/test/test-data/temp
