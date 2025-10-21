@@ -10,7 +10,7 @@ class XmlFormatError extends Error {
 class UnsuportedPkcs12Error extends Error {
   name: string = 'UnsuportedPkcs12Error';
 
-  constructor(extraMessage?: string) {
+  constructor(extraMessage?: string, originalError?: Error) {
     let message = "The used .p12 file is not supported";
 
     if (extraMessage) {
@@ -18,6 +18,11 @@ class UnsuportedPkcs12Error extends Error {
     }
 
     super(message);
+
+    if (originalError?.stack) {
+      // Combine stack traces
+      this.stack = `${this.stack}\nCaused by: ${originalError.stack}`;
+    }
   }
 }
 

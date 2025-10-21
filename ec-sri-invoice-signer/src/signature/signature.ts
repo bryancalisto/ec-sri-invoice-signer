@@ -1,6 +1,8 @@
+import { pki } from "node-forge";
 import { c14nCanonicalize } from "../canonicalization/c14n";
 import { XmlProperties } from "../utils/constants";
 import { extractPrivateKeyAndCertificateFromPkcs12, extractPrivateKeyData, extractX509Data, getHash, sign } from "../utils/cryptography";
+import { UnsuportedPkcs12Error } from "../utils/errors";
 import * as Utils from "../utils/utils";
 import { validateXmlForSigning } from "../utils/xml-validation";
 import { buildKeyInfoTag } from "./templates/keyInfo";
@@ -19,11 +21,32 @@ const insertSignatureIntoInvoiceXml = (invoiceXml: string, signatureXml: string,
 
 export const signDocumentXml = (docXml: string, pkcs12Data: string | Buffer, rootTagName: string, options?: signXmlOptions) => {
   validateXmlForSigning(docXml, rootTagName);
-
   const signingTime = Utils.getDate();
-  const { privateKey, certificate } = extractPrivateKeyAndCertificateFromPkcs12(pkcs12Data, options?.pkcs12Password);
-  const { exponent: certificateExponent, modulus: certificateModulus } = extractPrivateKeyData(privateKey);
-  const { issuerName: x509IssuerName, serialNumber: x509SerialNumber, content: certificateContent, contentHash: x509Hash } = extractX509Data(certificate);
+  let privateKey: pki.rsa.PrivateKey;
+  let certificate: pki.Certificate;
+  let certificateExponent: string;
+  let certificateModulus: string;
+  let x509IssuerName: string;
+  let x509SerialNumber: string;
+  let certificateContent: string;
+  let x509Hash: string;
+
+  try {
+    const { privateKey: _privateKey, certificate: _certificate } = extractPrivateKeyAndCertificateFromPkcs12(pkcs12Data, options?.pkcs12Password);
+    const { exponent: _certificateExponent, modulus: _certificateModulus } = extractPrivateKeyData(_privateKey);
+    const { issuerName: _x509IssuerName, serialNumber: _x509SerialNumber, content: _certificateContent, contentHash: _x509Hash } = extractX509Data(_certificate);
+
+    privateKey = _privateKey;
+    certificate = _certificate;
+    certificateExponent = _certificateExponent;
+    certificateModulus = _certificateModulus;
+    x509IssuerName = _x509IssuerName;
+    x509SerialNumber = _x509SerialNumber;
+    certificateContent = _certificateContent;
+    x509Hash = _x509Hash;
+  } catch(error) {
+    throw new UnsuportedPkcs12Error((error as Error).message, error as Error);
+  }
 
   // IDs
   const docTagId = 'comprobante';
