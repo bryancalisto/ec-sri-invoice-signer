@@ -1,9 +1,9 @@
 import { parseXml } from "./xml";
-import { UnsupportedXmlFeatureError, UnsupportedDocumentTypeError, XmlFormatError } from "./errors";
+import { UnsupportedXmlFeatureError, UnsupportedDocumentTypeError, XmlFormatError, UnexpectedDocumentRootError } from "./errors";
 
 const SUPPORTED_DOCUMENT_TYPES = new Set(['factura', 'liquidacionCompra', 'notaDebito', 'notaCredito', 'comprobanteRetencion', 'guiaRemision']);
 
-const validateDocumentType = (xml: string): string => {
+const validateDocumentType = (xml: string, rootTagName: string): void => {
   const parsed = parseXml(xml);
 
   const rootElement = Object.keys(parsed[0]).find(key =>
@@ -18,7 +18,9 @@ const validateDocumentType = (xml: string): string => {
     throw new UnsupportedDocumentTypeError(rootElement);
   }
 
-  return rootElement;
+  if (rootElement !== rootTagName) {
+    throw new UnexpectedDocumentRootError(rootTagName, rootElement);
+  }
 };
 
 const validateXmlFeatures = (xml: string) => {
@@ -113,7 +115,16 @@ const validateRootDocumentStructure = (xml: string, documentType: string) => {
   }
 };
 
-export const validateXmlForSigning = (xml: string): string => {
+/**
+ * Validate the XML structure and content for signing.
+ * @param xml The invoice XML to be validated.
+ * @param rootTagName The expected root tag name.
+ * @throws {XmlFormatError} If the XML format is invalid.
+ * @throws {UnsupportedXmlFeatureError} If the XML contains unsupported features.
+ * @throws {UnsupportedDocumentTypeError} If the document type is unsupported.
+ * @throws {UnexpectedDocumentRootError} If the root document structure is unexpected.
+ */
+export const validateXmlForSigning = (xml: string, rootTagName: string): void => {
   // Basic XML validation
   if (!xml || typeof xml !== 'string') {
     throw new XmlFormatError();
@@ -122,12 +133,10 @@ export const validateXmlForSigning = (xml: string): string => {
   validateXmlFeatures(xml);
 
   // Validate document type and return it
-  const documentType = validateDocumentType(xml);
+  validateDocumentType(xml, rootTagName);
 
   // Validate root document structure
-  validateRootDocumentStructure(xml, documentType);
-
-  return documentType;
+  validateRootDocumentStructure(xml, rootTagName);
 };
 
 export {

@@ -37,9 +37,18 @@ class UnsupportedDocumentTypeError extends Error {
   }
 }
 
+class UnexpectedDocumentRootError extends Error {
+  name: string = 'UnexpectedDocumentRootError';
+
+  constructor(expectedRoot: string, actualRoot: string) {
+    super(`Unexpected document root: expected <${expectedRoot}>, but found <${actualRoot}>.`);
+  }
+}
+
 export {
   UnsuportedPkcs12Error,
   XmlFormatError,
   UnsupportedXmlFeatureError,
-  UnsupportedDocumentTypeError
+  UnsupportedDocumentTypeError,
+  UnexpectedDocumentRootError
 }

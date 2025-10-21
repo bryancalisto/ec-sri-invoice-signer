@@ -2,6 +2,7 @@ import { c14nCanonicalize } from "../canonicalization/c14n";
 import { XmlProperties } from "../utils/constants";
 import { extractPrivateKeyAndCertificateFromPkcs12, extractPrivateKeyData, extractX509Data, getHash, sign } from "../utils/cryptography";
 import * as Utils from "../utils/utils";
+import { validateXmlForSigning } from "../utils/xml-validation";
 import { buildKeyInfoTag } from "./templates/keyInfo";
 import { buildSignatureTag } from "./templates/signature";
 import { buildSignedInfoTag } from "./templates/signedInfo";
@@ -17,6 +18,8 @@ const insertSignatureIntoInvoiceXml = (invoiceXml: string, signatureXml: string,
 }
 
 export const signDocumentXml = (docXml: string, pkcs12Data: string | Buffer, rootTagName: string, options?: signXmlOptions) => {
+  validateXmlForSigning(docXml, rootTagName);
+
   const signingTime = Utils.getDate();
   const { privateKey, certificate } = extractPrivateKeyAndCertificateFromPkcs12(pkcs12Data, options?.pkcs12Password);
   const { exponent: certificateExponent, modulus: certificateModulus } = extractPrivateKeyData(privateKey);
