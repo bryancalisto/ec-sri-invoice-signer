@@ -1,5 +1,5 @@
 # 🇪🇨 ec-sri-invoice-signer 🇪🇨
-Firmador de comprobantes electrónicos del Servicio de Rentas Internas (SRI) ecuatoriano. Soporta facturas, notas de crédito, notas de débito. Está escrito en puro TypeScript/JavaScript, sin dependencias de binarios criptográficos como OpenSSL, DLLs con el código de firmado o similares.
+Firmador de comprobantes electrónicos del Servicio de Rentas Internas (SRI) ecuatoriano. Soporta facturas, notas de crédito, notas de débito y guías de remisión. Está escrito en puro TypeScript/JavaScript, sin dependencias de binarios criptográficos como OpenSSL, DLLs con el código de firmado o similares.
 Por tal razón, funciona en Windows, Unix/Linux o cualquier plataforma que soporte Node.js sin configuraciones adicionales.
 
 ## Guía de uso
@@ -16,7 +16,8 @@ Por tal razón, funciona en Windows, Unix/Linux o cualquier plataforma que sopor
     // Otras funciones disponibles:
     // signPurchaseLiquidationXml,
     // signDebitNoteXml,
-    // signCreditNoteXml
+    // signCreditNoteXml,
+    // signDeliveryGuideXml,
     } from 'ec-sri-invoice-signer';
   /* Puedes user require() si usas módulos commonJS. */
 
@@ -40,6 +41,9 @@ Por tal razón, funciona en Windows, Unix/Linux o cualquier plataforma que sopor
 
   /* Firma notas de crédito */
   const signedCreditNote = signCreditNoteXml(creditNoteXml, p12FileData, { pkcs12Password: 'thePKCS12FilePassword' });
+
+  /* Firma guías de remisión */
+  const signedDeliveryGuide = signDeliveryGuideXml(deliveryGuideXml, p12FileData, { pkcs12Password: 'thePKCS12FilePassword' });
   ```
 
 3. Si este paquete te ha ayudado, considera dejar tu ⭐.
@@ -126,12 +130,43 @@ Si pruebas el paquete con .p12 de otros proveedores y encuentras problemas, por 
 
 ## Herramientas para prueba directa con servicios del SRI
 El paquete incluye herramientas para probar el firmado de facturas y notas de débito contra los servidores del SRI en modo 'prueba'.
-Para usarlas, primero configura los parámetros en `test/sri-live-test/invoice/invoice-params.json` (usa `test/sri-live-test/invoice/invoice-params-template.json` como plantilla) y `test/sri-live-test/debit-note/debit-note-params.json` (usa `test/sri-live-test/debit-note/debit-note-params-template.json` como plantilla).
-Luego, puedes correr las pruebas con los siguientes comandos:
+
+Para usarlas, primero configura los parámetros correspondientes al tipo de documento que quieres probar. Los scripts tomarán los parámetros configurados, firmarán el documento y lo enviarán al SRI para su validación y consultarán el servicio del SRI para verificar el estado del documento, reportando el resultado.
+
+**Nota:** No olvides primero ubicarte en la raíz del proyecto de node (directorio `ec-sri-invoice-signer/` donde está el package.json) antes de correr los comandos siguientes.
+
+### Facturas
+Edita el archivo en `test/sri-live-test/invoice/invoice-params.json` (usa `test/sri-live-test/invoice/invoice-params-template.json` como plantilla).
+
+Corre la prueba:
 
 ```bash
 npm run test:sri:invoice
+```
+
+### Notas de Débito
+Edita el archivo en `test/sri-live-test/debit-note/debit-note-params.json` (usa `test/sri-live-test/debit-note/debit-note-params-template.json` como plantilla).
+
+Corre la prueba:
+
+```bash
 npm run test:sri:debit-note
 ```
 
-Los scripts tomarán los parámetros configurados, firmarán el documento y lo enviarán al SRI para su validación y consultarán el servicio del SRI para verificar el estado del documento.
+### Notas de Crédito
+Edita el archivo en `test/sri-live-test/credit-note/credit-note-params.json` (usa `test/sri-live-test/credit-note/credit-note-params-template.json` como plantilla).
+
+Corre la prueba:
+
+```bash
+npm run test:sri:credit-note
+```
+
+### Guías de Remisión
+Edita el archivo en `test/sri-live-test/delivery-guide/delivery-guide-params.json` (usa `test/sri-live-test/delivery-guide/delivery-guide-params-template.json` como plantilla).
+
+Corre la prueba:
+
+```bash
+npm run test:sri:delivery-guide
+```

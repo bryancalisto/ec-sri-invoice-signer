@@ -14,7 +14,8 @@
     "test:coverage": "jest --coverage",
     "test:sri:invoice": "npx ts-node test/sri-live-test/invoice/invoice.ts",
     "test:sri:debit-note": "npx ts-node test/sri-live-test/debit-note/debit-note.ts",
-    "test:sri:credit-note": "npx ts-node test/sri-live-test/credit-note/credit-note.ts"
+    "test:sri:credit-note": "npx ts-node test/sri-live-test/credit-note/credit-note.ts",
+    "test:sri:delivery-guide": "npx ts-node test/sri-live-test/delivery-guide/delivery-guide.ts"
   },
   "repository": {
     "type": "git",
