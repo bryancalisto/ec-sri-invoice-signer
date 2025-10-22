@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<guiaRemision id="comprobante" version="1.0.0">
+    <infoTributaria>
+        <ambiente>1</ambiente>
+        <tipoEmision>1</tipoEmision>
+        <razonSocial>Distribuidora de Suministros</razonSocial>
+        <nombreComercial>Empresa Importadora y Exportadora de Piezas y Partes de algo</nombreComercial>
+        <ruc>1234567891001</ruc>
+        <claveAcceso>2110201106123456789100100110020010000000011234567815</claveAcceso>
+        <codDoc>06</codDoc>
+        <estab>002</estab>
+        <ptoEmi>001</ptoEmi>
+        <secuencial>000000001</secuencial>
+        <dirMatriz>Enrique Salas y Galo Plaza Lasso</dirMatriz>
+    </infoTributaria>
+    <infoGuiaRemision>
+        <dirEstablecimiento>Sebastian Moreno S/N Francisco Garcia</dirEstablecimiento>
+        <dirPartida>Av. Eloy Alfaro 34 y Av. Libertad Esq.</dirPartida>
+        <razonSocialTransportista>Transportes S.A.</razonSocialTransportista>
+        <tipoIdentificacionTransportista>04</tipoIdentificacionTransportista>
+        <rucTransportista>1796875790001</rucTransportista>
+        <rise>Contribuyente Regimen Simplificado RISE</rise>
+        <obligadoContabilidad>SI</obligadoContabilidad>
+        <contribuyenteEspecial>5368</contribuyenteEspecial>
+        <fechaIniTransporte>21/10/2011</fechaIniTransporte>
+        <fechaFinTransporte>22/10/2011</fechaFinTransporte>
+        <placa>MCL0827</placa>
+    </infoGuiaRemision>
+    <destinatarios>
+        <destinatario>
+            <identificacionDestinatario>1234543212</identificacionDestinatario>
+            <razonSocialDestinatario>Tonato Henry</razonSocialDestinatario>
+            <dirDestinatario>Av. Gran Colombia</dirDestinatario>
+            <motivoTraslado>Venta de Maquinaria de algo</motivoTraslado>
+            <docAduaneroUnico>0041314836996</docAduaneroUnico>
+            <codEstabDestino>001</codEstabDestino>
+            <ruta>Guayaquil – Cayambe</ruta>
+            <codDocSustento>01</codDocSustento>
+            <numDocSustento>002-001-000000001</numDocSustento>
+            <numAutDocSustento>1110311116302512345673910011234567791</numAutDocSustento>
+            <fechaEmisionDocSustento>21/10/2011</fechaEmisionDocSustento>
+            <detalles>
+                <detalle>
+                    <codigoInterno>121BJC-01</codigoInterno>
+                    <codigoAdicional>1234D56719-A</codigoAdicional>
+                    <descripcion>CAMIONETA 4X4 DIESEL 3.7</descripcion>
+                    <cantidad>10.00</cantidad>
+                    <detallesAdicionales>
+                        <detAdicional nombre="Marca" valor="Chevrolet"/>
+                        <detAdicional nombre="Modelo" valor="2012"/>
+                        <detAdicional nombre="Chasis" valor="1LDETA03V20003287"/>
+                    </detallesAdicionales>
+                </detalle>
+            </detalles>
+        </destinatario>
+    </destinatarios>
+    <infoAdicional>
+        <campoAdicional nombre="TELEFONO">0987655410</campoAdicional>
+        <campoAdicional nombre="E-MAIL">info@organizacion.com</campoAdicional>
+        <campoAdicional nombre="SUCURSAL 03">Guayaquil–12 de octubre </campoAdicional>
+    </infoAdicional>
+</guiaRemision>

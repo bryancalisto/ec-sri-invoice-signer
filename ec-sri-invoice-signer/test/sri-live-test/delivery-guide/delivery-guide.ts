@@ -1,11 +1,11 @@
 import fs from 'fs';
-import { signCreditNoteXml } from '../../../src';
+import { signDeliveryGuideXml } from '../../../src';
 import { XMLBuilder, XMLParser } from 'fast-xml-parser';
 import { findNode, getAccessKeyVerificationNumber, longPollDoc, sendDocToSRI } from '../utils';
 import path from 'path';
 
 async function main() {
-  const defaultParamsPath = path.resolve(__dirname, 'credit-note-params.json');
+  const defaultParamsPath = path.resolve(__dirname, 'delivery-guide-params.json');
   const paramsPath = process.argv[2] || defaultParamsPath;
 
   if (!fs.existsSync(paramsPath)) {
@@ -30,23 +30,23 @@ async function main() {
     sequentialDocumentNumber,
     numericCode,
     emissionType,
-    buyerIdType,
-    razonSocialComprador,
-    identificacionComprador,
-    codDocModificado,
-    numDocModificado,
-    fechaEmisionDocSustento,
+    dirPartida,
+    razonSocialTransportista,
+    tipoIdentificacionTransportista,
+    rucTransportista,
+    fechaIniTransporte,
+    fechaFinTransporte,
+    placa,
   } = params;
 
   // Generate access key
-  const accessKey = `${date.replace(/\//gm, '')}${documentType}${ruc}${environmentType}${establishment}${emissionPoint}${sequentialDocumentNumber}\
-${numericCode}${emissionType}`;
+  const accessKey = `${date.replace(/\//gm, '')}${documentType}${ruc}${environmentType}${establishment}${emissionPoint}${sequentialDocumentNumber}${numericCode}${emissionType}`;
 
   const accessKeyWithVerificationNumber = `${accessKey}${getAccessKeyVerificationNumber(accessKey)}`;
   console.log('[access key]:', accessKeyWithVerificationNumber);
 
   // This replaces fields in the XML with the values above automatically
-  let creditNoteXml = fs.readFileSync(xmlPath, 'utf-8');
+  let deliveryGuideXml = fs.readFileSync(xmlPath, 'utf-8');
 
   const parser = new XMLParser({
     preserveOrder: true,
@@ -57,7 +57,7 @@ ${numericCode}${emissionType}`;
     ignoreAttributes: false,
   });
 
-  const parsed = parser.parse(creditNoteXml);
+  const parsed = parser.parse(deliveryGuideXml);
 
   const infoTributariaFieldsToReplace = {
     ambiente: environmentType,
@@ -73,19 +73,19 @@ ${numericCode}${emissionType}`;
     dirMatriz,
   };
 
-  const infoNotaCreditoFieldsToReplace = {
-    fechaEmision: date,
-    tipoIdentificacionComprador: buyerIdType,
-    razonSocialComprador,
-    identificacionComprador,
-    codDocModificado,
-    numDocModificado,
-    fechaEmisionDocSustento,
+  const infoGuiaRemisionFieldsToReplace = {
+    dirPartida,
+    razonSocialTransportista,
+    tipoIdentificacionTransportista,
+    rucTransportista,
+    fechaIniTransporte,
+    fechaFinTransporte,
+    placa,
   };
 
-  const creditNoteNode = findNode('notaCredito', parsed);
-  const infoTributariaNode = findNode('infoTributaria', creditNoteNode);
-  const infoNotaCreditoNode = findNode('infoNotaCredito', creditNoteNode);
+  const deliveryGuideNode = findNode('guiaRemision', parsed);
+  const infoTributariaNode = findNode('infoTributaria', deliveryGuideNode);
+  const infoGuiaRemisionNode = findNode('infoGuiaRemision', deliveryGuideNode);
 
   for (const node of infoTributariaNode) {
     for (const [key, value] of Object.entries(infoTributariaFieldsToReplace)) {
@@ -95,8 +95,8 @@ ${numericCode}${emissionType}`;
     }
   }
 
-  for (const node of infoNotaCreditoNode) {
-    for (const [key, value] of Object.entries(infoNotaCreditoFieldsToReplace)) {
+  for (const node of infoGuiaRemisionNode) {
+    for (const [key, value] of Object.entries(infoGuiaRemisionFieldsToReplace)) {
       if (key in node) {
         node[key].find((node: any) => '#text' in node)['#text'] = value;
       }
@@ -108,15 +108,15 @@ ${numericCode}${emissionType}`;
     ignoreAttributes: false,
   });
 
-  creditNoteXml = builder.build(parsed);
+  deliveryGuideXml = builder.build(parsed);
 
-  // Send the signed credit note to the SRI servers
+  // Send the signed delivery guide to the SRI servers
   const signature = fs.readFileSync(signaturePath);
-  const signedCreditNote = signCreditNoteXml(creditNoteXml, signature, { pkcs12Password: signaturePassword })
+  const signedDeliveryGuide = signDeliveryGuideXml(deliveryGuideXml, signature, { pkcs12Password: signaturePassword })
 
-  await sendDocToSRI(signedCreditNote);
+  await sendDocToSRI(signedDeliveryGuide);
 
-  // Poll until credit note has been processed
+  // Poll until delivery guide has been processed
   await longPollDoc({ accessKey: accessKeyWithVerificationNumber });
 }
 
