@@ -1,6 +1,6 @@
 {
   "name": "ec-sri-invoice-signer",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "description": "Ecuador SRI invoice signer.",
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",
