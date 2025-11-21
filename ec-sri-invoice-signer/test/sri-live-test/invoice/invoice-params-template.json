@@ -1,5 +1,5 @@
 {
-  "invoiceXmlPath": "path/to/your/xml-invoice.xml",
+  "invoiceXmlPath": "test/test-data/invoice/original.xml",
   "signaturePath": "path/to/your/certificate.p12",
   "signaturePassword": "your .p12 password",
   "date": "08/09/2025",

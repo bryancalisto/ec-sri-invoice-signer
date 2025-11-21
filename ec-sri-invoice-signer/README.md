@@ -138,7 +138,7 @@ Si pruebas el paquete con .p12 de otros proveedores y encuentras problemas, por 
 
 
 ## Herramientas para prueba directa con servicios del SRI
-El paquete incluye herramientas para probar el firmado de facturas y notas de débito contra los servidores del SRI en modo 'prueba'.
+El repositorio incluye herramientas para probar el firmado de facturas y notas de débito contra los servidores del SRI en modo 'prueba'.
 
 
 Para usarlas, primero configura los parámetros correspondientes al tipo de documento que quieres probar. Los scripts tomarán los parámetros configurados, firmarán el documento y lo enviarán al SRI para su validación y consultarán el servicio del SRI para verificar el estado del documento, reportando el resultado.
@@ -146,7 +146,7 @@ Para usarlas, primero configura los parámetros correspondientes al tipo de docu
 **Nota:** No olvides primero ubicarte en la raíz del proyecto de node (directorio `ec-sri-invoice-signer/` donde está el package.json) antes de correr los comandos siguientes.
 
 ### Facturas
-Edita el archivo en `test/sri-live-test/invoice/invoice-params.json` (usa `test/sri-live-test/invoice/invoice-params-template.json` como plantilla).
+Crea el archivo `test/sri-live-test/invoice/invoice-params.json` (usa `test/sri-live-test/invoice/invoice-params-template.json` como plantilla).
 
 Corre la prueba:
 
@@ -155,7 +155,7 @@ npm run test:sri:invoice
 ```
 
 ### Notas de Débito
-Edita el archivo en `test/sri-live-test/debit-note/debit-note-params.json` (usa `test/sri-live-test/debit-note/debit-note-params-template.json` como plantilla).
+Crea el archivo `test/sri-live-test/debit-note/debit-note-params.json` (usa `test/sri-live-test/debit-note/debit-note-params-template.json` como plantilla).
 
 Corre la prueba:
 
@@ -164,7 +164,7 @@ npm run test:sri:debit-note
 ```
 
 ### Notas de Crédito
-Edita el archivo en `test/sri-live-test/credit-note/credit-note-params.json` (usa `test/sri-live-test/credit-note/credit-note-params-template.json` como plantilla).
+Crea el archivo `test/sri-live-test/credit-note/credit-note-params.json` (usa `test/sri-live-test/credit-note/credit-note-params-template.json` como plantilla).
 
 Corre la prueba:
 
@@ -173,7 +173,7 @@ npm run test:sri:credit-note
 ```
 
 ### Guías de Remisión
-Edita el archivo en `test/sri-live-test/delivery-guide/delivery-guide-params.json` (usa `test/sri-live-test/delivery-guide/delivery-guide-params-template.json` como plantilla).
+Crea el archivo `test/sri-live-test/delivery-guide/delivery-guide-params.json` (usa `test/sri-live-test/delivery-guide/delivery-guide-params-template.json` como plantilla).
 
 Corre la prueba:
 

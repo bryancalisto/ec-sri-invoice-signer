@@ -1,5 +1,5 @@
 {
-  "debitNoteXmlPath": "path/to/your/debit-note.xml",
+  "debitNoteXmlPath": "test/test-data/credit-note/original.xml",
   "signaturePath": "path/to/your/certificate.p12",
   "signaturePassword": "your .p12 password",
   "documentType": "05",

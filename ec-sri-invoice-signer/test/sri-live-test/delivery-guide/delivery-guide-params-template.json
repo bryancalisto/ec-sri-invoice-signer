@@ -1,5 +1,5 @@
 {
-  "xmlPath": "path/to/your/delivery-guide.xml",
+  "xmlPath": "test/test-data/delivery-guide/original.xml",
   "signaturePath": "path/to/your/certificate.p12",
   "signaturePassword": "your .p12 password",
   "documentType": "06",
