@@ -1,6 +1,6 @@
 import { describe, it, expect, afterEach, jest } from '@jest/globals';
 import * as Utils from '../../src/utils/utils';
-import { signCreditNoteXml, signDebitNoteXml, signDeliveryGuideXml, signInvoiceXml } from '../../src/signature/signature';
+import { signCreditNoteXml, signDebitNoteXml, signDeliveryGuideXml, signInvoiceXml, signWithholdingCertificateXml } from '../../src/signature/signature';
 import fs from 'fs';
 import path from 'path';
 
@@ -84,6 +84,24 @@ describe('Given the signDeliveryGuide function', () => {
     jest.spyOn(Utils, 'getDate').mockReturnValue('2024-04-18T14:34:32.878-05:00');
     jest.spyOn(Utils, 'getRandomUuid').mockReturnValue('5bdfc32d-a37f-47c3-90fe-49f5a093b7bf');
     const result = signDeliveryGuideXml(original, pkcs12Data, { pkcs12Password: '' });
+    expect(result).toEqual(signed);
+  });
+});
+
+describe('Given the signWithholdingCertificateXml function', () => {
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+
+  it('should generate the signature for the withholding certificate and put it at the end of the document', () => {
+    const original = fs.readFileSync(path.resolve('test/test-data/withholding-certificate/original.xml')).toString();
+    const pkcs12Data = fs.readFileSync(path.resolve('test/test-data/pkcs12/signature.p12')).toString('base64');
+    const signed = fs.readFileSync(path.resolve('test/test-data/withholding-certificate/signed.xml')).toString();
+
+    // Keep variable data constant
+    jest.spyOn(Utils, 'getDate').mockReturnValue('2024-04-18T14:34:32.878-05:00');
+    jest.spyOn(Utils, 'getRandomUuid').mockReturnValue('5bdfc32d-a37f-47c3-90fe-49f5a093b7bf');
+    const result = signWithholdingCertificateXml(original, pkcs12Data, { pkcs12Password: '' });
     expect(result).toEqual(signed);
   });
 });

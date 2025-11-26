@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<comprobanteRetencion id="comprobante" version="1.0.0">
+  <infoTributaria>
+    <ambiente>2</ambiente>
+    <tipoEmision>1</tipoEmision>
+    <razonSocial>RAZON SOCIAL</razonSocial>
+    <nombreComercial>NOMBRE COMERCIAL</nombreComercial>
+    <ruc>1790013213001</ruc>
+    <claveAcceso>2107202301179001321300120010010000000011234567815</claveAcceso>
+    <codDoc>07</codDoc>
+    <estab>001</estab>
+    <ptoEmi>001</ptoEmi>
+    <secuencial>000000001</secuencial>
+    <dirMatriz>DIRECCION MATRIZ</dirMatriz>
+  </infoTributaria>
+  <infoCompRetencion>
+    <fechaEmision>21/07/2023</fechaEmision>
+    <dirEstablecimiento>DIR ESTABLECIMIENTO</dirEstablecimiento>
+    <obligadoContabilidad>SI</obligadoContabilidad>
+    <tipoIdentificacionSujetoRetenido>04</tipoIdentificacionSujetoRetenido>
+    <razonSocialSujetoRetenido>RAZON SOCIAL</razonSocialSujetoRetenido>
+    <identificacionSujetoRetenido>1790013213001</identificacionSujetoRetenido>
+    <periodoFiscal>07/2023</periodoFiscal>
+  </infoCompRetencion>
+  <impuestos>
+    <impuesto>
+      <codigo>1</codigo>
+      <codigoRetencion>1</codigoRetencion>
+      <baseImponible>100.00</baseImponible>
+      <porcentajeRetener>10.00</porcentajeRetener>
+      <valorRetenido>10.00</valorRetenido>
+      <codDocSustento>01</codDocSustento>
+      <numDocSustento>001001000000001</numDocSustento>
+      <fechaEmisionDocSustento>21/07/2023</fechaEmisionDocSustento>
+    </impuesto>
+  </impuestos>
+</comprobanteRetencion>
