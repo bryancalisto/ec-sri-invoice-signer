@@ -1,5 +1,5 @@
 # 🇪🇨 ec-sri-invoice-signer 🇪🇨
-Firmador de comprobantes electrónicos del Servicio de Rentas Internas (SRI) ecuatoriano. Soporta facturas, notas de crédito, notas de débito y guías de remisión. Está escrito en puro TypeScript/JavaScript, sin dependencias de binarios criptográficos como OpenSSL, DLLs con el código de firmado o similares.
+Firmador de comprobantes electrónicos del Servicio de Rentas Internas (SRI) ecuatoriano. Soporta facturas, notas de crédito, notas de débito, comprobantes de retención y guías de remisión. Está escrito en puro TypeScript/JavaScript, sin dependencias de binarios criptográficos como OpenSSL, DLLs con el código de firmado o similares.
 Por tal razón, funciona en Windows, Unix/Linux o cualquier plataforma que soporte Node.js sin configuraciones adicionales.
 
 ## Guía de uso
@@ -18,6 +18,7 @@ Por tal razón, funciona en Windows, Unix/Linux o cualquier plataforma que sopor
     // signDebitNoteXml,
     // signCreditNoteXml,
     // signDeliveryGuideXml,
+    // signWithholdingCertificateXml,
     } from 'ec-sri-invoice-signer';
   /* Puedes user require() si usas módulos commonJS. */
 
@@ -45,6 +46,9 @@ Por tal razón, funciona en Windows, Unix/Linux o cualquier plataforma que sopor
 
   /* Firma guías de remisión */
   const signedDeliveryGuide = signDeliveryGuideXml(deliveryGuideXml, p12FileData, { pkcs12Password: 'thePKCS12FilePassword' });
+
+  /* Firma comprobantes de retención */
+  const signedWithholdingCertificate = signWithholdingCertificateXml(withholdingCertificateXml, p12FileData, { pkcs12Password: 'thePKCS12FilePassword' });
   ```
 
 3. Si este paquete te ha ayudado, considera dejar tu estrella en <a style="
@@ -179,4 +183,13 @@ Corre la prueba:
 
 ```bash
 npm run test:sri:delivery-guide
+```
+
+### Comprobantes de Retención
+Crea el archivo `test/sri-live-test/withholding-certificate/withholding-certificate-params.json` (usa `test/sri-live-test/withholding-certificate/withholding-certificate-params-template.json` como plantilla).
+
+Corre la prueba:
+
+```bash
+npm run test:sri:withholding-certificate
 ```

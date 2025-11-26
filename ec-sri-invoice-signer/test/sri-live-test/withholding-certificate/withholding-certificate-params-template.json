@@ -1,0 +1,14 @@
+{
+  "withholdingCertificateXmlPath": "test/test-data/withholding-certificate/original.xml",
+  "signaturePath": "path/to/your/certificate.p12",
+  "signaturePassword": "your .p12 password",
+  "date": "08/09/2025",
+  "documentType": "07",
+  "ruc": "1234567891001",
+  "environmentType": "1",
+  "establishment": "001",
+  "emissionPoint": "001",
+  "sequentialDocumentNumber": "000000001",
+  "numericCode": "12345678",
+  "emissionType": "1"
+}

@@ -131,3 +131,15 @@ export const signCreditNoteXml = (xml: string, pkcs12Data: string | Buffer, opti
 export const signDeliveryGuideXml = (xml: string, pkcs12Data: string | Buffer, options?: signXmlOptions) => {
   return signDocumentXml(xml, pkcs12Data, 'guiaRemision', options);
 }
+
+/**
+ * 
+ * @param xml The withholding certificate XML to be signed.
+ * @param pkcs12Data The pkcs12 file (.p12/.pfx) data expressed as a node Buffer or base64 string.
+ * @param options Options are:
+ * - **pkcs12Password**: The pkcs12 file password. Defaults to no password.
+ * @returns The signed withholding certificate XML.
+ */
+export const signWithholdingCertificateXml = (xml: string, pkcs12Data: string | Buffer, options?: signXmlOptions) => {
+  return signDocumentXml(xml, pkcs12Data, 'comprobanteRetencion', options);
+}
