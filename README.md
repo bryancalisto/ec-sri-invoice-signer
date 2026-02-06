@@ -1,6 +1,7 @@
 # 🇪🇨 ec-sri-invoice-signer 🇪🇨
-Firmador de comprobantes electrónicos del Servicio de Rentas Internas (SRI) ecuatoriano. Soporta facturas, notas de crédito, notas de débito, comprobantes de retención y guías de remisión. Está escrito en puro TypeScript/JavaScript, sin dependencias de binarios criptográficos como OpenSSL, DLLs con el código de firmado o similares.
-Por tal razón, funciona en Windows, Unix/Linux o cualquier plataforma que soporte Node.js sin configuraciones adicionales.
+Firmador de comprobantes electrónicos del Servicio de Rentas Internas (SRI) ecuatoriano. Soporta facturas, notas de crédito, notas de débito, comprobantes de retención y guías de remisión. Está escrito en puro TypeScript, sin dependencias de binarios criptográficos como OpenSSL, DLLs con el código de firmado, JARs o similares.
+
+Funciona en Windows, Unix / Linux, o cualquier plataforma que soporte Node.js, sin configuraciones adicionales.
 
 ## Guía de uso
 
