@@ -2,6 +2,7 @@ import { c14nCanonicalize } from "../canonicalization/c14n";
 import { XmlProperties } from "../utils/constants";
 import { extractPrivateKeyAndCertificateFromPkcs12, extractPrivateKeyData, extractX509Data, getHash, sign } from "../utils/cryptography";
 import * as Utils from "../utils/utils";
+import { validateDocumentType, validateXmlFeatures } from "../utils/xml";
 import { buildKeyInfoTag } from "./templates/keyInfo";
 import { buildSignatureTag } from "./templates/signature";
 import { buildSignedInfoTag } from "./templates/signedInfo";
@@ -21,6 +22,9 @@ export const signDocumentXml = (docXml: string, pkcs12Data: string | Buffer, roo
   const { privateKey, certificate } = extractPrivateKeyAndCertificateFromPkcs12(pkcs12Data, options?.pkcs12Password);
   const { exponent: certificateExponent, modulus: certificateModulus } = extractPrivateKeyData(privateKey);
   const { issuerName: x509IssuerName, serialNumber: x509SerialNumber, content: certificateContent, contentHash: x509Hash } = extractX509Data(certificate);
+
+  validateDocumentType(docXml);
+  validateXmlFeatures(docXml);
 
   // IDs
   const docTagId = 'comprobante';
