@@ -14,6 +14,9 @@ const XmlProperties = {
   }
 };
 
+const SupportedDocumentTypes = new Set(['factura', 'liquidacionCompra', 'notaDebito', 'notaCredito', 'comprobanteRetencion', 'guiaRemision']);
+
 export {
-  XmlProperties
+  XmlProperties,
+  SupportedDocumentTypes
 }

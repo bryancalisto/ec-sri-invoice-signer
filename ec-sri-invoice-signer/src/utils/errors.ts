@@ -21,7 +21,25 @@ class UnsuportedPkcs12Error extends Error {
   }
 }
 
+class UnsupportedXmlFeatureError extends Error {
+  name: string = 'UnsupportedXmlFeatureError';
+
+  constructor(feature: string, description: string) {
+    super(`Unsupported XML feature: ${feature}. ${description}`);
+  }
+}
+
+class UnsupportedDocumentTypeError extends Error {
+  name: string = 'UnsupportedDocumentTypeError';
+
+  constructor(documentType: string) {
+    super(`Unsupported document type: ${documentType}. Supported types are: factura, notaDebito, notaCredito, comprobanteRetencion, guiaRemision`);
+  }
+}
+
 export {
   UnsuportedPkcs12Error,
-  XmlFormatError
+  XmlFormatError,
+  UnsupportedXmlFeatureError,
+  UnsupportedDocumentTypeError
 }
