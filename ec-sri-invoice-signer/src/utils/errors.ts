@@ -33,7 +33,7 @@ class UnsupportedDocumentTypeError extends Error {
   name: string = 'UnsupportedDocumentTypeError';
 
   constructor(documentType: string) {
-    super(`Unsupported document type: ${documentType}. Supported types are: factura, notaDebito, notaCredito, comprobanteRetencion, guiaRemision`);
+    super(`Unsupported document type: ${documentType}. Supported types are: factura, liquidacionCompra, notaDebito, notaCredito, comprobanteRetencion, guiaRemision`);
   }
 }
 

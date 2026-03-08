@@ -134,6 +134,31 @@ Funciona en Windows, Unix / Linux, o cualquier plataforma que soporte Node.js, s
  </factura>
  ```
 
+## Manejo de errores
+Este paquete exporta clases de error específicas para facilitar el manejo de excepciones:
+
+- `XmlFormatError`: Lanzado cuando el XML proporcionado no tiene un formato válido.
+- `UnsuportedPkcs12Error`: Lanzado cuando el archivo .p12 no es soportado o la contraseña es incorrecta.
+- `UnsupportedXmlFeatureError`: Lanzado cuando el XML contiene características no soportadas (como `DOCTYPE` o `xmlns`).
+- `UnsupportedDocumentTypeError`: Lanzado cuando el tipo de documento (nodo raíz) no es soportado.
+
+Ejemplo de manejo:
+```js
+import { signInvoiceXml, XmlFormatError, UnsupportedXmlFeatureError } from 'ec-sri-invoice-signer';
+
+try {
+  const signedInvoice = signInvoiceXml(invoiceXml, p12FileData, { pkcs12Password });
+} catch (error) {
+  if (error instanceof XmlFormatError) {
+    console.error('El XML tiene errores de formato');
+  } else if (error instanceof UnsupportedXmlFeatureError) {
+    console.error('El XML contiene características no soportadas:', error.message);
+  } else {
+    console.error('Error inesperado:', error.message);
+  }
+}
+```
+
 ## Nota importante sobre los archivos .p12
 El paquete se ha probado satisfactoriamente usando .p12 de estos proveedores (no tengo .p12 de otros proveedores y tampoco he podido recibir el feedback de usuarios del paquete usando otras firmas):
 - Uanataca.
