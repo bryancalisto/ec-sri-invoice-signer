@@ -39,7 +39,7 @@
   "homepage": "https://github.com/bryancalisto/ec-sri-invoice-signer#readme",
   "devDependencies": {
     "@types/jest": "^30.0.0",
-    "@types/node": "^24.3.1",
+    "@types/node": "^25.5.0",
     "@types/node-forge": "^1.3.3",
     "@types/sax": "^1.2.7",
     "jest": "^30.1.3",
