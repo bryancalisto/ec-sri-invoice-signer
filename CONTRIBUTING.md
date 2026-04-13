@@ -1,4 +1,4 @@
-# Contributing to ec-sri-invoice-signed
+# Contributing to ec-sri-invoice-signer
 
 Thank you for considering contributing to this project! Contributions from the community are welcome. Please follow the guidelines if you want to contribute.
 
