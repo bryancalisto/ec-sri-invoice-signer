@@ -1,5 +1,3 @@
-# CONTRIBUTING.md
-
 # Contributing to ec-sri-invoice-signed
 
 Thank you for considering contributing to this project! Contributions from the community are welcome. Please follow the guidelines if you want to contribute.
@@ -17,6 +15,8 @@ If you encounter any issues or bugs, please report them by creating a new issue 
 Please don't create a pull request right away. Create an issue describing the intended feature in order to check feasibility, convenience and create a plan for it. We'll derive our next actions from the issue conversation.
 
 ## Submitting Pull Requests
+
+**Please, keep PRs small and focused on a single change (i.e., feature, bug, issue). This makes it easier to review and merge.**
 
 To submit a pull request, please follow these steps:
 
