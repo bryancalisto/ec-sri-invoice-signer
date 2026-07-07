@@ -132,6 +132,78 @@ describe('Given the c14nCanonicalize function', () => {
     expect(result).toEqual(expected);
   });
 
+  it('should render an inherited prefixed namespace on the fragment apex only, not on descendants that reuse it', () => {
+    const input = '<ds:SignedInfo Id="x"><ds:Reference URI="#a"></ds:Reference></ds:SignedInfo>';
+    const expected = '<ds:SignedInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#" Id="x"><ds:Reference URI="#a"></ds:Reference></ds:SignedInfo>';
+
+    const result = c14nCanonicalize(input, {
+      inheritedNamespaces: [
+        { prefix: 'ds', uri: 'http://www.w3.org/2000/09/xmldsig#' }
+      ]
+    });
+
+    expect(result).toEqual(expected);
+  });
+
+  it('should render multiple inherited namespaces on the apex sorted by prefix', () => {
+    const input = '<xades:SignedProperties Id="sp"><ds:DigestValue>abc</ds:DigestValue></xades:SignedProperties>';
+    const expected = '<xades:SignedProperties xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:xades="http://uri.etsi.org/01903/v1.3.2#" Id="sp"><ds:DigestValue>abc</ds:DigestValue></xades:SignedProperties>';
+
+    const result = c14nCanonicalize(input, {
+      inheritedNamespaces: [
+        { prefix: 'xades', uri: 'http://uri.etsi.org/01903/v1.3.2#' },
+        { prefix: 'ds', uri: 'http://www.w3.org/2000/09/xmldsig#' }
+      ]
+    });
+
+    expect(result).toEqual(expected);
+  });
+
+  it('should let a child redeclare a default namespace that differs from the inherited one', () => {
+    const input = '<Doc Id="P"><child xmlns="http://other">v</child></Doc>';
+    const expected = '<Doc xmlns="http://www.example.com" Id="P"><child xmlns="http://other">v</child></Doc>';
+
+    const result = c14nCanonicalize(input, {
+      inheritedNamespaces: [
+        { prefix: undefined, uri: 'http://www.example.com' }
+      ]
+    });
+
+    expect(result).toEqual(expected);
+  });
+
+  it('should expand empty/self-closing elements to explicit start and end tags', () => {
+    const input = '<a><b/></a>';
+    const expected = '<a><b></b></a>';
+
+    const result = c14nCanonicalize(input);
+    expect(result).toEqual(expected);
+  });
+
+  it('should preserve line feeds in text but escape carriage returns as character references', () => {
+    const input = '<a>line1&#13;\nline2</a>';
+    const expected = '<a>line1&#xD;\nline2</a>';
+
+    const result = c14nCanonicalize(input);
+    expect(result).toEqual(expected);
+  });
+
+  it('should escape whitespace character references inside attribute values', () => {
+    const input = '<a b="x&#9;y"/>';
+    const expected = '<a b="x&#x9;y"></a>';
+
+    const result = c14nCanonicalize(input);
+    expect(result).toEqual(expected);
+  });
+
+  it('should keep the trailing carriage return entity found in real SRI document text', () => {
+    const input = '<factura id="comprobante"><dir>Quito Sur  &#013; </dir></factura>';
+    const expected = '<factura id="comprobante"><dir>Quito Sur  &#xD; </dir></factura>';
+
+    const result = c14nCanonicalize(input);
+    expect(result).toEqual(expected);
+  });
+
   it('should process entities in elements and attributes', () => {
     const input = `<doc>
   <text>First line&#x0d;&#10;Second line</text>
