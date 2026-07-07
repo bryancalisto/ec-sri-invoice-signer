@@ -18,6 +18,7 @@ describe('Given the signInvoice function', () => {
     jest.spyOn(Utils, 'getRandomUuid').mockReturnValue('5bdfc32d-a37f-47c3-90fe-49f5a093b7bf');
 
     const result = signInvoiceXml(invoiceXml, pkcs12Data, { pkcs12Password: '' });
+    // fs.writeFileSync(path.resolve('test/test-data/invoice/signed.xml'), result)
     expect(result).toEqual(signedInvoice);
   });
 
@@ -30,6 +31,7 @@ describe('Given the signInvoice function', () => {
     jest.spyOn(Utils, 'getRandomUuid').mockReturnValue('5bdfc32d-a37f-47c3-90fe-49f5a093b7bf');
 
     const result = signInvoiceXml(invoiceXml, pkcs12Data, { pkcs12Password: '' });
+    // fs.writeFileSync(path.resolve('test/test-data/invoice/edge-cases/certificate-with-email-address/signed-invoice.xml'), result)
     expect(result).toEqual(signedInvoice);
   });
 });
@@ -48,6 +50,7 @@ describe('Given the signDebitNote function', () => {
     jest.spyOn(Utils, 'getRandomUuid').mockReturnValue('5bdfc32d-a37f-47c3-90fe-49f5a093b7bf');
 
     const result = signDebitNoteXml(original, pkcs12Data, { pkcs12Password: '' });
+    // fs.writeFileSync(path.resolve('test/test-data/debit-note/signed.xml'), result)
     expect(result).toEqual(signed);
   });
 });
@@ -66,6 +69,7 @@ describe('Given the signCreditNote function', () => {
     jest.spyOn(Utils, 'getRandomUuid').mockReturnValue('5bdfc32d-a37f-47c3-90fe-49f5a093b7bf');
 
     const result = signCreditNoteXml(original, pkcs12Data, { pkcs12Password: '' });
+    // fs.writeFileSync(path.resolve('test/test-data/credit-note/signed.xml'), result)
     expect(result).toEqual(signed);
   });
 });
@@ -84,6 +88,7 @@ describe('Given the signDeliveryGuide function', () => {
     jest.spyOn(Utils, 'getDate').mockReturnValue('2024-04-18T14:34:32.878-05:00');
     jest.spyOn(Utils, 'getRandomUuid').mockReturnValue('5bdfc32d-a37f-47c3-90fe-49f5a093b7bf');
     const result = signDeliveryGuideXml(original, pkcs12Data, { pkcs12Password: '' });
+    // fs.writeFileSync(path.resolve('test/test-data/delivery-guide/signed.xml'), result)
     expect(result).toEqual(signed);
   });
 });
@@ -102,6 +107,7 @@ describe('Given the signWithholdingCertificateXml function', () => {
     jest.spyOn(Utils, 'getDate').mockReturnValue('2024-04-18T14:34:32.878-05:00');
     jest.spyOn(Utils, 'getRandomUuid').mockReturnValue('5bdfc32d-a37f-47c3-90fe-49f5a093b7bf');
     const result = signWithholdingCertificateXml(original, pkcs12Data, { pkcs12Password: '' });
+    // fs.writeFileSync(path.resolve('test/test-data/withholding-certificate/signed.xml'), result)
     expect(result).toEqual(signed);
   });
 });

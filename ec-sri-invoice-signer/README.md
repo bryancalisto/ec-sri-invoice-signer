@@ -64,9 +64,8 @@ Funciona en Windows, Unix / Linux, o cualquier plataforma que soporte Node.js, s
     href="https://github.com/bryancalisto/ec-sri-invoice-signer">GitHub ⭐</a>.
 
  ## Notas importantes sobre la estructura del XML
- Este paquete no implementa la especificación de [canonicalización](https://en.wikipedia.org/wiki/Canonicalization) http://www.w3.org/TR/2001/REC-xml-c14n-20010315 por completo.
- El XML es un lenguaje con muchas características sofisticadas que, probablemente, no tienen mucha cabida en una aplicación de facturación electrónica en el marco del SRI.
- Por tal razón, solo se implementa las partes del estándar requeridas para soportar XML con características relativamente comunes. Esto debería cubrir la mayoría de los casos de uso.
+ La [canonicalización](https://en.wikipedia.org/wiki/Canonicalization) (http://www.w3.org/TR/2001/REC-xml-c14n-20010315) se realiza mediante la librería [`xml-crypto`](https://www.npmjs.com/package/xml-crypto), una implementación robusta y conforme al estándar.
+ Aun así, este paquete impone algunas restricciones sobre el XML de entrada. El XML es un lenguaje con muchas características sofisticadas que, probablemente, no tienen mucha cabida en una aplicación de facturación electrónica en el marco del SRI, por lo que estas restricciones no deberían afectar la mayoría de los casos de uso.
 
  Estas son las características requeridas del XML que se pretende firmar (ninguna de las características no soportadas es requerida para el intercambio de datos con el SRI):
  - El documento a firmarse debe consistir del nodo raíz (e.g. `factura` o `notaDebito`) con su respectivo id 'comprobante', su versión y sus etiquetas hijas describiendo el contenido del documento (sin otros namespaces).
