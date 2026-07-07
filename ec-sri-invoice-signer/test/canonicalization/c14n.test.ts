@@ -59,8 +59,8 @@ describe('Given the c14nCanonicalize function', () => {
 
   it('should replace whitespace between attributes with a single space (0x20)', () => {
     const input = `<e1   a='one'
-    
-    b  = 'two'  >`;
+
+    b  = 'two'  />`;
 
     const expected = `<e1 a="one" b="two"></e1>`;
 
