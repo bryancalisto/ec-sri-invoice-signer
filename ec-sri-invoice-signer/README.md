@@ -163,6 +163,7 @@ El paquete se ha probado satisfactoriamente usando .p12 de estos proveedores (no
 - Uanataca.
 - Security Data.
 - Lazzate.
+- Banco Central.
 
 Si pruebas el paquete con .p12 de otros proveedores y encuentras problemas, por favor crea un [issue](https://github.com/bryancalisto/ec-sri-invoice-signer/issues)
 
