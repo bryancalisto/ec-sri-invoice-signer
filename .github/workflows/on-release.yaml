@@ -20,9 +20,6 @@ jobs:
           node-version: '24.18.0'
           registry-url: 'https://registry.npmjs.org'
       - run: sudo timedatectl set-timezone America/Guayaquil # date getter function tests are dependent on timezone
-      # Ensure npm 11.5.1 or later is installed (needed for OIDC)
-      - name: Update npm
-        run: npm install -g npm@latest
       - run: npm ci
       - run: npm run build
       - run: npm run test
