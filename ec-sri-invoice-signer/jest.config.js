@@ -1,6 +1,8 @@
 module.exports = {
-  preset: 'ts-jest',
   testEnvironment: 'node',
   testMatch: ['**/test/**/*.test.ts'],
-  maxWorkers: '25%' // for better performance
+  transform: {
+    '^.+\\.(t|j)sx?$': '@swc/jest',
+  },
+  maxWorkers: '50%' // not 100% to not overwhelm the system and get better performance
 };
